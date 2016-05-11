@@ -29,13 +29,13 @@ import org.jetbrains.annotations.NotNull;
 public class FxGson {
 
     /**
-     * Creates a {@link GsonBuilder} pre-configured to handle JavaFX properties.
+     * Creates a {@link GsonBuilder} pre-configured to handle JavaFX core classes.
      *
      * @return a pre-configured {@link GsonBuilder}
      */
     @NotNull
-    public static GsonBuilder builder() {
-        return addPropertySerializers(new GsonBuilder());
+    public static GsonBuilder coreBuilder() {
+        return addCoreSerializers(new GsonBuilder());
     }
 
     /**
@@ -46,11 +46,20 @@ public class FxGson {
      */
     @NotNull
     public static GsonBuilder fullBuilder() {
-        return builder().registerTypeAdapterFactory(new JavaFxExtraTypeAdapterFactory());
+        return addExtraSerializers(coreBuilder());
     }
 
+    /**
+     * Adds the core JavaFX classes adapters to an existing {@link GsonBuilder}. This is useful if you don't control the
+     * instantiation of the {@link GsonBuilder}.
+     *
+     * @param builder
+     *         the builder to add the type adapters to
+     *
+     * @return the given builder, so that it can be used in a Builder pattern
+     */
     @NotNull
-    public static GsonBuilder addPropertySerializers(@NotNull GsonBuilder builder) {
+    public static GsonBuilder addCoreSerializers(@NotNull GsonBuilder builder) {
         // serialization of nulls is necessary to have properties with null values deserialized properly
         builder.serializeNulls()
                .registerTypeAdapter(ObservableList.class, new ObservableListCreator())
@@ -58,5 +67,19 @@ public class FxGson {
                .registerTypeAdapter(ObservableMap.class, new ObservableMapCreator())
                .registerTypeAdapterFactory(new JavaFxPropertyTypeAdapterFactory());
         return builder;
+    }
+
+    /**
+     * Adds the extra JavaFX classes adapters to an existing {@link GsonBuilder}. This is useful if you don't control
+     * the instantiation of the {@link GsonBuilder}.
+     *
+     * @param builder
+     *         the builder to add the type adapters to
+     *
+     * @return the given builder, so that it can be used in a Builder pattern
+     */
+    @NotNull
+    public static GsonBuilder addExtraSerializers(@NotNull GsonBuilder builder) {
+        return builder.registerTypeAdapterFactory(new JavaFxExtraTypeAdapterFactory());
     }
 }
