@@ -1,0 +1,61 @@
+// bintray plugin is used to upload artifacts to a bintray repo
+plugins { id "com.jfrog.bintray" version "1.0" }
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+group = 'org.hildan.fxgson'
+version = '1'
+description = 'A Gson extension to make it easy to deal with JavaFX properties.'
+
+sourceCompatibility = 1.8
+
+repositories { mavenCentral() }
+
+dependencies {
+    compile 'com.google.code.gson:gson:2.6.2'
+    testCompile 'junit:junit:4.+'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+}
+
+bintray {
+    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : ''
+    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : ''
+    configurations = ['archives']
+
+    publish = true // the version should be auto published after an upload
+
+    pkg {
+        repo = project.hasProperty('bintrayRepoLibs') ? project.bintrayRepoLibs : ''
+        name = project.name
+        desc = project.description
+        labels = ['json', 'gson', 'javafx', 'property']
+
+        String githubRepoName = project.name
+        websiteUrl = 'https://github.com/joffrey-bion/' + githubRepoName
+        issueTrackerUrl = 'https://github.com/joffrey-bion/' + githubRepoName + '/issues'
+        vcsUrl = 'https://github.com/joffrey-bion/' + githubRepoName + '.git'
+
+        licenses = ['MIT']
+        version {
+            vcsTag = 'v' + project.version
+            gpg { sign = true }
+        }
+    }
+}
