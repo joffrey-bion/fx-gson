@@ -1,35 +1,30 @@
 package org.hildan.fxgson;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
 import javafx.beans.property.Property;
-import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import com.google.gson.GsonBuilder;
 import org.hildan.fxgson.creators.ObservableListCreator;
-import org.hildan.fxgson.serializers.BooleanPropertySerializer;
-import org.hildan.fxgson.serializers.ColorSerializer;
-import org.hildan.fxgson.serializers.DoublePropertySerializer;
-import org.hildan.fxgson.serializers.FloatPropertySerializer;
-import org.hildan.fxgson.serializers.FontSerializer;
-import org.hildan.fxgson.serializers.IntegerPropertySerializer;
-import org.hildan.fxgson.serializers.LongPropertySerializer;
-import org.hildan.fxgson.serializers.PropertySerializer;
-import org.hildan.fxgson.serializers.StringPropertySerializer;
+import org.hildan.fxgson.creators.ObservableMapCreator;
+import org.hildan.fxgson.creators.ObservableSetCreator;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Creates a pre-configured {@link GsonBuilder} that handles properly JavaFX properties.
+ * Creates pre-configured {@link GsonBuilder}s that handle nicely JavaFX-specific classes.
  * <p>
- * Basically, this class creates a {@link GsonBuilder} initialized with custom serializers for JavaFX types. These
- * custom serializers make sure the serialized version of the property simply contains the value of the property, so
- * that it is human-readable and still useful.
+ * What we mean by nicely here is that the serialized version of the properties is simply the value that was inside
+ * each property, not the actual property internal fields, so that it is human-readable and still useful.
+ * <p>
+ * In the doc of this class, we distinguish the core JavaFX classes from the extra classes:
+ * <ul>
+ *     <li>Core JavaFX classes: the {@link Property} class and its subclasses, the {@link ObservableList},
+ *     {@link ObservableMap}, {@link ObservableSet}.</li>
+ *     <li>Extra JavaFX classes: {@link Color}, {@link Font}</li>
+ * </ul>
  */
 public class FxGson {
 
@@ -51,8 +46,7 @@ public class FxGson {
      */
     @NotNull
     public static GsonBuilder fullBuilder() {
-        return builder().registerTypeAdapter(Color.class, new ColorSerializer())
-                        .registerTypeAdapter(Font.class, new FontSerializer());
+        return builder().registerTypeAdapterFactory(new JavaFxExtraTypeAdapterFactory());
     }
 
     @NotNull
@@ -60,13 +54,9 @@ public class FxGson {
         // serialization of nulls is necessary to have properties with null values deserialized properly
         builder.serializeNulls()
                .registerTypeAdapter(ObservableList.class, new ObservableListCreator())
-               .registerTypeAdapter(StringProperty.class, new StringPropertySerializer())
-               .registerTypeAdapter(DoubleProperty.class, new DoublePropertySerializer())
-               .registerTypeAdapter(FloatProperty.class, new FloatPropertySerializer())
-               .registerTypeAdapter(BooleanProperty.class, new BooleanPropertySerializer())
-               .registerTypeAdapter(IntegerProperty.class, new IntegerPropertySerializer())
-               .registerTypeAdapter(LongProperty.class, new LongPropertySerializer())
-               .registerTypeAdapter(Property.class, new PropertySerializer());
+               .registerTypeAdapter(ObservableSet.class, new ObservableSetCreator())
+               .registerTypeAdapter(ObservableMap.class, new ObservableMapCreator())
+               .registerTypeAdapterFactory(new JavaFxPropertyTypeAdapterFactory());
         return builder;
     }
 }

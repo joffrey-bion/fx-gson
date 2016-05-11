@@ -1,20 +1,38 @@
-package org.hildan.fxgson.serializers;
+package org.hildan.fxgson;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Objects;
 
+import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A helper to handle {@link Type} objects creation when dealing with deserialization of generic types.
+ * A helper to handle {@link Type} and {@link TypeToken} objects creation.
  */
 class TypeHelper {
 
+    /**
+     * Gets a {@link TypeToken} equivalent to the given one, but with the given raw type instead of the original one.
+     *
+     * @param sourceTypeToken
+     *         the initial type token to get the type parameters from
+     * @param newRawType
+     *         the new raw type to use
+     * @return a new type token with the given raw type and the type parameters of the given type token
+     */
     @NotNull
-    static ParameterizedType newParametrizedType(@NotNull Type rawType, @NotNull Type... typeArguments) {
+    static TypeToken<?> withRawType(@NotNull TypeToken<?> sourceTypeToken, @NotNull Type newRawType) {
+        ParameterizedType sourceType = (ParameterizedType) sourceTypeToken.getType();
+        Type[] typeParams = sourceType.getActualTypeArguments();
+        Type targetType = newParametrizedType(newRawType, typeParams);
+        return TypeToken.get(targetType);
+    }
+
+    @NotNull
+    private static ParameterizedType newParametrizedType(@NotNull Type rawType, @NotNull Type... typeArguments) {
         return new CustomParameterizedType(rawType, null, typeArguments);
     }
 
@@ -26,11 +44,10 @@ class TypeHelper {
 
         private Type[] typeArguments;
 
-        private CustomParameterizedType(@NotNull Type rawType, @Nullable Type ownerType,
-                                        @NotNull Type... typeArguments) {
+        private CustomParameterizedType(@NotNull Type rawType, @Nullable Type ownerType, @NotNull Type... typeArgs) {
             this.rawType = rawType;
             this.ownerType = ownerType;
-            this.typeArguments = typeArguments;
+            this.typeArguments = typeArgs;
         }
 
         @Override
