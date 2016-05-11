@@ -15,6 +15,7 @@ repositories { mavenCentral() }
 
 dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
+    compile 'org.jetbrains:annotations:15.0'
     testCompile 'junit:junit:4.+'
 }
 
