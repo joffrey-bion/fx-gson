@@ -1,0 +1,9 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+before_install:
+  - sudo apt-get update && sudo apt-get install oracle-java8-installer
+  - java -version
+  - chmod +x gradlew
