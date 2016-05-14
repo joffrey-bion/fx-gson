@@ -30,7 +30,11 @@ public class StringPropertyTypeAdapter extends TypeAdapter<StringProperty> {
 
     @Override
     public StringProperty read(JsonReader in) throws IOException {
-        boolean isNull = in.peek() == JsonToken.NULL;
-        return new SimpleStringProperty(isNull ? null : in.nextString());
+        if (in.peek() == JsonToken.NULL) {
+            in.nextNull();
+            return new SimpleStringProperty(null);
+        } else {
+            return new SimpleStringProperty(in.nextString());
+        }
     }
 }
