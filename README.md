@@ -20,41 +20,55 @@ For instance, if I have a class like this:
             this.firstName = new SimpleStringProperty(firstName);
             this.lastName = new SimpleStringProperty(lastName);
         }
+        
+        // getters / setters / prop getters
     }
+    
+Here is how it is serialized:
 
-Normal Gson usage would produce:
-
-    {
-        "firstName": {
-            "name": "",
-            "value": "Hans",
-            "valid": true,
-            "helper": {
-                "observable": {}
-            }
-        },
-        "lastName": {
-            "name": "",
-            "value": "Muster",
-            "valid": true,
-            "helper": {
-                "observable": {}
-            }
+<table>
+    <tr>
+        <th>With Gson</th>
+        <th>With FxGson</th>
+    </tr>
+    <tr>
+        <td>
+        <pre>{
+    "firstName": {
+        "name": "",
+        "value": "Hans",
+        "valid": true,
+        "helper": {
+            "observable": {}
+        }
+    },
+    "lastName": {
+        "name": "",
+        "value": "Muster",
+        "valid": true,
+        "helper": {
+            "observable": {}
         }
     }
+}</pre>
+        </td>
+        <td>
+            <pre>{
+    "firstName": "Hans",
+    "lastName": "Muster"
+}</pre>
+        </td>
+    </tr>
+</table>
 
-With FxGson, we get instead:
 
-    {
-        "firstName": "Hans",
-        "lastName": "Muster"
-    }
-
-Isn't that beautiful?
+Convincing, eh?
 
 ## Usage
 
-### Add the dependency in Gradle
+### Add the dependency
+ 
+#### In Gradle
 
     repositories {
         jcenter()
@@ -64,14 +78,25 @@ Isn't that beautiful?
         compile 'org.hildan.fxgson:fx-gson:1.2'
     }
 
+#### In Maven
+
+    <dependency>
+      <groupId>org.hildan.fxgson</groupId>
+      <artifactId>fx-gson</artifactId>
+      <version>1.2</version>
+      <type>pom</type>
+    </dependency>
+
 ### Use FxGson
 
-#### Simple usage with the FxGson class
+#### Using the pre-configured builders
 
 You can use the built-in `GsonBuilder`s directly:
 
+    // to handle only Properties and Observable collections
     Gson fxGson = FxGson.coreBuilder().create();
 
+    // to also handle Color, Font, etc.
     Gson fxGsonWithExtras = FxGson.fullBuilder().create();
 
 Because `FxGson` returns a builder, you can add your own configuration to it:
@@ -81,6 +106,8 @@ Because `FxGson` returns a builder, you can add your own configuration to it:
                       .setPrettyPrinting()
                       .create();
 
+#### Configuring an existing builder to handle JavaFX properties
+
 Sometimes you don't control the creation of the `GsonBuilder` you are using, because you take it from some library or
  some other piece of code.
 In this case, use the provided helper methods to add `FxGson` configuration to an existing `GsonBuilder`:
@@ -88,7 +115,7 @@ In this case, use the provided helper methods to add `FxGson` configuration to a
     GsonBuilder builder = MyLib.getBuilder();
     Gson gson = FxGson.addCoreSerializers(builder).create();
 
-#### Using TypeAdapter factories
+#### Going for full control
 
 FxGson is simply a helper class registering a particular `TypeAdapterFactory` on a `GsonBuilder`. If you want more
 control, you can use directly or even extend the `JavaFxPropertyTypeAdapterFactory` or `JavaFxExtraTypeAdapterFactory`
