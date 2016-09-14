@@ -26,6 +26,7 @@ public class ColorTypeAdapter extends TypeAdapter<Color> {
     @Override
     public Color read(JsonReader in) throws IOException {
         if (in.peek() == JsonToken.NULL) {
+            in.nextNull();
             return null;
         }
         return Color.web(in.nextString());

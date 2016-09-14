@@ -30,6 +30,7 @@ public class FontTypeAdapter extends TypeAdapter<Font> {
     @Override
     public Font read(JsonReader in) throws IOException {
         if (in.peek() == JsonToken.NULL) {
+            in.nextNull();
             return null;
         }
         String[] font = in.nextString().split(",");
