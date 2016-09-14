@@ -73,15 +73,15 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
         // collection property types
 
         if (ListProperty.class.isAssignableFrom(clazz)) {
-            TypeAdapter<?> delegate = gson.getDelegateAdapter(this, withRawType(type, ObservableList.class));
+            TypeAdapter<?> delegate = gson.getAdapter(withRawType(type, ObservableList.class));
             return new ListPropertyTypeAdapter(delegate);
         }
         if (SetProperty.class.isAssignableFrom(clazz)) {
-            TypeAdapter<?> delegate = gson.getDelegateAdapter(this, withRawType(type, ObservableSet.class));
+            TypeAdapter<?> delegate = gson.getAdapter(withRawType(type, ObservableSet.class));
             return new SetPropertyTypeAdapter(delegate);
         }
         if (MapProperty.class.isAssignableFrom(clazz)) {
-            TypeAdapter<?> delegate = gson.getDelegateAdapter(this, withRawType(type, ObservableMap.class));
+            TypeAdapter<?> delegate = gson.getAdapter(withRawType(type, ObservableMap.class));
             return new MapPropertyTypeAdapter(delegate);
         }
 
@@ -90,7 +90,7 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
         Type[] typeParams = ((ParameterizedType) type.getType()).getActualTypeArguments();
         Type param = typeParams[0];
         // null factory skipPast because the nested type argument might also be a Property
-        TypeAdapter<?> delegate = gson.getDelegateAdapter(null, TypeToken.get(param));
+        TypeAdapter<?> delegate = gson.getAdapter(TypeToken.get(param));
         return (TypeAdapter<T>) new ObjectPropertyTypeAdapter<>(delegate);
     }
 }
