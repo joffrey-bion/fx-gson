@@ -178,50 +178,50 @@ public class FxGsonTest {
 
     @Test
     public void testBooleanProperty() {
-        testProperty(WithBooleanProp.class, true, "{\"bool\":true}", o -> o.bool);
-        testProperty(WithBooleanProp.class, false, "{\"bool\":false}", o -> o.bool);
+        testProperty(WithBooleanProp.class, true, "{\"prop\":true}", o -> o.prop);
+        testProperty(WithBooleanProp.class, false, "{\"prop\":false}", o -> o.prop);
     }
 
     @Test
     public void testIntegerProperty() {
-        testProperty(WithIntegerProp.class, 0, "{\"num\":0}", o -> o.num);
-        testProperty(WithIntegerProp.class, 5, "{\"num\":5}", o -> o.num);
-        testProperty(WithIntegerProp.class, -3, "{\"num\":-3}", o -> o.num);
+        testProperty(WithIntegerProp.class, 0, "{\"prop\":0}", o -> o.prop);
+        testProperty(WithIntegerProp.class, 5, "{\"prop\":5}", o -> o.prop);
+        testProperty(WithIntegerProp.class, -3, "{\"prop\":-3}", o -> o.prop);
     }
 
     @Test
     public void testLongProperty() {
-        testProperty(WithLongProp.class, 0L, "{\"num\":0}", o -> o.num);
-        testProperty(WithLongProp.class, 5L, "{\"num\":5}", o -> o.num);
-        testProperty(WithLongProp.class, -3L, "{\"num\":-3}", o -> o.num);
+        testProperty(WithLongProp.class, 0L, "{\"prop\":0}", o -> o.prop);
+        testProperty(WithLongProp.class, 5L, "{\"prop\":5}", o -> o.prop);
+        testProperty(WithLongProp.class, -3L, "{\"prop\":-3}", o -> o.prop);
     }
 
     @Test
     public void testFloatProperty() {
-        testProperty(WithFloatProp.class, 0f, "{\"num\":0.0}", o -> o.num);
-        testProperty(WithFloatProp.class, 2.5f, "{\"num\":2.5}", o -> o.num);
-        testProperty(WithFloatProp.class, -3.5f, "{\"num\":-3.5}", o -> o.num);
+        testProperty(WithFloatProp.class, 0f, "{\"prop\":0.0}", o -> o.prop);
+        testProperty(WithFloatProp.class, 2.5f, "{\"prop\":2.5}", o -> o.prop);
+        testProperty(WithFloatProp.class, -3.5f, "{\"prop\":-3.5}", o -> o.prop);
     }
 
     @Test
     public void testDoubleProperty() {
-        testProperty(WithDoubleProp.class, 0d, "{\"num\":0.0}", o -> o.num);
-        testProperty(WithDoubleProp.class, 2.5d, "{\"num\":2.5}", o -> o.num);
-        testProperty(WithDoubleProp.class, -3.5d, "{\"num\":-3.5}", o -> o.num);
+        testProperty(WithDoubleProp.class, 0d, "{\"prop\":0.0}", o -> o.prop);
+        testProperty(WithDoubleProp.class, 2.5d, "{\"prop\":2.5}", o -> o.prop);
+        testProperty(WithDoubleProp.class, -3.5d, "{\"prop\":-3.5}", o -> o.prop);
     }
 
     @Test
     public void testStringProperty() {
-        testProperty(WithStringProp.class, "myValue", "{\"str\":\"myValue\"}", o -> o.str);
-        testProperty(WithStringProp.class, "", "{\"str\":\"\"}", o -> o.str);
-        testProperty(WithStringProp.class, null, "{\"str\":null}", o -> o.str);
+        testProperty(WithStringProp.class, "myValue", "{\"prop\":\"myValue\"}", o -> o.prop);
+        testProperty(WithStringProp.class, "", "{\"prop\":\"\"}", o -> o.prop);
+        testProperty(WithStringProp.class, null, "{\"prop\":null}", o -> o.prop);
     }
 
     @Test
     public void testObjectProperty() {
         CustomObject obj = new CustomObject("myValue");
-        testProperty(WithGenericProp.class, obj, "{\"obj\":{\"name\":\"myValue\"}}", o -> o.obj);
-        testProperty(WithGenericProp.class, null, "{\"obj\":null}", o -> o.obj);
+        testProperty(WithGenericProp.class, obj, "{\"prop\":{\"name\":\"myValue\"}}", o -> o.prop);
+        testProperty(WithGenericProp.class, null, "{\"prop\":null}", o -> o.prop);
     }
 
     @Test
@@ -233,8 +233,8 @@ public class FxGsonTest {
         ObservableList<CustomObject> listOne = FXCollections.observableArrayList(one);
         ObservableList<CustomObject> listTwo = FXCollections.observableArrayList(one, two);
 
-        Function<WithObsList, ObservableList<CustomObject>> getter = obj -> obj.list;
-        BiConsumer<WithObsList, ObservableList<CustomObject>> setter = (obj, list) -> obj.list = list;
+        Function<WithObsList, ObservableList<CustomObject>> getter = o -> o.list;
+        BiConsumer<WithObsList, ObservableList<CustomObject>> setter = (o, l) -> o.list = l;
 
         testValue(WithObsList.class, null, "{\"list\":null}", getter, setter);
         testValue(WithObsList.class, listEmpty, "{\"list\":[]}", getter, setter);
@@ -252,8 +252,8 @@ public class FxGsonTest {
         ObservableSet<CustomObject> setOne = FXCollections.observableSet(one);
         ObservableSet<CustomObject> setTwo = FXCollections.observableSet(one, two);
 
-        Function<WithObsSet, ObservableSet<CustomObject>> getter = obj -> obj.set;
-        BiConsumer<WithObsSet, ObservableSet<CustomObject>> setter = (obj, set) -> obj.set = set;
+        Function<WithObsSet, ObservableSet<CustomObject>> getter = o -> o.set;
+        BiConsumer<WithObsSet, ObservableSet<CustomObject>> setter = (o, s) -> o.set = s;
 
         testValue(WithObsSet.class, null, "{\"set\":null}", getter, setter);
         testValue(WithObsSet.class, setEmpty, "{\"set\":[]}", getter, setter);
@@ -274,8 +274,8 @@ public class FxGsonTest {
         mapTwo.put("key1", one);
         mapTwo.put("key2", two);
 
-        Function<WithObsMapStr, ObservableMap<String, CustomObject>> getter = obj -> obj.map;
-        BiConsumer<WithObsMapStr, ObservableMap<String, CustomObject>> setter = (obj, map) -> obj.map = map;
+        Function<WithObsMapStr, ObservableMap<String, CustomObject>> getter = o -> o.map;
+        BiConsumer<WithObsMapStr, ObservableMap<String, CustomObject>> setter = (o, m) -> o.map = m;
 
         testValue(WithObsMapStr.class, null, "{\"map\":null}", getter, setter);
         testValue(WithObsMapStr.class, mapEmpty, "{\"map\":{}}", getter, setter);
@@ -296,8 +296,8 @@ public class FxGsonTest {
         mapTwo.put(1, one);
         mapTwo.put(2, two);
 
-        Function<WithObsMapInt, ObservableMap<Integer, CustomObject>> getter = obj -> obj.map;
-        BiConsumer<WithObsMapInt, ObservableMap<Integer, CustomObject>> setter = (obj, map) -> obj.map = map;
+        Function<WithObsMapInt, ObservableMap<Integer, CustomObject>> getter = o -> o.map;
+        BiConsumer<WithObsMapInt, ObservableMap<Integer, CustomObject>> setter = (o, m) -> o.map = m;
 
         testValue(WithObsMapInt.class, null, "{\"map\":null}", getter, setter);
         testValue(WithObsMapInt.class, mapEmpty, "{\"map\":{}}", getter, setter);
@@ -322,8 +322,8 @@ public class FxGsonTest {
         ObservableMap<String, CustomObject> mapOneObs = FXCollections.observableMap(mapOne);
         ObservableMap<String, CustomObject> mapTwoObs = FXCollections.observableMap(mapTwo);
 
-        Function<WithObsMapStr, ObservableMap<String, CustomObject>> getter = obj -> obj.map;
-        BiConsumer<WithObsMapStr, ObservableMap<String, CustomObject>> setter = (obj, map) -> obj.map = map;
+        Function<WithObsMapStr, ObservableMap<String, CustomObject>> getter = o -> o.map;
+        BiConsumer<WithObsMapStr, ObservableMap<String, CustomObject>> setter = (o, m) -> o.map = m;
 
         testValue(WithObsMapStr.class, null, "{\"map\":null}", getter, setter);
         testValue(WithObsMapStr.class, mapEmptyObs, "{\"map\":{}}", getter, setter);
@@ -348,8 +348,8 @@ public class FxGsonTest {
         ObservableMap<Integer, CustomObject> mapOneObs = FXCollections.observableMap(mapOne);
         ObservableMap<Integer, CustomObject> mapTwoObs = FXCollections.observableMap(mapTwo);
 
-        Function<WithObsMapInt, ObservableMap<Integer, CustomObject>> getter = obj -> obj.map;
-        BiConsumer<WithObsMapInt, ObservableMap<Integer, CustomObject>> setter = (obj, map) -> obj.map = map;
+        Function<WithObsMapInt, ObservableMap<Integer, CustomObject>> getter = o -> o.map;
+        BiConsumer<WithObsMapInt, ObservableMap<Integer, CustomObject>> setter = (o, m) -> o.map = m;
 
         testValue(WithObsMapInt.class, null, "{\"map\":null}", getter, setter);
         testValue(WithObsMapInt.class, mapEmptyObs, "{\"map\":{}}", getter, setter);
@@ -416,8 +416,8 @@ public class FxGsonTest {
         List<CustomObject> listOne = Collections.singletonList(one);
         List<CustomObject> listTwo = Arrays.asList(one, two);
 
-        Function<WithList, List<CustomObject>> getter = obj -> obj.list;
-        BiConsumer<WithList, List<CustomObject>> setter = (obj, list) -> obj.list = list;
+        Function<WithList, List<CustomObject>> getter = o -> o.list;
+        BiConsumer<WithList, List<CustomObject>> setter = (o, l) -> o.list = l;
 
         testValue(WithList.class, null, "{\"list\":null}", getter, setter);
         testValue(WithList.class, listEmpty, "{\"list\":[]}", getter, setter);
@@ -434,8 +434,8 @@ public class FxGsonTest {
         Set<CustomObject> setOne = Collections.singleton(one);
         Set<CustomObject> setTwo = new HashSet<>(Arrays.asList(one, two));
 
-        Function<WithSet, Set<CustomObject>> getter = obj -> obj.set;
-        BiConsumer<WithSet, Set<CustomObject>> setter = (obj, set) -> obj.set = set;
+        Function<WithSet, Set<CustomObject>> getter = o -> o.set;
+        BiConsumer<WithSet, Set<CustomObject>> setter = (o, s) -> o.set = s;
 
         testValue(WithSet.class, null, "{\"set\":null}", getter, setter);
         testValue(WithSet.class, setEmpty, "{\"set\":[]}", getter, setter);
@@ -455,8 +455,8 @@ public class FxGsonTest {
         mapTwo.put("key1", one);
         mapTwo.put("key2", two);
 
-        Function<WithMapStr, Map<String, CustomObject>> getter = obj -> obj.map;
-        BiConsumer<WithMapStr, Map<String, CustomObject>> setter = (obj, map) -> obj.map = map;
+        Function<WithMapStr, Map<String, CustomObject>> getter = o -> o.map;
+        BiConsumer<WithMapStr, Map<String, CustomObject>> setter = (o, m) -> o.map = m;
 
         testValue(WithMapStr.class, null, "{\"map\":null}", getter, setter);
         testValue(WithMapStr.class, mapEmpty, "{\"map\":{}}", getter, setter);
@@ -476,8 +476,8 @@ public class FxGsonTest {
         mapTwo.put(1, one);
         mapTwo.put(2, two);
 
-        Function<WithMapInt, Map<Integer, CustomObject>> getter = obj -> obj.map;
-        BiConsumer<WithMapInt, Map<Integer, CustomObject>> setter = (obj, map) -> obj.map = map;
+        Function<WithMapInt, Map<Integer, CustomObject>> getter = o -> o.map;
+        BiConsumer<WithMapInt, Map<Integer, CustomObject>> setter = (o, m) -> o.map = m;
 
         testValue(WithMapInt.class, null, "{\"map\":null}", getter, setter);
         testValue(WithMapInt.class, mapEmpty, "{\"map\":{}}", getter, setter);

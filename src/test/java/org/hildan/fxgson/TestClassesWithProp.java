@@ -32,7 +32,7 @@ class TestClassesWithProp {
     }
 
     static class WithBooleanProp {
-        BooleanProperty bool = new SimpleBooleanProperty();
+        BooleanProperty prop = new SimpleBooleanProperty();
 
         @Override
         public boolean equals(Object o) {
@@ -43,17 +43,17 @@ class TestClassesWithProp {
                 return false;
             }
             WithBooleanProp that = (WithBooleanProp) o;
-            return propEquals(bool, that.bool);
+            return propEquals(prop, that.prop);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(bool);
+            return Objects.hash(prop);
         }
     }
 
     static class WithIntegerProp {
-        IntegerProperty num = new SimpleIntegerProperty();
+        IntegerProperty prop = new SimpleIntegerProperty();
 
         @Override
         public boolean equals(Object o) {
@@ -64,17 +64,17 @@ class TestClassesWithProp {
                 return false;
             }
             WithIntegerProp that = (WithIntegerProp) o;
-            return propEquals(num, that.num);
+            return propEquals(prop, that.prop);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(num);
+            return Objects.hash(prop);
         }
     }
 
     static class WithLongProp {
-        LongProperty num = new SimpleLongProperty();
+        LongProperty prop = new SimpleLongProperty();
 
         @Override
         public boolean equals(Object o) {
@@ -85,17 +85,17 @@ class TestClassesWithProp {
                 return false;
             }
             WithLongProp that = (WithLongProp) o;
-            return propEquals(num, that.num);
+            return propEquals(prop, that.prop);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(num);
+            return Objects.hash(prop);
         }
     }
 
     static class WithFloatProp {
-        FloatProperty num = new SimpleFloatProperty();
+        FloatProperty prop = new SimpleFloatProperty();
 
         @Override
         public boolean equals(Object o) {
@@ -106,17 +106,17 @@ class TestClassesWithProp {
                 return false;
             }
             WithFloatProp that = (WithFloatProp) o;
-            return propEquals(num, that.num);
+            return propEquals(prop, that.prop);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(num);
+            return Objects.hash(prop);
         }
     }
 
     static class WithDoubleProp {
-        DoubleProperty num = new SimpleDoubleProperty();
+        DoubleProperty prop = new SimpleDoubleProperty();
 
         @Override
         public boolean equals(Object o) {
@@ -127,17 +127,17 @@ class TestClassesWithProp {
                 return false;
             }
             WithDoubleProp that = (WithDoubleProp) o;
-            return propEquals(num, that.num);
+            return propEquals(prop, that.prop);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(num);
+            return Objects.hash(prop);
         }
     }
 
     static class WithStringProp {
-        StringProperty str = new SimpleStringProperty();
+        StringProperty prop = new SimpleStringProperty();
 
         @Override
         public boolean equals(Object o) {
@@ -148,17 +148,17 @@ class TestClassesWithProp {
                 return false;
             }
             WithStringProp that = (WithStringProp) o;
-            return propEquals(str, that.str);
+            return propEquals(prop, that.prop);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(str);
+            return Objects.hash(prop);
         }
     }
 
     static class WithGenericProp {
-        Property<CustomObject> obj = new SimpleObjectProperty<>();
+        Property<CustomObject> prop = new SimpleObjectProperty<>();
 
         @Override
         public boolean equals(Object o) {
@@ -169,12 +169,12 @@ class TestClassesWithProp {
                 return false;
             }
             WithGenericProp that = (WithGenericProp) o;
-            return propEquals(obj, that.obj);
+            return propEquals(prop, that.prop);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(obj);
+            return Objects.hash(prop);
         }
     }
 
