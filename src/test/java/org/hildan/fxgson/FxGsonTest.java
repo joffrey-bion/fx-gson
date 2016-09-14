@@ -16,14 +16,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.hildan.fxgson.TestClassesWithProp.*;
+import static org.hildan.fxgson.TestClassesExtra.*;
 import static org.hildan.fxgson.TestClassesSimple.*;
+import static org.hildan.fxgson.TestClassesWithProp.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -350,8 +354,8 @@ public class FxGsonTest {
         testValue(WithObsMapInt.class, null, "{\"map\":null}", getter, setter);
         testValue(WithObsMapInt.class, mapEmptyObs, "{\"map\":{}}", getter, setter);
         testValue(WithObsMapInt.class, mapOneObs, "{\"map\":{\"1\":{\"name\":\"myObj1\"}}}", getter, setter);
-        testValue(WithObsMapInt.class, mapTwoObs,
-                "{\"map\":{\"1\":{\"name\":\"myObj1\"},\"2\":{\"name\":\"myObj2\"}}}", getter, setter);
+        testValue(WithObsMapInt.class, mapTwoObs, "{\"map\":{\"1\":{\"name\":\"myObj1\"},\"2\":{\"name\":\"myObj2\"}}}",
+                getter, setter);
     }
 
     @Test
@@ -398,7 +402,8 @@ public class FxGsonTest {
     @Test
     public void testObject() {
         CustomObject obj = new CustomObject("myValue");
-        testValue(WithCustomObject.class, obj, "{\"value\":{\"name\":\"myValue\"}}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithCustomObject.class, obj, "{\"value\":{\"name\":\"myValue\"}}", o -> o.value,
+                (o, v) -> o.value = v);
         testValue(WithCustomObject.class, null, "{\"value\":null}", o -> o.value, (o, v) -> o.value = v);
     }
 
@@ -417,8 +422,7 @@ public class FxGsonTest {
         testValue(WithList.class, null, "{\"list\":null}", getter, setter);
         testValue(WithList.class, listEmpty, "{\"list\":[]}", getter, setter);
         testValue(WithList.class, listOne, "{\"list\":[{\"name\":\"myObj1\"}]}", getter, setter);
-        testValue(WithList.class, listTwo, "{\"list\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}", getter,
-                setter);
+        testValue(WithList.class, listTwo, "{\"list\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}", getter, setter);
     }
 
     @Test
@@ -457,8 +461,8 @@ public class FxGsonTest {
         testValue(WithMapStr.class, null, "{\"map\":null}", getter, setter);
         testValue(WithMapStr.class, mapEmpty, "{\"map\":{}}", getter, setter);
         testValue(WithMapStr.class, mapOne, "{\"map\":{\"key1\":{\"name\":\"myObj1\"}}}", getter, setter);
-        testValue(WithMapStr.class, mapTwo,
-                "{\"map\":{\"key1\":{\"name\":\"myObj1\"},\"key2\":{\"name\":\"myObj2\"}}}", getter, setter);
+        testValue(WithMapStr.class, mapTwo, "{\"map\":{\"key1\":{\"name\":\"myObj1\"},\"key2\":{\"name\":\"myObj2\"}}}",
+                getter, setter);
     }
 
     @Test
@@ -480,5 +484,29 @@ public class FxGsonTest {
         testValue(WithMapInt.class, mapOne, "{\"map\":{\"1\":{\"name\":\"myObj1\"}}}", getter, setter);
         testValue(WithMapInt.class, mapTwo, "{\"map\":{\"1\":{\"name\":\"myObj1\"},\"2\":{\"name\":\"myObj2\"}}}",
                 getter, setter);
+    }
+
+    @Test
+    public void testFont() {
+        String family = "SansSerif";
+        FontWeight weight = FontWeight.findByName("Regular");
+        double size = 11.0;
+        Font font = Font.font(family, weight, size);
+
+        Function<WithFont, Font> getter = o -> o.font;
+        BiConsumer<WithFont, Font> setter = (o, f) -> o.font = f;
+
+        testValue(WithFont.class, null, "{\"font\":null}", getter, setter, extraGson);
+        testValue(WithFont.class, font, "{\"font\":\"SansSerif,Regular,11.0\"}", getter, setter, extraGson);
+    }
+
+    @Test
+    public void testColor() {
+        Function<WithColor, Color> getter = o -> o.color;
+        BiConsumer<WithColor, Color> setter = (o, c) -> o.color = c;
+
+        testValue(WithColor.class, null, "{\"color\":null}", getter, setter, extraGson);
+        testValue(WithColor.class, Color.RED, "{\"color\":\"#ff0000ff\"}", getter, setter, extraGson);
+        testValue(WithColor.class, Color.BLUE, "{\"color\":\"#0000ffff\"}", getter, setter, extraGson);
     }
 }
