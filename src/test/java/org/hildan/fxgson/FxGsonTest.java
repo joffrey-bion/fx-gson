@@ -1,6 +1,12 @@
 package org.hildan.fxgson;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -16,7 +22,8 @@ import com.google.gson.GsonBuilder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.hildan.fxgson.TestClasses.*;
+import static org.hildan.fxgson.TestClassesWithProp.*;
+import static org.hildan.fxgson.TestClassesSimple.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -30,34 +37,6 @@ public class FxGsonTest {
     public static void createGson() {
         coreGson = FxGson.coreBuilder().create();
         extraGson = FxGson.fullBuilder().create();
-    }
-
-    /**
-     * Tests the serialization/deserialization of the given object with each of the provided {@link Gson}s.
-     * <p>
-     * This method checks that the object is the same after a serialization-deserialization cycle.
-     * <p>
-     * If an expected JSON is provided, this method checks if the serialized object gives the expected JSON.
-     *
-     * @param objClass
-     *         the class of the object to test
-     * @param objToTest
-     *         the object to test
-     * @param expectedJson
-     *         the expected JSON representing the serialized objToTest, or null if this method should not test the
-     *         serialized representation of the object
-     * @param gsons
-     *         the {@link Gson}s to use for serialization/deserialization tests
-     * @param <B>
-     *         the type of the object to test
-     */
-    private static <B> void testObject(Class<B> objClass, B objToTest, String expectedJson, Gson... gsons) {
-        for (Gson gson : gsons) {
-            assertEquals("Incorrect JSON generated", expectedJson, gson.toJson(objToTest));
-
-            B deserialized = gson.fromJson(expectedJson, objClass);
-            assertEquals("Incorrect deserialized value", objToTest, deserialized);
-        }
     }
 
     /**
@@ -195,54 +174,54 @@ public class FxGsonTest {
 
     @Test
     public void testBooleanProperty() {
-        testProperty(BaseWithBoolean.class, true, "{\"bool\":true}", o -> o.bool);
-        testProperty(BaseWithBoolean.class, false, "{\"bool\":false}", o -> o.bool);
+        testProperty(WithBooleanProp.class, true, "{\"bool\":true}", o -> o.bool);
+        testProperty(WithBooleanProp.class, false, "{\"bool\":false}", o -> o.bool);
     }
 
     @Test
     public void testIntegerProperty() {
-        testProperty(BaseWithInteger.class, 0, "{\"num\":0}", o -> o.num);
-        testProperty(BaseWithInteger.class, 5, "{\"num\":5}", o -> o.num);
-        testProperty(BaseWithInteger.class, -3, "{\"num\":-3}", o -> o.num);
+        testProperty(WithIntegerProp.class, 0, "{\"num\":0}", o -> o.num);
+        testProperty(WithIntegerProp.class, 5, "{\"num\":5}", o -> o.num);
+        testProperty(WithIntegerProp.class, -3, "{\"num\":-3}", o -> o.num);
     }
 
     @Test
     public void testLongProperty() {
-        testProperty(BaseWithLong.class, 0L, "{\"num\":0}", o -> o.num);
-        testProperty(BaseWithLong.class, 5L, "{\"num\":5}", o -> o.num);
-        testProperty(BaseWithLong.class, -3L, "{\"num\":-3}", o -> o.num);
+        testProperty(WithLongProp.class, 0L, "{\"num\":0}", o -> o.num);
+        testProperty(WithLongProp.class, 5L, "{\"num\":5}", o -> o.num);
+        testProperty(WithLongProp.class, -3L, "{\"num\":-3}", o -> o.num);
     }
 
     @Test
     public void testFloatProperty() {
-        testProperty(BaseWithFloat.class, 0f, "{\"num\":0.0}", o -> o.num);
-        testProperty(BaseWithFloat.class, 2.5f, "{\"num\":2.5}", o -> o.num);
-        testProperty(BaseWithFloat.class, -3.5f, "{\"num\":-3.5}", o -> o.num);
+        testProperty(WithFloatProp.class, 0f, "{\"num\":0.0}", o -> o.num);
+        testProperty(WithFloatProp.class, 2.5f, "{\"num\":2.5}", o -> o.num);
+        testProperty(WithFloatProp.class, -3.5f, "{\"num\":-3.5}", o -> o.num);
     }
 
     @Test
     public void testDoubleProperty() {
-        testProperty(BaseWithDouble.class, 0d, "{\"num\":0.0}", o -> o.num);
-        testProperty(BaseWithDouble.class, 2.5d, "{\"num\":2.5}", o -> o.num);
-        testProperty(BaseWithDouble.class, -3.5d, "{\"num\":-3.5}", o -> o.num);
+        testProperty(WithDoubleProp.class, 0d, "{\"num\":0.0}", o -> o.num);
+        testProperty(WithDoubleProp.class, 2.5d, "{\"num\":2.5}", o -> o.num);
+        testProperty(WithDoubleProp.class, -3.5d, "{\"num\":-3.5}", o -> o.num);
     }
 
     @Test
     public void testStringProperty() {
-        testProperty(BaseWithString.class, "myValue", "{\"str\":\"myValue\"}", o -> o.str);
-        testProperty(BaseWithString.class, "", "{\"str\":\"\"}", o -> o.str);
-        testProperty(BaseWithString.class, null, "{\"str\":null}", o -> o.str);
+        testProperty(WithStringProp.class, "myValue", "{\"str\":\"myValue\"}", o -> o.str);
+        testProperty(WithStringProp.class, "", "{\"str\":\"\"}", o -> o.str);
+        testProperty(WithStringProp.class, null, "{\"str\":null}", o -> o.str);
     }
 
     @Test
     public void testObjectProperty() {
         CustomObject obj = new CustomObject("myValue");
-        testProperty(BaseWithComplexObject.class, obj, "{\"obj\":{\"name\":\"myValue\"}}", o -> o.obj);
-        testProperty(BaseWithComplexObject.class, null, "{\"obj\":null}", o -> o.obj);
+        testProperty(WithGenericProp.class, obj, "{\"obj\":{\"name\":\"myValue\"}}", o -> o.obj);
+        testProperty(WithGenericProp.class, null, "{\"obj\":null}", o -> o.obj);
     }
 
     @Test
-    public void testList() {
+    public void testObservableList() {
         CustomObject one = new CustomObject("myObj1");
         CustomObject two = new CustomObject("myObj2");
 
@@ -250,18 +229,18 @@ public class FxGsonTest {
         ObservableList<CustomObject> listOne = FXCollections.observableArrayList(one);
         ObservableList<CustomObject> listTwo = FXCollections.observableArrayList(one, two);
 
-        Function<BaseWithList, ObservableList<CustomObject>> getter = obj -> obj.list;
-        BiConsumer<BaseWithList, ObservableList<CustomObject>> setter = (obj, list) -> obj.list = list;
+        Function<WithObsList, ObservableList<CustomObject>> getter = obj -> obj.list;
+        BiConsumer<WithObsList, ObservableList<CustomObject>> setter = (obj, list) -> obj.list = list;
 
-        testValue(BaseWithList.class, null, "{\"list\":null}", getter, setter);
-        testValue(BaseWithList.class, listEmpty, "{\"list\":[]}", getter, setter);
-        testValue(BaseWithList.class, listOne, "{\"list\":[{\"name\":\"myObj1\"}]}", getter, setter);
-        testValue(BaseWithList.class, listTwo, "{\"list\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}", getter,
+        testValue(WithObsList.class, null, "{\"list\":null}", getter, setter);
+        testValue(WithObsList.class, listEmpty, "{\"list\":[]}", getter, setter);
+        testValue(WithObsList.class, listOne, "{\"list\":[{\"name\":\"myObj1\"}]}", getter, setter);
+        testValue(WithObsList.class, listTwo, "{\"list\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}", getter,
                 setter);
     }
 
     @Test
-    public void testSet() {
+    public void testObservableSet() {
         CustomObject one = new CustomObject("myObj1");
         CustomObject two = new CustomObject("myObj2");
 
@@ -269,18 +248,18 @@ public class FxGsonTest {
         ObservableSet<CustomObject> setOne = FXCollections.observableSet(one);
         ObservableSet<CustomObject> setTwo = FXCollections.observableSet(one, two);
 
-        Function<BaseWithSet, ObservableSet<CustomObject>> getter = obj -> obj.set;
-        BiConsumer<BaseWithSet, ObservableSet<CustomObject>> setter = (obj, set) -> obj.set = set;
+        Function<WithObsSet, ObservableSet<CustomObject>> getter = obj -> obj.set;
+        BiConsumer<WithObsSet, ObservableSet<CustomObject>> setter = (obj, set) -> obj.set = set;
 
-        testValue(BaseWithSet.class, null, "{\"set\":null}", getter, setter);
-        testValue(BaseWithSet.class, setEmpty, "{\"set\":[]}", getter, setter);
-        testValue(BaseWithSet.class, setOne, "{\"set\":[{\"name\":\"myObj1\"}]}", getter, setter);
+        testValue(WithObsSet.class, null, "{\"set\":null}", getter, setter);
+        testValue(WithObsSet.class, setEmpty, "{\"set\":[]}", getter, setter);
+        testValue(WithObsSet.class, setOne, "{\"set\":[{\"name\":\"myObj1\"}]}", getter, setter);
         // do not check a particular JSON because the order is non-deterministic
-        testValue(BaseWithSet.class, setTwo, null, getter, setter);
+        testValue(WithObsSet.class, setTwo, null, getter, setter);
     }
 
     @Test
-    public void testMapStr() {
+    public void testObservableMapStr() {
         CustomObject one = new CustomObject("myObj1");
         CustomObject two = new CustomObject("myObj2");
 
@@ -291,18 +270,18 @@ public class FxGsonTest {
         mapTwo.put("key1", one);
         mapTwo.put("key2", two);
 
-        Function<BaseWithMapStr, ObservableMap<String, CustomObject>> getter = obj -> obj.map;
-        BiConsumer<BaseWithMapStr, ObservableMap<String, CustomObject>> setter = (obj, map) -> obj.map = map;
+        Function<WithObsMapStr, ObservableMap<String, CustomObject>> getter = obj -> obj.map;
+        BiConsumer<WithObsMapStr, ObservableMap<String, CustomObject>> setter = (obj, map) -> obj.map = map;
 
-        testValue(BaseWithMapStr.class, null, "{\"map\":null}", getter, setter);
-        testValue(BaseWithMapStr.class, mapEmpty, "{\"map\":{}}", getter, setter);
-        testValue(BaseWithMapStr.class, mapOne, "{\"map\":{\"key1\":{\"name\":\"myObj1\"}}}", getter, setter);
-        testValue(BaseWithMapStr.class, mapTwo,
+        testValue(WithObsMapStr.class, null, "{\"map\":null}", getter, setter);
+        testValue(WithObsMapStr.class, mapEmpty, "{\"map\":{}}", getter, setter);
+        testValue(WithObsMapStr.class, mapOne, "{\"map\":{\"key1\":{\"name\":\"myObj1\"}}}", getter, setter);
+        testValue(WithObsMapStr.class, mapTwo,
                 "{\"map\":{\"key1\":{\"name\":\"myObj1\"},\"key2\":{\"name\":\"myObj2\"}}}", getter, setter);
     }
 
     @Test
-    public void testMapInt() {
+    public void testObservableMapInt() {
         CustomObject one = new CustomObject("myObj1");
         CustomObject two = new CustomObject("myObj2");
 
@@ -313,18 +292,18 @@ public class FxGsonTest {
         mapTwo.put(1, one);
         mapTwo.put(2, two);
 
-        Function<BaseWithMapInt, ObservableMap<Integer, CustomObject>> getter = obj -> obj.map;
-        BiConsumer<BaseWithMapInt, ObservableMap<Integer, CustomObject>> setter = (obj, map) -> obj.map = map;
+        Function<WithObsMapInt, ObservableMap<Integer, CustomObject>> getter = obj -> obj.map;
+        BiConsumer<WithObsMapInt, ObservableMap<Integer, CustomObject>> setter = (obj, map) -> obj.map = map;
 
-        testValue(BaseWithMapInt.class, null, "{\"map\":null}", getter, setter);
-        testValue(BaseWithMapInt.class, mapEmpty, "{\"map\":{}}", getter, setter);
-        testValue(BaseWithMapInt.class, mapOne, "{\"map\":{\"1\":{\"name\":\"myObj1\"}}}", getter, setter);
-        testValue(BaseWithMapInt.class, mapTwo, "{\"map\":{\"1\":{\"name\":\"myObj1\"},\"2\":{\"name\":\"myObj2\"}}}",
+        testValue(WithObsMapInt.class, null, "{\"map\":null}", getter, setter);
+        testValue(WithObsMapInt.class, mapEmpty, "{\"map\":{}}", getter, setter);
+        testValue(WithObsMapInt.class, mapOne, "{\"map\":{\"1\":{\"name\":\"myObj1\"}}}", getter, setter);
+        testValue(WithObsMapInt.class, mapTwo, "{\"map\":{\"1\":{\"name\":\"myObj1\"},\"2\":{\"name\":\"myObj2\"}}}",
                 getter, setter);
     }
 
     @Test
-    public void testCustomTreeMapStr() {
+    public void testCustomObservableTreeMapStr() {
         CustomObject one = new CustomObject("myObj1");
         CustomObject two = new CustomObject("myObj2");
 
@@ -339,18 +318,18 @@ public class FxGsonTest {
         ObservableMap<String, CustomObject> mapOneObs = FXCollections.observableMap(mapOne);
         ObservableMap<String, CustomObject> mapTwoObs = FXCollections.observableMap(mapTwo);
 
-        Function<BaseWithMapStr, ObservableMap<String, CustomObject>> getter = obj -> obj.map;
-        BiConsumer<BaseWithMapStr, ObservableMap<String, CustomObject>> setter = (obj, map) -> obj.map = map;
+        Function<WithObsMapStr, ObservableMap<String, CustomObject>> getter = obj -> obj.map;
+        BiConsumer<WithObsMapStr, ObservableMap<String, CustomObject>> setter = (obj, map) -> obj.map = map;
 
-        testValue(BaseWithMapStr.class, null, "{\"map\":null}", getter, setter);
-        testValue(BaseWithMapStr.class, mapEmptyObs, "{\"map\":{}}", getter, setter);
-        testValue(BaseWithMapStr.class, mapOneObs, "{\"map\":{\"key1\":{\"name\":\"myObj1\"}}}", getter, setter);
-        testValue(BaseWithMapStr.class, mapTwoObs,
+        testValue(WithObsMapStr.class, null, "{\"map\":null}", getter, setter);
+        testValue(WithObsMapStr.class, mapEmptyObs, "{\"map\":{}}", getter, setter);
+        testValue(WithObsMapStr.class, mapOneObs, "{\"map\":{\"key1\":{\"name\":\"myObj1\"}}}", getter, setter);
+        testValue(WithObsMapStr.class, mapTwoObs,
                 "{\"map\":{\"key1\":{\"name\":\"myObj1\"},\"key2\":{\"name\":\"myObj2\"}}}", getter, setter);
     }
 
     @Test
-    public void testCustomTreeMapInt() {
+    public void testCustomObservableTreeMapInt() {
         CustomObject one = new CustomObject("myObj1");
         CustomObject two = new CustomObject("myObj2");
 
@@ -365,13 +344,141 @@ public class FxGsonTest {
         ObservableMap<Integer, CustomObject> mapOneObs = FXCollections.observableMap(mapOne);
         ObservableMap<Integer, CustomObject> mapTwoObs = FXCollections.observableMap(mapTwo);
 
-        Function<BaseWithMapInt, ObservableMap<Integer, CustomObject>> getter = obj -> obj.map;
-        BiConsumer<BaseWithMapInt, ObservableMap<Integer, CustomObject>> setter = (obj, map) -> obj.map = map;
+        Function<WithObsMapInt, ObservableMap<Integer, CustomObject>> getter = obj -> obj.map;
+        BiConsumer<WithObsMapInt, ObservableMap<Integer, CustomObject>> setter = (obj, map) -> obj.map = map;
 
-        testValue(BaseWithMapInt.class, null, "{\"map\":null}", getter, setter);
-        testValue(BaseWithMapInt.class, mapEmptyObs, "{\"map\":{}}", getter, setter);
-        testValue(BaseWithMapInt.class, mapOneObs, "{\"map\":{\"1\":{\"name\":\"myObj1\"}}}", getter, setter);
-        testValue(BaseWithMapInt.class, mapTwoObs,
+        testValue(WithObsMapInt.class, null, "{\"map\":null}", getter, setter);
+        testValue(WithObsMapInt.class, mapEmptyObs, "{\"map\":{}}", getter, setter);
+        testValue(WithObsMapInt.class, mapOneObs, "{\"map\":{\"1\":{\"name\":\"myObj1\"}}}", getter, setter);
+        testValue(WithObsMapInt.class, mapTwoObs,
                 "{\"map\":{\"1\":{\"name\":\"myObj1\"},\"2\":{\"name\":\"myObj2\"}}}", getter, setter);
+    }
+
+    @Test
+    public void testBoolean() {
+        testValue(WithBoolean.class, true, "{\"value\":true}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithBoolean.class, false, "{\"value\":false}", o -> o.value, (o, v) -> o.value = v);
+    }
+
+    @Test
+    public void testInteger() {
+        testValue(WithInteger.class, 0, "{\"value\":0}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithInteger.class, 5, "{\"value\":5}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithInteger.class, -3, "{\"value\":-3}", o -> o.value, (o, v) -> o.value = v);
+    }
+
+    @Test
+    public void testLong() {
+        testValue(WithLong.class, 0L, "{\"value\":0}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithLong.class, 5L, "{\"value\":5}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithLong.class, -3L, "{\"value\":-3}", o -> o.value, (o, v) -> o.value = v);
+    }
+
+    @Test
+    public void testFloat() {
+        testValue(WithFloat.class, 0f, "{\"value\":0.0}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithFloat.class, 2.5f, "{\"value\":2.5}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithFloat.class, -3.5f, "{\"value\":-3.5}", o -> o.value, (o, v) -> o.value = v);
+    }
+
+    @Test
+    public void testDouble() {
+        testValue(WithDouble.class, 0d, "{\"value\":0.0}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithDouble.class, 2.5d, "{\"value\":2.5}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithDouble.class, -3.5d, "{\"value\":-3.5}", o -> o.value, (o, v) -> o.value = v);
+    }
+
+    @Test
+    public void testString() {
+        testValue(WithString.class, "myValue", "{\"value\":\"myValue\"}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithString.class, "", "{\"value\":\"\"}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithString.class, null, "{\"value\":null}", o -> o.value, (o, v) -> o.value = v);
+    }
+
+    @Test
+    public void testObject() {
+        CustomObject obj = new CustomObject("myValue");
+        testValue(WithCustomObject.class, obj, "{\"value\":{\"name\":\"myValue\"}}", o -> o.value, (o, v) -> o.value = v);
+        testValue(WithCustomObject.class, null, "{\"value\":null}", o -> o.value, (o, v) -> o.value = v);
+    }
+
+    @Test
+    public void testList() {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        List<CustomObject> listEmpty = Collections.emptyList();
+        List<CustomObject> listOne = Collections.singletonList(one);
+        List<CustomObject> listTwo = Arrays.asList(one, two);
+
+        Function<WithList, List<CustomObject>> getter = obj -> obj.list;
+        BiConsumer<WithList, List<CustomObject>> setter = (obj, list) -> obj.list = list;
+
+        testValue(WithList.class, null, "{\"list\":null}", getter, setter);
+        testValue(WithList.class, listEmpty, "{\"list\":[]}", getter, setter);
+        testValue(WithList.class, listOne, "{\"list\":[{\"name\":\"myObj1\"}]}", getter, setter);
+        testValue(WithList.class, listTwo, "{\"list\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}", getter,
+                setter);
+    }
+
+    @Test
+    public void testSet() {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        Set<CustomObject> setEmpty = Collections.emptySet();
+        Set<CustomObject> setOne = Collections.singleton(one);
+        Set<CustomObject> setTwo = new HashSet<>(Arrays.asList(one, two));
+
+        Function<WithSet, Set<CustomObject>> getter = obj -> obj.set;
+        BiConsumer<WithSet, Set<CustomObject>> setter = (obj, set) -> obj.set = set;
+
+        testValue(WithSet.class, null, "{\"set\":null}", getter, setter);
+        testValue(WithSet.class, setEmpty, "{\"set\":[]}", getter, setter);
+        testValue(WithSet.class, setOne, "{\"set\":[{\"name\":\"myObj1\"}]}", getter, setter);
+        // do not check a particular JSON because the order is non-deterministic
+        testValue(WithSet.class, setTwo, null, getter, setter);
+    }
+
+    @Test
+    public void testMapStr() {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        Map<String, CustomObject> mapEmpty = Collections.emptyMap();
+        Map<String, CustomObject> mapOne = Collections.singletonMap("key1", one);
+        Map<String, CustomObject> mapTwo = new HashMap<>();
+        mapTwo.put("key1", one);
+        mapTwo.put("key2", two);
+
+        Function<WithMapStr, Map<String, CustomObject>> getter = obj -> obj.map;
+        BiConsumer<WithMapStr, Map<String, CustomObject>> setter = (obj, map) -> obj.map = map;
+
+        testValue(WithMapStr.class, null, "{\"map\":null}", getter, setter);
+        testValue(WithMapStr.class, mapEmpty, "{\"map\":{}}", getter, setter);
+        testValue(WithMapStr.class, mapOne, "{\"map\":{\"key1\":{\"name\":\"myObj1\"}}}", getter, setter);
+        testValue(WithMapStr.class, mapTwo,
+                "{\"map\":{\"key1\":{\"name\":\"myObj1\"},\"key2\":{\"name\":\"myObj2\"}}}", getter, setter);
+    }
+
+    @Test
+    public void testMapInt() {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        Map<Integer, CustomObject> mapEmpty = Collections.emptyMap();
+        Map<Integer, CustomObject> mapOne = Collections.singletonMap(1, one);
+        Map<Integer, CustomObject> mapTwo = new HashMap<>();
+        mapTwo.put(1, one);
+        mapTwo.put(2, two);
+
+        Function<WithMapInt, Map<Integer, CustomObject>> getter = obj -> obj.map;
+        BiConsumer<WithMapInt, Map<Integer, CustomObject>> setter = (obj, map) -> obj.map = map;
+
+        testValue(WithMapInt.class, null, "{\"map\":null}", getter, setter);
+        testValue(WithMapInt.class, mapEmpty, "{\"map\":{}}", getter, setter);
+        testValue(WithMapInt.class, mapOne, "{\"map\":{\"1\":{\"name\":\"myObj1\"}}}", getter, setter);
+        testValue(WithMapInt.class, mapTwo, "{\"map\":{\"1\":{\"name\":\"myObj1\"},\"2\":{\"name\":\"myObj2\"}}}",
+                getter, setter);
     }
 }

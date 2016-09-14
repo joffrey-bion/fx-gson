@@ -20,7 +20,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
-class TestClasses {
+import org.hildan.fxgson.TestClassesSimple.CustomObject;
+
+class TestClassesWithProp {
 
     private static boolean propEquals(Property<?> p1, Property<?> p2) {
         if (p1 == null) {
@@ -29,7 +31,7 @@ class TestClasses {
         return p2 != null && Objects.equals(p1.getValue(), p2.getValue());
     }
 
-    static class BaseWithBoolean {
+    static class WithBooleanProp {
         BooleanProperty bool = new SimpleBooleanProperty();
 
         @Override
@@ -40,7 +42,7 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithBoolean that = (BaseWithBoolean) o;
+            WithBooleanProp that = (WithBooleanProp) o;
             return propEquals(bool, that.bool);
         }
 
@@ -50,7 +52,7 @@ class TestClasses {
         }
     }
 
-    static class BaseWithInteger {
+    static class WithIntegerProp {
         IntegerProperty num = new SimpleIntegerProperty();
 
         @Override
@@ -61,7 +63,7 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithInteger that = (BaseWithInteger) o;
+            WithIntegerProp that = (WithIntegerProp) o;
             return propEquals(num, that.num);
         }
 
@@ -71,7 +73,7 @@ class TestClasses {
         }
     }
 
-    static class BaseWithLong {
+    static class WithLongProp {
         LongProperty num = new SimpleLongProperty();
 
         @Override
@@ -82,7 +84,7 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithLong that = (BaseWithLong) o;
+            WithLongProp that = (WithLongProp) o;
             return propEquals(num, that.num);
         }
 
@@ -92,7 +94,7 @@ class TestClasses {
         }
     }
 
-    static class BaseWithFloat {
+    static class WithFloatProp {
         FloatProperty num = new SimpleFloatProperty();
 
         @Override
@@ -103,7 +105,7 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithFloat that = (BaseWithFloat) o;
+            WithFloatProp that = (WithFloatProp) o;
             return propEquals(num, that.num);
         }
 
@@ -113,7 +115,7 @@ class TestClasses {
         }
     }
 
-    static class BaseWithDouble {
+    static class WithDoubleProp {
         DoubleProperty num = new SimpleDoubleProperty();
 
         @Override
@@ -124,7 +126,7 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithDouble that = (BaseWithDouble) o;
+            WithDoubleProp that = (WithDoubleProp) o;
             return propEquals(num, that.num);
         }
 
@@ -134,7 +136,7 @@ class TestClasses {
         }
     }
 
-    static class BaseWithString {
+    static class WithStringProp {
         StringProperty str = new SimpleStringProperty();
 
         @Override
@@ -145,7 +147,7 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithString that = (BaseWithString) o;
+            WithStringProp that = (WithStringProp) o;
             return propEquals(str, that.str);
         }
 
@@ -155,7 +157,7 @@ class TestClasses {
         }
     }
 
-    static class BaseWithComplexObject {
+    static class WithGenericProp {
         Property<CustomObject> obj = new SimpleObjectProperty<>();
 
         @Override
@@ -166,7 +168,7 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithComplexObject that = (BaseWithComplexObject) o;
+            WithGenericProp that = (WithGenericProp) o;
             return propEquals(obj, that.obj);
         }
 
@@ -176,7 +178,7 @@ class TestClasses {
         }
     }
 
-    static class BaseWithList {
+    static class WithObsList {
         ObservableList<CustomObject> list;
 
         @Override
@@ -187,7 +189,7 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithList that = (BaseWithList) o;
+            WithObsList that = (WithObsList) o;
             return Objects.equals(list, that.list);
         }
 
@@ -197,7 +199,7 @@ class TestClasses {
         }
     }
 
-    static class BaseWithSet {
+    static class WithObsSet {
         ObservableSet<CustomObject> set;
 
         @Override
@@ -208,7 +210,7 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithSet that = (BaseWithSet) o;
+            WithObsSet that = (WithObsSet) o;
             return Objects.equals(set, that.set);
         }
 
@@ -218,7 +220,7 @@ class TestClasses {
         }
     }
 
-    static class BaseWithMapInt {
+    static class WithObsMapInt {
         ObservableMap<Integer, CustomObject> map;
 
         @Override
@@ -229,7 +231,7 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithMapInt that = (BaseWithMapInt) o;
+            WithObsMapInt that = (WithObsMapInt) o;
             return Objects.equals(map, that.map);
         }
 
@@ -239,7 +241,7 @@ class TestClasses {
         }
     }
 
-    static class BaseWithMapStr {
+    static class WithObsMapStr {
         ObservableMap<String, CustomObject> map;
 
         @Override
@@ -250,39 +252,13 @@ class TestClasses {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            BaseWithMapStr that = (BaseWithMapStr) o;
+            WithObsMapStr that = (WithObsMapStr) o;
             return Objects.equals(map, that.map);
         }
 
         @Override
         public int hashCode() {
             return Objects.hash(map);
-        }
-    }
-
-    static class CustomObject {
-
-        String name;
-
-        CustomObject(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            CustomObject that = (CustomObject) o;
-            return Objects.equals(name, that.name);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(name);
         }
     }
 }
