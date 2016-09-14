@@ -19,6 +19,8 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import org.hildan.fxgson.TestClassesSimple.CustomObject;
 
@@ -169,6 +171,48 @@ class TestClassesWithProp {
                 return false;
             }
             WithGenericProp that = (WithGenericProp) o;
+            return propEquals(prop, that.prop);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(prop);
+        }
+    }
+
+    static class WithFontProp {
+        Property<Font> prop = new SimpleObjectProperty<>();
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            WithFontProp that = (WithFontProp) o;
+            return propEquals(prop, that.prop);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(prop);
+        }
+    }
+
+    static class WithColorProp {
+        Property<Color> prop = new SimpleObjectProperty<>();
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            WithColorProp that = (WithColorProp) o;
             return propEquals(prop, that.prop);
         }
 

@@ -501,6 +501,17 @@ public class FxGsonTest {
     }
 
     @Test
+    public void testFontProperty() {
+        String family = "SansSerif";
+        FontWeight weight = FontWeight.findByName("Regular");
+        double size = 11.0;
+        Font font = Font.font(family, weight, size);
+
+        testProperty(WithFontProp.class, null, "{\"prop\":null}", o -> o.prop, extraGson);
+        testProperty(WithFontProp.class, font, "{\"prop\":\"SansSerif,Regular,11.0\"}", o -> o.prop, extraGson);
+    }
+
+    @Test
     public void testColor() {
         Function<WithColor, Color> getter = o -> o.color;
         BiConsumer<WithColor, Color> setter = (o, c) -> o.color = c;
@@ -508,5 +519,12 @@ public class FxGsonTest {
         testValue(WithColor.class, null, "{\"color\":null}", getter, setter, extraGson);
         testValue(WithColor.class, Color.RED, "{\"color\":\"#ff0000ff\"}", getter, setter, extraGson);
         testValue(WithColor.class, Color.BLUE, "{\"color\":\"#0000ffff\"}", getter, setter, extraGson);
+    }
+
+    @Test
+    public void testColorProperty() {
+        testProperty(WithColorProp.class, null, "{\"prop\":null}", o -> o.prop, extraGson);
+        testProperty(WithColorProp.class, Color.RED, "{\"prop\":\"#ff0000ff\"}", o -> o.prop, extraGson);
+        testProperty(WithColorProp.class, Color.BLUE, "{\"prop\":\"#0000ffff\"}", o -> o.prop, extraGson);
     }
 }
