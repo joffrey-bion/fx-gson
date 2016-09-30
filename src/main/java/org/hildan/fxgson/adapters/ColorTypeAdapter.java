@@ -20,7 +20,12 @@ public class ColorTypeAdapter extends TypeAdapter<Color> {
             out.nullValue();
             return;
         }
-        out.value("#" + value.toString().substring(2));
+        int red = (int)Math.round(value.getRed() * 255.0);
+        int green = (int)Math.round(value.getGreen() * 255.0);
+        int blue = (int)Math.round(value.getBlue() * 255.0);
+        int opacity = (int)Math.round(value.getOpacity() * 255.0);
+        String colorStr = String.format("#%02x%02x%02x%02x", red, green, blue, opacity);
+        out.value(colorStr);
     }
 
     @Override
