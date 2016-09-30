@@ -75,7 +75,7 @@ Convincing, eh?
     }
 
     dependencies {
-        compile 'org.hildan.fxgson:fx-gson:1.2.1'
+        compile 'org.hildan.fxgson:fx-gson:1.2.3'
     }
 
 #### In Maven
@@ -83,7 +83,7 @@ Convincing, eh?
     <dependency>
       <groupId>org.hildan.fxgson</groupId>
       <artifactId>fx-gson</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.3</version>
       <type>pom</type>
     </dependency>
 
