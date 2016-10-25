@@ -5,12 +5,15 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/57327660a0ca35004baf8bfb/badge.svg)](https://www.versioneye.com/user/projects/57327660a0ca35004baf8bfb)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/fx-gson/blob/master/LICENSE)
 
-Gson extension to serialize JavaFX properties as their values, and deserialize values into properties.
+A set of type adapters for [Google Gson](https://github.com/google/gson) to serialize JavaFX properties as their values,
+and deserialize values into properties.
+
+## Why FX Gson?
 
 In JavaFX, POJOs usually contain `Property` objects instead of primitives. When serialized with Gson, we don't want to
 see the internals of such `Property` objects in the produced JSON, but rather the actual value held by the property.
 
-For instance, if I have a class like this:
+For instance, suppose the `Person` class is defined like this:
 
     public class Person {
         private final StringProperty firstName;
@@ -73,7 +76,7 @@ You can use the built-in `GsonBuilder`s directly:
     // to handle only Properties and Observable collections
     Gson fxGson = FxGson.coreBuilder().create();
 
-    // to also handle Color, Font, etc.
+    // to also handle the Color & Font classes
     Gson fxGsonWithExtras = FxGson.fullBuilder().create();
 
 Because `FxGson` returns a builder, you can add your own configuration to it:
@@ -82,6 +85,8 @@ Because `FxGson` returns a builder, you can add your own configuration to it:
                       .registerTypeAdapterFactory(new MyFactory())
                       .setPrettyPrinting()
                       .create();
+                      
+You can find more info on the built-in `GsonBuilder`s [in the Wiki](https://github.com/joffrey-bion/fx-gson/wiki/Built-in-GsonBuilders).
 
 #### Configuring an existing builder to handle JavaFX properties
 
@@ -92,15 +97,9 @@ In this case, use the provided helper methods to add `FxGson` configuration to a
     GsonBuilder builder = MyLib.getBuilder();
     Gson gson = FxGson.addCoreSerializers(builder).create();
 
-#### Going for full control
+#### Going full control
 
-FxGson is simply a helper class registering a particular `TypeAdapterFactory` on a `GsonBuilder`. If you want more
-control, you can use directly or even extend the `JavaFxPropertyTypeAdapterFactory` or `JavaFxExtraTypeAdapterFactory`
-yourself.
-
-When doing so, be aware that observable collections like `ObservableList` require a specific Gson `InstanceCreator`,
-because otherwise Gson does not know how to serialize them. You can find predefined instance creators for JavaFX
-observable collections in the package `org.hildan.fxgson.creators`.
+You will find more customization info in [this dedicated wiki page](https://github.com/joffrey-bion/fx-gson/wiki/Customize-FX-Gson).
 
 ### Add the dependency
  
@@ -123,41 +122,11 @@ observable collections in the package `org.hildan.fxgson.creators`.
       <type>pom</type>
     </dependency>
     
-Note: the artifact is on Bintray JCenter, not in Maven Central, so make sure you point your maven to JCenter by adding the repo to your settings:
+Note: the artifact is on Bintray JCenter, not in Maven Central, so make sure you point your maven to JCenter by adding 
+the repo to your `settings.xml` using the URL `http://jcenter.bintray.com`.
 
-    <?xml version="1.0" encoding="UTF-8" ?>
-    <settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'
-              xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
-
-        <profiles>
-            <profile>
-                <repositories>
-                    <repository>
-                        <snapshots>
-                            <enabled>false</enabled>
-                        </snapshots>
-                        <id>central</id>
-                        <name>bintray</name>
-                        <url>http://jcenter.bintray.com</url>
-                    </repository>
-                </repositories>
-                <pluginRepositories>
-                    <pluginRepository>
-                        <snapshots>
-                            <enabled>false</enabled>
-                        </snapshots>
-                        <id>central</id>
-                        <name>bintray-plugins</name>
-                        <url>http://jcenter.bintray.com</url>
-                    </pluginRepository>
-                </pluginRepositories>
-                <id>bintray</id>
-            </profile>
-        </profiles>
-        <activeProfiles>
-            <activeProfile>bintray</activeProfile>
-        </activeProfiles>
-    </settings>
+You can find a complete XML example in the "Set me up!" blue rectangle on the 
+[JCenter home page](https://bintray.com/bintray/jcenter).
 
 ## License
 
