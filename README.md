@@ -66,29 +66,6 @@ Convincing, eh?
 
 ## Usage
 
-### Add the dependency
- 
-#### In Gradle
-
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        compile 'org.hildan.fxgson:fx-gson:1.2.3'
-    }
-
-#### In Maven
-
-    <dependency>
-      <groupId>org.hildan.fxgson</groupId>
-      <artifactId>fx-gson</artifactId>
-      <version>1.2.3</version>
-      <type>pom</type>
-    </dependency>
-
-### Use FxGson
-
 #### Using the pre-configured builders
 
 You can use the built-in `GsonBuilder`s directly:
@@ -124,6 +101,63 @@ yourself.
 When doing so, be aware that observable collections like `ObservableList` require a specific Gson `InstanceCreator`,
 because otherwise Gson does not know how to serialize them. You can find predefined instance creators for JavaFX
 observable collections in the package `org.hildan.fxgson.creators`.
+
+### Add the dependency
+ 
+#### In Gradle
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        compile 'org.hildan.fxgson:fx-gson:1.2.3'
+    }
+
+#### In Maven
+
+    <dependency>
+      <groupId>org.hildan.fxgson</groupId>
+      <artifactId>fx-gson</artifactId>
+      <version>1.2.3</version>
+      <type>pom</type>
+    </dependency>
+    
+Note: the artifact is on Bintray JCenter, not in Maven Central, so make sure you point your maven to JCenter by adding the repo to your settings:
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'
+              xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+
+        <profiles>
+            <profile>
+                <repositories>
+                    <repository>
+                        <snapshots>
+                            <enabled>false</enabled>
+                        </snapshots>
+                        <id>central</id>
+                        <name>bintray</name>
+                        <url>http://jcenter.bintray.com</url>
+                    </repository>
+                </repositories>
+                <pluginRepositories>
+                    <pluginRepository>
+                        <snapshots>
+                            <enabled>false</enabled>
+                        </snapshots>
+                        <id>central</id>
+                        <name>bintray-plugins</name>
+                        <url>http://jcenter.bintray.com</url>
+                    </pluginRepository>
+                </pluginRepositories>
+                <id>bintray</id>
+            </profile>
+        </profiles>
+        <activeProfiles>
+            <activeProfile>bintray</activeProfile>
+        </activeProfiles>
+    </settings>
 
 ## License
 
