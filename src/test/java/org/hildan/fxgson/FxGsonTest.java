@@ -20,27 +20,37 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.hildan.fxgson.error.NullPrimitiveException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import static org.hildan.fxgson.TestClassesExtra.*;
 import static org.hildan.fxgson.TestClassesSimple.*;
 import static org.hildan.fxgson.TestClassesWithProp.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class FxGsonTest {
 
-    private static Gson coreGson;
+    private static Gson[] allGsons;
 
-    private static Gson extraGson;
+    private static Gson[] extraGsons;
+
+    private static Gson[] safeGsons;
+
+    private static Gson[] strictGsons;
 
     @BeforeClass
     public static void createGson() {
-        coreGson = FxGson.coreBuilder().create();
-        extraGson = FxGson.fullBuilder().create();
+        Gson coreGson = FxGson.coreBuilder().create();
+        Gson extraGson = FxGson.fullBuilder().create();
+        Gson coreGsonSafe = new FxGsonBuilder().acceptNullPrimitives().create();
+        Gson extraGsonSafe = new FxGsonBuilder().acceptNullPrimitives().withExtras().create();
+        allGsons = new Gson[] {coreGson, extraGson, coreGsonSafe, extraGsonSafe};
+        extraGsons = new Gson[] {extraGson, extraGsonSafe};
+        strictGsons = new Gson[] {coreGson, extraGson};
+        safeGsons = new Gson[] {coreGsonSafe, extraGsonSafe};
     }
 
     /**
@@ -53,14 +63,14 @@ public class FxGsonTest {
      * @param baseClass
      *         the class of object to test
      * @param valueToTest
-     *         the value to test
+     *         the value of the field to test
      * @param expectedJson
      *         the expected JSON representing the serialized object (with the value inside), or null if this method
      *         should not test the serialized representation of the object
      * @param getter
-     *         a function to access the field within an object of baseClass
+     *         a function to access the field to test within an object of baseClass
      * @param setter
-     *         a function to set the field within an object of baseClass
+     *         a function to set the field to test within an object of baseClass
      * @param gsons
      *         the {@link Gson}s to use for serialization/deserialization tests
      * @param <B>
@@ -113,8 +123,55 @@ public class FxGsonTest {
      *         the type of the value to test inside the object
      */
     private <B, V> void testValue(Class<B> baseClass, V valueToTest, String expectedJson, Function<B, V> getter,
-                                  BiConsumer<B, V> setter) {
-        testValue(baseClass, valueToTest, expectedJson, getter, setter, coreGson, extraGson);
+            BiConsumer<B, V> setter) {
+        testValue(baseClass, valueToTest, expectedJson, getter, setter, allGsons);
+    }
+
+    /**
+     * Tests the deserialization of an inner value of an object with each of the provided {@link Gson}s.
+     *
+     * @param baseClass
+     *         the class of object to test
+     * @param inputJson
+     *         the input JSON to test
+     * @param expectedValue
+     *         the expected deserialized value of the field to test
+     * @param getter
+     *         a function to access the field to test within an object of baseClass
+     * @param gsons
+     *         the {@link Gson}s to use for serialization/deserialization tests
+     * @param <B>
+     *         the type of the object containing the field to test
+     * @param <V>
+     *         the type of the value to test inside the object
+     */
+    private static <B, V> void testDeserialize(Class<B> baseClass, String inputJson, V expectedValue,
+            Function<B, V> getter, Gson... gsons) {
+        for (Gson gson : gsons) {
+            B deserialized = gson.fromJson(inputJson, baseClass);
+            assertEquals("Incorrect deserialized value", expectedValue, getter.apply(deserialized));
+        }
+    }
+
+    /**
+     * Tests the deserialization of an inner value of an object with each of the provided {@link Gson}s.
+     *
+     * @param baseClass
+     *         the class of object to test
+     * @param inputJson
+     *         the input JSON to test
+     * @param expectedValue
+     *         the expected deserialized value of the field to test
+     * @param getter
+     *         a function to access the field to test within an object of baseClass
+     * @param <B>
+     *         the type of the object containing the field to test
+     * @param <V>
+     *         the type of the value to test inside the object
+     */
+    private static <B, V> void testDeserialize(Class<B> baseClass, String inputJson, V expectedValue,
+            Function<B, V> getter) {
+        testDeserialize(baseClass, inputJson, expectedValue, getter, allGsons);
     }
 
     /**
@@ -131,24 +188,26 @@ public class FxGsonTest {
      *         should not test the serialized representation of the object
      * @param getProperty
      *         a function to access the tested object's property
-     * @param gson
-     *         the {@link Gson} to use for serialization/deserialization
+     * @param gsons
+     *         the {@link Gson}s to use for serialization/deserialization
      * @param <B>
      *         the type of parent object to test
      * @param <V>
      *         the type of the value to test inside the object
      */
     private static <B, V> void testProperty(Class<B> baseClass, V valueToTest, String expectedJson,
-                                            Function<B, Property<V>> getProperty, Gson gson) {
-        Function<B, V> valueGetter = obj -> {
-            Property<V> prop = getProperty.apply(obj);
-            assertNotNull("The property itself should not be null (only its content may)", prop);
-            return prop.getValue();
-        };
+            Function<B, Property<V>> getProperty, Gson... gsons) {
+        for (Gson gson : gsons) {
+            Function<B, V> valueGetter = obj -> {
+                Property<V> prop = getProperty.apply(obj);
+                assertNotNull("The property itself should not be null (only its content may)", prop);
+                return prop.getValue();
+            };
 
-        BiConsumer<B, V> valueSetter = (obj, value) -> getProperty.apply(obj).setValue(value);
+            BiConsumer<B, V> valueSetter = (obj, value) -> getProperty.apply(obj).setValue(value);
 
-        testValue(baseClass, valueToTest, expectedJson, valueGetter, valueSetter, gson);
+            testValue(baseClass, valueToTest, expectedJson, valueGetter, valueSetter, gson);
+        }
     }
 
     /**
@@ -172,14 +231,31 @@ public class FxGsonTest {
      */
     private <B, V> void testProperty(Class<B> baseClass, V valueToTest, String expectedJson,
                                      Function<B, Property<V>> getProperty) {
-        testProperty(baseClass, valueToTest, expectedJson, getProperty, coreGson);
-        testProperty(baseClass, valueToTest, expectedJson, getProperty, extraGson);
+        testProperty(baseClass, valueToTest, expectedJson, getProperty, allGsons);
     }
 
     @Test
     public void testBooleanProperty() {
         testProperty(WithBooleanProp.class, true, "{\"prop\":true}", o -> o.prop);
         testProperty(WithBooleanProp.class, false, "{\"prop\":false}", o -> o.prop);
+    }
+
+    @Test(expected = NullPrimitiveException.class)
+    public void testNullPrimitivesFail() {
+        testDeserialize(WithBooleanProp.class, "{\"prop\":null}", null, o -> o.prop.get(), strictGsons);
+        testDeserialize(WithIntegerProp.class, "{\"prop\":null}", null, o -> o.prop.get(), strictGsons);
+        testDeserialize(WithLongProp.class, "{\"prop\":null}", null, o -> o.prop.get(), strictGsons);
+        testDeserialize(WithFloatProp.class, "{\"prop\":null}", null, o -> o.prop.get(), strictGsons);
+        testDeserialize(WithDoubleProp.class, "{\"prop\":null}", null, o -> o.prop.get(), strictGsons);
+    }
+
+    @Test
+    public void testNullPrimitivesDefault() {
+        testDeserialize(WithBooleanProp.class, "{\"prop\":null}", false, o -> o.prop.get(), safeGsons);
+        testDeserialize(WithIntegerProp.class, "{\"prop\":null}", 0, o -> o.prop.get(), safeGsons);
+        testDeserialize(WithLongProp.class, "{\"prop\":null}", 0L, o -> o.prop.get(), safeGsons);
+        testDeserialize(WithFloatProp.class, "{\"prop\":null}", 0f, o -> o.prop.get(), safeGsons);
+        testDeserialize(WithDoubleProp.class, "{\"prop\":null}", 0d, o -> o.prop.get(), safeGsons);
     }
 
     @Test
@@ -496,8 +572,8 @@ public class FxGsonTest {
         Function<WithFont, Font> getter = o -> o.font;
         BiConsumer<WithFont, Font> setter = (o, f) -> o.font = f;
 
-        testValue(WithFont.class, null, "{\"font\":null}", getter, setter, extraGson);
-        testValue(WithFont.class, font, "{\"font\":\"SansSerif,Regular,11.0\"}", getter, setter, extraGson);
+        testValue(WithFont.class, null, "{\"font\":null}", getter, setter, extraGsons);
+        testValue(WithFont.class, font, "{\"font\":\"SansSerif,Regular,11.0\"}", getter, setter, extraGsons);
     }
 
     @Test
@@ -507,8 +583,8 @@ public class FxGsonTest {
         double size = 11.0;
         Font font = Font.font(family, weight, size);
 
-        testProperty(WithFontProp.class, null, "{\"prop\":null}", o -> o.prop, extraGson);
-        testProperty(WithFontProp.class, font, "{\"prop\":\"SansSerif,Regular,11.0\"}", o -> o.prop, extraGson);
+        testProperty(WithFontProp.class, null, "{\"prop\":null}", o -> o.prop, extraGsons);
+        testProperty(WithFontProp.class, font, "{\"prop\":\"SansSerif,Regular,11.0\"}", o -> o.prop, extraGsons);
     }
 
     @Test
@@ -516,15 +592,15 @@ public class FxGsonTest {
         Function<WithColor, Color> getter = o -> o.color;
         BiConsumer<WithColor, Color> setter = (o, c) -> o.color = c;
 
-        testValue(WithColor.class, null, "{\"color\":null}", getter, setter, extraGson);
-        testValue(WithColor.class, Color.RED, "{\"color\":\"#ff0000ff\"}", getter, setter, extraGson);
-        testValue(WithColor.class, Color.BLUE, "{\"color\":\"#0000ffff\"}", getter, setter, extraGson);
+        testValue(WithColor.class, null, "{\"color\":null}", getter, setter, extraGsons);
+        testValue(WithColor.class, Color.RED, "{\"color\":\"#ff0000ff\"}", getter, setter, extraGsons);
+        testValue(WithColor.class, Color.BLUE, "{\"color\":\"#0000ffff\"}", getter, setter, extraGsons);
     }
 
     @Test
     public void testColorProperty() {
-        testProperty(WithColorProp.class, null, "{\"prop\":null}", o -> o.prop, extraGson);
-        testProperty(WithColorProp.class, Color.RED, "{\"prop\":\"#ff0000ff\"}", o -> o.prop, extraGson);
-        testProperty(WithColorProp.class, Color.BLUE, "{\"prop\":\"#0000ffff\"}", o -> o.prop, extraGson);
+        testProperty(WithColorProp.class, null, "{\"prop\":null}", o -> o.prop, extraGsons);
+        testProperty(WithColorProp.class, Color.RED, "{\"prop\":\"#ff0000ff\"}", o -> o.prop, extraGsons);
+        testProperty(WithColorProp.class, Color.BLUE, "{\"prop\":\"#0000ffff\"}", o -> o.prop, extraGsons);
     }
 }

@@ -5,14 +5,17 @@ import java.io.IOException;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
-import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
  * A custom type adapter for JavaFX {@link DoubleProperty}.
  */
-public class DoublePropertyTypeAdapter extends TypeAdapter<DoubleProperty> {
+public class DoublePropertyTypeAdapter extends PrimitiveTypeAdapter<DoubleProperty> {
+
+    public DoublePropertyTypeAdapter(boolean crashOnNullValue) {
+        super(crashOnNullValue);
+    }
 
     @Override
     public void write(JsonWriter out, DoubleProperty value) throws IOException {
@@ -20,7 +23,12 @@ public class DoublePropertyTypeAdapter extends TypeAdapter<DoubleProperty> {
     }
 
     @Override
-    public DoubleProperty read(JsonReader in) throws IOException {
+    protected DoubleProperty createDefaultValue() {
+        return new SimpleDoubleProperty();
+    }
+
+    @Override
+    public DoubleProperty readNonNullValue(JsonReader in) throws IOException {
         return new SimpleDoubleProperty(in.nextDouble());
     }
 }
