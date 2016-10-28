@@ -1,4 +1,4 @@
-package org.hildan.fxgson.adapters;
+package org.hildan.fxgson.adapters.extras;
 
 import java.io.IOException;
 
@@ -10,7 +10,8 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * A custom type adapter for JavaFX {@link Color}.
+ * A basic {@link TypeAdapter} for JavaFX {@link Color}. It serializes a color as its RGBA hexadecimal string
+ * representation preceded by #. Supports null values.
  */
 public class ColorTypeAdapter extends TypeAdapter<Color> {
 
@@ -20,10 +21,10 @@ public class ColorTypeAdapter extends TypeAdapter<Color> {
             out.nullValue();
             return;
         }
-        int red = (int)Math.round(value.getRed() * 255.0);
-        int green = (int)Math.round(value.getGreen() * 255.0);
-        int blue = (int)Math.round(value.getBlue() * 255.0);
-        int opacity = (int)Math.round(value.getOpacity() * 255.0);
+        int red = (int) Math.round(value.getRed() * 255.0);
+        int green = (int) Math.round(value.getGreen() * 255.0);
+        int blue = (int) Math.round(value.getBlue() * 255.0);
+        int opacity = (int) Math.round(value.getOpacity() * 255.0);
         String colorStr = String.format("#%02x%02x%02x%02x", red, green, blue, opacity);
         out.value(colorStr);
     }

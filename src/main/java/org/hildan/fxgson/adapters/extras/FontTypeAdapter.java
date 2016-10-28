@@ -1,4 +1,4 @@
-package org.hildan.fxgson.adapters;
+package org.hildan.fxgson.adapters.extras;
 
 import java.io.IOException;
 
@@ -11,7 +11,13 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * A custom type adapter for JavaFX {@link Font}.
+ * A basic {@link TypeAdapter} for JavaFX {@link Font}. It serializes a font as a string "family,style,size". For
+ * instance:
+ * <ul>
+ *     <li>The standard Arial font in 11pt is serialized as {@code "Arial,Regular,11.0"}</li>
+ *     <li>The Sans Serif font in 14pt bold gives {@code "SansSerif,Bold,14.0"}</li>
+ * </ul>
+ * This adapter supports null values.
  */
 public class FontTypeAdapter extends TypeAdapter<Font> {
 

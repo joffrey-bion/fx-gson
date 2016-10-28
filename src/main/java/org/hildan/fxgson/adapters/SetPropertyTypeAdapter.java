@@ -8,11 +8,11 @@ import javafx.collections.ObservableSet;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * A custom type adapter for JavaFX {@link SetProperty}.
+ * A basic {@link TypeAdapter} for JavaFX {@link SetProperty}. It serializes the set inside the property instead of the
+ * property itself.
  */
 public class SetPropertyTypeAdapter<T> extends TypeAdapter<SetProperty<T>> {
 

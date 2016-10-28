@@ -11,7 +11,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * A custom type adapter for JavaFX {@link MapProperty}.
+ * A basic {@link TypeAdapter} for JavaFX {@link MapProperty}. It serializes the map inside the property instead of the
+ * property itself.
  */
 public class MapPropertyTypeAdapter<K, V> extends TypeAdapter<MapProperty<K, V>> {
 

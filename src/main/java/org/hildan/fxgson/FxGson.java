@@ -10,6 +10,8 @@ import javafx.scene.text.Font;
 import org.hildan.fxgson.creators.ObservableListCreator;
 import org.hildan.fxgson.creators.ObservableMapCreator;
 import org.hildan.fxgson.creators.ObservableSetCreator;
+import org.hildan.fxgson.factories.JavaFxExtraTypeAdapterFactory;
+import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.gson.GsonBuilder;

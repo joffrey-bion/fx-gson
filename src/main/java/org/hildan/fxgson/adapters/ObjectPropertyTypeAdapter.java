@@ -7,11 +7,11 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * A custom type adapter for JavaFX {@link Property}.
+ * A basic {@link TypeAdapter} for JavaFX {@link Property}. It serializes the object inside the property instead of the
+ * property itself.
  */
 public class ObjectPropertyTypeAdapter<T> extends TypeAdapter<Property<T>> {
 

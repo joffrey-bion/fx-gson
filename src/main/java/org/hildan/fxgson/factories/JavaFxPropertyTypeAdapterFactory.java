@@ -1,4 +1,4 @@
-package org.hildan.fxgson;
+package org.hildan.fxgson.factories;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -17,22 +17,20 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
-import org.hildan.fxgson.adapters.BooleanPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.DoublePropertyTypeAdapter;
-import org.hildan.fxgson.adapters.FloatPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.IntegerPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.ListPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.LongPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.MapPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.ObjectPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.SetPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.StringPropertyTypeAdapter;
-
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
-import static org.hildan.fxgson.TypeHelper.*;
+import org.hildan.fxgson.adapters.ListPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.MapPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.ObjectPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.SetPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.StringPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.primitives.BooleanPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.primitives.DoublePropertyTypeAdapter;
+import org.hildan.fxgson.adapters.primitives.FloatPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.primitives.IntegerPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.primitives.LongPropertyTypeAdapter;
 
 /**
  * A {@link TypeAdapterFactory} for JavaFX {@link Property} types.
@@ -42,8 +40,8 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
     private final boolean crashOnNullPrimitives;
 
     /**
-     * Creates a new {@link JavaFxPropertyTypeAdapterFactory}. This default factory crashes when asked to deserialize
-     * a null JSON value for a primitive type property such as {@link IntegerProperty} or {@link BooleanProperty}.
+     * Creates a new JavaFxPropertyTypeAdapterFactory. This default factory crashes when asked to deserialize a null
+     * JSON value for a primitive type property such as {@link IntegerProperty} or {@link BooleanProperty}.
      *
      * @see #JavaFxPropertyTypeAdapterFactory(boolean)
      */
@@ -52,12 +50,12 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
     }
 
     /**
-     * Creates a new {@link JavaFxPropertyTypeAdapterFactory}.
+     * Creates a new JavaFxPropertyTypeAdapterFactory.
      *
      * @param crashOnNullPrimitives
      *         if true, null values in the JSON are not accepted for primitive properties like {@link IntegerProperty}
-     *         or {@link BooleanProperty} during deserialization. If false, a property is created with a default
-     *         value instead of crashing.
+     *         or {@link BooleanProperty} during deserialization. If false, a property is created with a default value
+     *         instead of crashing.
      */
     public JavaFxPropertyTypeAdapterFactory(boolean crashOnNullPrimitives) {
         this.crashOnNullPrimitives = crashOnNullPrimitives;
@@ -76,19 +74,19 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
         // simple property types
 
         if (BooleanProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>)new BooleanPropertyTypeAdapter(crashOnNullPrimitives);
+            return (TypeAdapter<T>) new BooleanPropertyTypeAdapter(crashOnNullPrimitives);
         }
         if (IntegerProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>)new IntegerPropertyTypeAdapter(crashOnNullPrimitives);
+            return (TypeAdapter<T>) new IntegerPropertyTypeAdapter(crashOnNullPrimitives);
         }
         if (LongProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>)new LongPropertyTypeAdapter(crashOnNullPrimitives);
+            return (TypeAdapter<T>) new LongPropertyTypeAdapter(crashOnNullPrimitives);
         }
         if (FloatProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>)new FloatPropertyTypeAdapter(crashOnNullPrimitives);
+            return (TypeAdapter<T>) new FloatPropertyTypeAdapter(crashOnNullPrimitives);
         }
         if (DoubleProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>)new DoublePropertyTypeAdapter(crashOnNullPrimitives);
+            return (TypeAdapter<T>) new DoublePropertyTypeAdapter(crashOnNullPrimitives);
         }
         if (StringProperty.class.isAssignableFrom(clazz)) {
             return (TypeAdapter<T>) new StringPropertyTypeAdapter();
@@ -97,15 +95,15 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
         // collection property types
 
         if (ListProperty.class.isAssignableFrom(clazz)) {
-            TypeAdapter<?> delegate = gson.getAdapter(withRawType(type, ObservableList.class));
+            TypeAdapter<?> delegate = gson.getAdapter(TypeHelper.withRawType(type, ObservableList.class));
             return new ListPropertyTypeAdapter(delegate);
         }
         if (SetProperty.class.isAssignableFrom(clazz)) {
-            TypeAdapter<?> delegate = gson.getAdapter(withRawType(type, ObservableSet.class));
+            TypeAdapter<?> delegate = gson.getAdapter(TypeHelper.withRawType(type, ObservableSet.class));
             return new SetPropertyTypeAdapter(delegate);
         }
         if (MapProperty.class.isAssignableFrom(clazz)) {
-            TypeAdapter<?> delegate = gson.getAdapter(withRawType(type, ObservableMap.class));
+            TypeAdapter<?> delegate = gson.getAdapter(TypeHelper.withRawType(type, ObservableMap.class));
             return new MapPropertyTypeAdapter(delegate);
         }
 

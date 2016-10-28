@@ -1,4 +1,4 @@
-package org.hildan.fxgson;
+package org.hildan.fxgson.factories;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -7,8 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
-import org.hildan.fxgson.adapters.ColorTypeAdapter;
-import org.hildan.fxgson.adapters.FontTypeAdapter;
+import org.hildan.fxgson.adapters.extras.ColorTypeAdapter;
+import org.hildan.fxgson.adapters.extras.FontTypeAdapter;
 
 /**
  * A {@link TypeAdapterFactory} for JavaFX secondary classes, such as {@link Color} and {@link Font}.

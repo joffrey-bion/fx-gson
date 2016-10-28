@@ -8,11 +8,11 @@ import javafx.collections.ObservableList;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * A custom type adapter for JavaFX {@link ListProperty}.
+ * A basic {@link TypeAdapter} for JavaFX {@link ListProperty}. It serializes the list inside the property instead of
+ * the property itself.
  */
 public class ListPropertyTypeAdapter<T> extends TypeAdapter<ListProperty<T>> {
 

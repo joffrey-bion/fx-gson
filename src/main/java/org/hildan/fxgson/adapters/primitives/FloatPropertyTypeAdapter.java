@@ -1,4 +1,4 @@
-package org.hildan.fxgson.adapters;
+package org.hildan.fxgson.adapters.primitives;
 
 import java.io.IOException;
 
@@ -9,7 +9,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * A custom type adapter for JavaFX {@link FloatProperty}.
+ * An implementation of {@link PrimitiveTypeAdapter} for JavaFX {@link FloatProperty}. It serializes the float value of
+ * the property instead of the property itself.
  */
 public class FloatPropertyTypeAdapter extends PrimitiveTypeAdapter<FloatProperty> {
 

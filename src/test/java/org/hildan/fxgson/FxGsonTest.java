@@ -20,7 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import org.hildan.fxgson.error.NullPrimitiveException;
+import org.hildan.fxgson.adapters.primitives.NullPrimitiveException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -151,27 +151,6 @@ public class FxGsonTest {
             B deserialized = gson.fromJson(inputJson, baseClass);
             assertEquals("Incorrect deserialized value", expectedValue, getter.apply(deserialized));
         }
-    }
-
-    /**
-     * Tests the deserialization of an inner value of an object with each of the provided {@link Gson}s.
-     *
-     * @param baseClass
-     *         the class of object to test
-     * @param inputJson
-     *         the input JSON to test
-     * @param expectedValue
-     *         the expected deserialized value of the field to test
-     * @param getter
-     *         a function to access the field to test within an object of baseClass
-     * @param <B>
-     *         the type of the object containing the field to test
-     * @param <V>
-     *         the type of the value to test inside the object
-     */
-    private static <B, V> void testDeserialize(Class<B> baseClass, String inputJson, V expectedValue,
-            Function<B, V> getter) {
-        testDeserialize(baseClass, inputJson, expectedValue, getter, allGsons);
     }
 
     /**

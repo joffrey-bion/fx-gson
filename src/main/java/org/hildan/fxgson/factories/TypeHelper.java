@@ -1,4 +1,4 @@
-package org.hildan.fxgson;
+package org.hildan.fxgson.factories;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

@@ -1,4 +1,4 @@
-package org.hildan.fxgson.adapters;
+package org.hildan.fxgson.adapters.primitives;
 
 import java.io.IOException;
 
@@ -9,7 +9,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * A custom type adapter for JavaFX {@link BooleanProperty}.
+ * An implementation of {@link PrimitiveTypeAdapter} for JavaFX {@link BooleanProperty}. It serializes the boolean value
+ * of the property instead of the property itself.
  */
 public class BooleanPropertyTypeAdapter extends PrimitiveTypeAdapter<BooleanProperty> {
 
