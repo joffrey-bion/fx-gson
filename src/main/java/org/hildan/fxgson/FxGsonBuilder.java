@@ -14,18 +14,27 @@ import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
 
 public class FxGsonBuilder {
 
-    private final GsonBuilder builder = new GsonBuilder();
+    private final GsonBuilder builder;
 
     private boolean crashOnNullPrimitives = true;
 
     private boolean includeExtras = false;
 
+    public FxGsonBuilder() {
+        this(new GsonBuilder());
+    }
+
+    public FxGsonBuilder(GsonBuilder sourcebuilder) {
+        this.builder = sourcebuilder;
+    }
+
     public GsonBuilder builder() {
+        // serialization of nulls is necessary to have properties with null values deserialized properly
         builder.serializeNulls()
                .registerTypeAdapter(ObservableList.class, new ObservableListCreator())
                .registerTypeAdapter(ObservableSet.class, new ObservableSetCreator())
-               .registerTypeAdapter(ObservableMap.class, new ObservableMapCreator());
-        builder.registerTypeAdapterFactory(new JavaFxPropertyTypeAdapterFactory(crashOnNullPrimitives));
+               .registerTypeAdapter(ObservableMap.class, new ObservableMapCreator())
+               .registerTypeAdapterFactory(new JavaFxPropertyTypeAdapterFactory(crashOnNullPrimitives));
         if (includeExtras) {
             builder.registerTypeAdapterFactory(new JavaFxExtraTypeAdapterFactory());
         }

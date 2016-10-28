@@ -7,14 +7,9 @@ import javafx.collections.ObservableSet;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-import org.hildan.fxgson.creators.ObservableListCreator;
-import org.hildan.fxgson.creators.ObservableMapCreator;
-import org.hildan.fxgson.creators.ObservableSetCreator;
-import org.hildan.fxgson.factories.JavaFxExtraTypeAdapterFactory;
-import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
-import org.jetbrains.annotations.NotNull;
-
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Creates pre-configured {@link GsonBuilder}s that handle nicely JavaFX-specific classes.
@@ -24,19 +19,40 @@ import com.google.gson.GsonBuilder;
  * <p>
  * In the doc of this class, we distinguish the core JavaFX classes from the extra classes:
  * <ul>
- *     <li>Core JavaFX classes: the {@link Property} class and its subclasses, the {@link ObservableList},
- *     {@link ObservableMap}, {@link ObservableSet}.</li>
- *     <li>Extra JavaFX classes: {@link Color}, {@link Font}</li>
+ * <li>Core JavaFX classes: the {@link Property} class and its subclasses, the {@link ObservableList},
+ * {@link ObservableMap}, {@link ObservableSet}.</li>
+ * <li>Extra JavaFX classes: {@link Color}, {@link Font}</li>
  * </ul>
  */
 public class FxGson {
 
     /**
+     * Creates a {@link Gson} pre-configured to handle JavaFX core classes. This is a shorthand for
+     * {@code new FxGsonBuilder().create()}.
+     *
+     * @return a new pre-configured {@link Gson}
+     */
+    @NotNull
+    public static Gson create() {
+        return new FxGsonBuilder().create();
+    }
+
+    /**
+     * Creates a {@link Gson} pre-configured to handle JavaFX properties, as well as other useful classes such as
+     * {@link Font} and {@link Color}. This is a shorthand for {@code new FxGsonBuilder().withExtras().create()}.
+     *
+     * @return a new pre-configured {@link Gson}
+     */
+    @NotNull
+    public static Gson createWithExtras() {
+        return new FxGsonBuilder().withExtras().create();
+    }
+
+    /**
      * Creates a {@link GsonBuilder} pre-configured to handle JavaFX core classes. This is a shorthand for
      * {@code new FxGsonBuilder().builder()}.
      *
-     *
-     * @return a pre-configured {@link GsonBuilder}
+     * @return a new pre-configured {@link GsonBuilder}
      */
     @NotNull
     public static GsonBuilder coreBuilder() {
@@ -47,7 +63,7 @@ public class FxGson {
      * Creates a {@link GsonBuilder} pre-configured to handle JavaFX properties, as well as other useful classes such as
      * {@link Font} and {@link Color}. This is a shorthand for {@code new FxGsonBuilder().withExtras().builder()}.
      *
-     * @return a pre-configured {@link GsonBuilder}
+     * @return a new pre-configured {@link GsonBuilder}
      */
     @NotNull
     public static GsonBuilder fullBuilder() {
@@ -56,7 +72,7 @@ public class FxGson {
 
     /**
      * Adds the core JavaFX classes adapters to an existing {@link GsonBuilder}. This is useful if you don't control the
-     * instantiation of the {@link GsonBuilder}.
+     * instantiation of the {@link GsonBuilder}. This is a shorthand for {@code new FxGsonBuilder(builder).builder()}.
      *
      * @param builder
      *         the builder to add the type adapters to
@@ -64,42 +80,7 @@ public class FxGson {
      * @return the given builder, so that it can be used in a Builder pattern
      */
     @NotNull
-    public static GsonBuilder addCoreSerializers(@NotNull GsonBuilder builder) {
-        return addCoreSerializers(builder, true);
-    }
-
-    /**
-     * Adds the core JavaFX classes adapters to an existing {@link GsonBuilder}. This is useful if you don't control the
-     * instantiation of the {@link GsonBuilder}.
-     *
-     * @param builder
-     *         the builder to add the type adapters to
-     * @param crashOnNullPrimitives
-     *
-     * @return the given builder, so that it can be used in a Builder pattern
-     */
-    @NotNull
-    public static GsonBuilder addCoreSerializers(@NotNull GsonBuilder builder, boolean crashOnNullPrimitives) {
-        // serialization of nulls is necessary to have properties with null values deserialized properly
-        builder.serializeNulls()
-                .registerTypeAdapter(ObservableList.class, new ObservableListCreator())
-                .registerTypeAdapter(ObservableSet.class, new ObservableSetCreator())
-                .registerTypeAdapter(ObservableMap.class, new ObservableMapCreator())
-                .registerTypeAdapterFactory(new JavaFxPropertyTypeAdapterFactory(crashOnNullPrimitives));
-        return builder;
-    }
-
-    /**
-     * Adds the extra JavaFX classes adapters to an existing {@link GsonBuilder}. This is useful if you don't control
-     * the instantiation of the {@link GsonBuilder}.
-     *
-     * @param builder
-     *         the builder to add the type adapters to
-     *
-     * @return the given builder, so that it can be used in a Builder pattern
-     */
-    @NotNull
-    public static GsonBuilder addExtraSerializers(@NotNull GsonBuilder builder) {
-        return builder.registerTypeAdapterFactory(new JavaFxExtraTypeAdapterFactory());
+    public static GsonBuilder addFxSupport(@NotNull GsonBuilder builder) {
+        return new FxGsonBuilder(builder).builder();
     }
 }

@@ -20,16 +20,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.hildan.fxgson.adapters.primitives.NullPrimitiveException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import static org.hildan.fxgson.TestClassesExtra.*;
+import static org.hildan.fxgson.TestClassesExtra.WithColor;
+import static org.hildan.fxgson.TestClassesExtra.WithFont;
 import static org.hildan.fxgson.TestClassesSimple.*;
 import static org.hildan.fxgson.TestClassesWithProp.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class FxGsonTest {
 
@@ -42,15 +44,31 @@ public class FxGsonTest {
     private static Gson[] strictGsons;
 
     @BeforeClass
-    public static void createGson() {
-        Gson coreGson = FxGson.coreBuilder().create();
-        Gson extraGson = FxGson.fullBuilder().create();
-        Gson coreGsonSafe = new FxGsonBuilder().acceptNullPrimitives().create();
-        Gson extraGsonSafe = new FxGsonBuilder().acceptNullPrimitives().withExtras().create();
-        allGsons = new Gson[] {coreGson, extraGson, coreGsonSafe, extraGsonSafe};
-        extraGsons = new Gson[] {extraGson, extraGsonSafe};
-        strictGsons = new Gson[] {coreGson, extraGson};
-        safeGsons = new Gson[] {coreGsonSafe, extraGsonSafe};
+    public static void createGsons() {
+        // initialize Gsons in all possible ways
+        Gson coreGson1 = FxGson.create();
+        Gson coreGson2 = FxGson.coreBuilder().create();
+        Gson coreGson3 = new FxGsonBuilder().create();
+        Gson coreGson4 = FxGson.addFxSupport(new GsonBuilder()).create();
+        Gson coreGson5 = new FxGsonBuilder(new GsonBuilder()).create();
+
+        Gson extraGson1 = FxGson.createWithExtras();
+        Gson extraGson2 = FxGson.fullBuilder().create();
+        Gson extraGson3 = new FxGsonBuilder().withExtras().create();
+        Gson extraGson4 = new FxGsonBuilder(new GsonBuilder()).withExtras().create();
+
+        Gson coreGsonSafe1 = new FxGsonBuilder().acceptNullPrimitives().create();
+        Gson coreGsonSafe2 = new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().create();
+        Gson extraGsonSafe1 = new FxGsonBuilder().acceptNullPrimitives().withExtras().create();
+        Gson extraGsonSafe2 = new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().withExtras().create();
+
+        allGsons = new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, extraGson1, extraGson2, extraGson3,
+                extraGson4, coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
+        strictGsons =
+                new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, extraGson1, extraGson2, extraGson3,
+                        extraGson4};
+        extraGsons = new Gson[]{extraGson1, extraGson2, extraGson3, extraGson4, extraGsonSafe1, extraGsonSafe2};
+        safeGsons = new Gson[]{coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
     }
 
     /**
@@ -123,7 +141,7 @@ public class FxGsonTest {
      *         the type of the value to test inside the object
      */
     private <B, V> void testValue(Class<B> baseClass, V valueToTest, String expectedJson, Function<B, V> getter,
-            BiConsumer<B, V> setter) {
+                                  BiConsumer<B, V> setter) {
         testValue(baseClass, valueToTest, expectedJson, getter, setter, allGsons);
     }
 
@@ -146,7 +164,7 @@ public class FxGsonTest {
      *         the type of the value to test inside the object
      */
     private static <B, V> void testDeserialize(Class<B> baseClass, String inputJson, V expectedValue,
-            Function<B, V> getter, Gson... gsons) {
+                                               Function<B, V> getter, Gson... gsons) {
         for (Gson gson : gsons) {
             B deserialized = gson.fromJson(inputJson, baseClass);
             assertEquals("Incorrect deserialized value", expectedValue, getter.apply(deserialized));
@@ -175,7 +193,7 @@ public class FxGsonTest {
      *         the type of the value to test inside the object
      */
     private static <B, V> void testProperty(Class<B> baseClass, V valueToTest, String expectedJson,
-            Function<B, Property<V>> getProperty, Gson... gsons) {
+                                            Function<B, Property<V>> getProperty, Gson... gsons) {
         for (Gson gson : gsons) {
             Function<B, V> valueGetter = obj -> {
                 Property<V> prop = getProperty.apply(obj);
