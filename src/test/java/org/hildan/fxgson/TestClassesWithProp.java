@@ -2,20 +2,7 @@ package org.hildan.fxgson;
 
 import java.util.Objects;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
@@ -150,6 +137,27 @@ class TestClassesWithProp {
                 return false;
             }
             WithStringProp that = (WithStringProp) o;
+            return propEquals(prop, that.prop);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(prop);
+        }
+    }
+
+    static class WithObjectProp {
+        ObjectProperty<CustomObject> prop = new SimpleObjectProperty<>();
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            WithGenericProp that = (WithGenericProp) o;
             return propEquals(prop, that.prop);
         }
 
@@ -303,6 +311,90 @@ class TestClassesWithProp {
         @Override
         public int hashCode() {
             return Objects.hash(map);
+        }
+    }
+
+    static class WithListProp {
+        ListProperty<CustomObject> prop = new SimpleListProperty<>();
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            WithListProp that = (WithListProp) o;
+            return propEquals(prop, that.prop);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(prop);
+        }
+    }
+
+    static class WithSetProp {
+        SetProperty<CustomObject> prop = new SimpleSetProperty<>();
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            WithSetProp that = (WithSetProp) o;
+            return propEquals(prop, that.prop);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(prop);
+        }
+    }
+
+    static class WithMapIntProp {
+        MapProperty<Integer, CustomObject> prop = new SimpleMapProperty<>();
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            WithMapIntProp that = (WithMapIntProp) o;
+            return propEquals(prop, that.prop);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(prop);
+        }
+    }
+
+    static class WithMapStrProp {
+        MapProperty<String, CustomObject> prop = new SimpleMapProperty<>();
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            WithMapStrProp that = (WithMapStrProp) o;
+            return propEquals(prop, that.prop);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(prop);
         }
     }
 }

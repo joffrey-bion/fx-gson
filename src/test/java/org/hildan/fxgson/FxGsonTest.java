@@ -23,6 +23,7 @@ import javafx.scene.text.FontWeight;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.hildan.fxgson.adapters.primitives.NullPrimitiveException;
+import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -51,6 +52,9 @@ public class FxGsonTest {
         Gson coreGson3 = new FxGsonBuilder().create();
         Gson coreGson4 = FxGson.addFxSupport(new GsonBuilder()).create();
         Gson coreGson5 = new FxGsonBuilder(new GsonBuilder()).create();
+        Gson coreGson6 = new FxGsonBuilder().builder()
+                                            .registerTypeAdapterFactory(new JavaFxPropertyTypeAdapterFactory())
+                                            .create();
 
         Gson extraGson1 = FxGson.createWithExtras();
         Gson extraGson2 = FxGson.fullBuilder().create();
@@ -62,10 +66,10 @@ public class FxGsonTest {
         Gson extraGsonSafe1 = new FxGsonBuilder().acceptNullPrimitives().withExtras().create();
         Gson extraGsonSafe2 = new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().withExtras().create();
 
-        allGsons = new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, extraGson1, extraGson2, extraGson3,
+        allGsons = new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1, extraGson2, extraGson3,
                 extraGson4, coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
         strictGsons =
-                new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, extraGson1, extraGson2, extraGson3,
+                new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1, extraGson2, extraGson3,
                         extraGson4};
         extraGsons = new Gson[]{extraGson1, extraGson2, extraGson3, extraGson4, extraGsonSafe1, extraGsonSafe2};
         safeGsons = new Gson[]{coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
@@ -293,8 +297,31 @@ public class FxGsonTest {
     @Test
     public void testObjectProperty() {
         CustomObject obj = new CustomObject("myValue");
+        testProperty(WithObjectProp.class, obj, "{\"prop\":{\"name\":\"myValue\"}}", o -> o.prop);
+        testProperty(WithObjectProp.class, null, "{\"prop\":null}", o -> o.prop);
+    }
+
+    @Test
+    public void testGenericProperty() {
+        CustomObject obj = new CustomObject("myValue");
         testProperty(WithGenericProp.class, obj, "{\"prop\":{\"name\":\"myValue\"}}", o -> o.prop);
         testProperty(WithGenericProp.class, null, "{\"prop\":null}", o -> o.prop);
+    }
+
+    @Test
+    public void testListProperty() {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        ObservableList<CustomObject> listEmpty = FXCollections.observableArrayList();
+        ObservableList<CustomObject> listOne = FXCollections.observableArrayList(one);
+        ObservableList<CustomObject> listTwo = FXCollections.observableArrayList(one, two);
+
+        testProperty(WithListProp.class, null, "{\"prop\":null}", o -> o.prop);
+        testProperty(WithListProp.class, listEmpty, "{\"prop\":[]}", o -> o.prop);
+        testProperty(WithListProp.class, listOne, "{\"prop\":[{\"name\":\"myObj1\"}]}", o -> o.prop);
+        testProperty(WithListProp.class, listTwo, "{\"prop\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}",
+                o -> o.prop);
     }
 
     @Test
@@ -317,6 +344,22 @@ public class FxGsonTest {
     }
 
     @Test
+    public void testSetProperty() {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        ObservableSet<CustomObject> setEmpty = FXCollections.emptyObservableSet();
+        ObservableSet<CustomObject> setOne = FXCollections.observableSet(one);
+        ObservableSet<CustomObject> setTwo = FXCollections.observableSet(one, two);
+
+        testProperty(WithSetProp.class, null, "{\"prop\":null}", o -> o.prop);
+        testProperty(WithSetProp.class, setEmpty, "{\"prop\":[]}", o -> o.prop);
+        testProperty(WithSetProp.class, setOne, "{\"prop\":[{\"name\":\"myObj1\"}]}", o -> o.prop);
+        // do not check a particular JSON because the order is non-deterministic
+        testProperty(WithSetProp.class, setTwo, null, o -> o.prop);
+    }
+
+    @Test
     public void testObservableSet() {
         CustomObject one = new CustomObject("myObj1");
         CustomObject two = new CustomObject("myObj2");
@@ -333,6 +376,25 @@ public class FxGsonTest {
         testValue(WithObsSet.class, setOne, "{\"set\":[{\"name\":\"myObj1\"}]}", getter, setter);
         // do not check a particular JSON because the order is non-deterministic
         testValue(WithObsSet.class, setTwo, null, getter, setter);
+    }
+
+    @Test
+    public void testMapStrProperty() {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        ObservableMap<String, CustomObject> mapEmpty = FXCollections.emptyObservableMap();
+        ObservableMap<String, CustomObject> mapOne = FXCollections.observableHashMap();
+        mapOne.put("key1", one);
+        ObservableMap<String, CustomObject> mapTwo = FXCollections.observableHashMap();
+        mapTwo.put("key1", one);
+        mapTwo.put("key2", two);
+
+        testProperty(WithMapStrProp.class, null, "{\"prop\":null}", o -> o.prop);
+        testProperty(WithMapStrProp.class, mapEmpty, "{\"prop\":{}}", o -> o.prop);
+        testProperty(WithMapStrProp.class, mapOne, "{\"prop\":{\"key1\":{\"name\":\"myObj1\"}}}", o -> o.prop);
+        testProperty(WithMapStrProp.class, mapTwo,
+                "{\"prop\":{\"key1\":{\"name\":\"myObj1\"},\"key2\":{\"name\":\"myObj2\"}}}", o -> o.prop);
     }
 
     @Test
@@ -358,6 +420,25 @@ public class FxGsonTest {
     }
 
     @Test
+    public void testMapIntProperty() {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        ObservableMap<Integer, CustomObject> mapEmpty = FXCollections.emptyObservableMap();
+        ObservableMap<Integer, CustomObject> mapOne = FXCollections.observableHashMap();
+        mapOne.put(1, one);
+        ObservableMap<Integer, CustomObject> mapTwo = FXCollections.observableHashMap();
+        mapTwo.put(1, one);
+        mapTwo.put(2, two);
+
+        testProperty(WithMapIntProp.class, null, "{\"prop\":null}", o -> o.prop);
+        testProperty(WithMapIntProp.class, mapEmpty, "{\"prop\":{}}", o -> o.prop);
+        testProperty(WithMapIntProp.class, mapOne, "{\"prop\":{\"1\":{\"name\":\"myObj1\"}}}", o -> o.prop);
+        testProperty(WithMapIntProp.class, mapTwo,
+                "{\"prop\":{\"1\":{\"name\":\"myObj1\"},\"2\":{\"name\":\"myObj2\"}}}", o -> o.prop);
+    }
+
+    @Test
     public void testObservableMapInt() {
         CustomObject one = new CustomObject("myObj1");
         CustomObject two = new CustomObject("myObj2");
@@ -377,6 +458,29 @@ public class FxGsonTest {
         testValue(WithObsMapInt.class, mapOne, "{\"map\":{\"1\":{\"name\":\"myObj1\"}}}", getter, setter);
         testValue(WithObsMapInt.class, mapTwo, "{\"map\":{\"1\":{\"name\":\"myObj1\"},\"2\":{\"name\":\"myObj2\"}}}",
                 getter, setter);
+    }
+
+    @Test
+    public void testCustomTreeMapStrProperty() {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        Map<String, CustomObject> mapEmpty = new TreeMap<>();
+        Map<String, CustomObject> mapOne = new TreeMap<>();
+        mapOne.put("key1", one);
+        Map<String, CustomObject> mapTwo = new TreeMap<>();
+        mapTwo.put("key1", one);
+        mapTwo.put("key2", two);
+
+        ObservableMap<String, CustomObject> mapEmptyObs = FXCollections.observableMap(mapEmpty);
+        ObservableMap<String, CustomObject> mapOneObs = FXCollections.observableMap(mapOne);
+        ObservableMap<String, CustomObject> mapTwoObs = FXCollections.observableMap(mapTwo);
+
+        testProperty(WithMapStrProp.class, null, "{\"prop\":null}", o -> o.prop);
+        testProperty(WithMapStrProp.class, mapEmptyObs, "{\"prop\":{}}", o -> o.prop);
+        testProperty(WithMapStrProp.class, mapOneObs, "{\"prop\":{\"key1\":{\"name\":\"myObj1\"}}}", o -> o.prop);
+        testProperty(WithMapStrProp.class, mapTwoObs,
+                "{\"prop\":{\"key1\":{\"name\":\"myObj1\"},\"key2\":{\"name\":\"myObj2\"}}}", o -> o.prop);
     }
 
     @Test
@@ -403,6 +507,29 @@ public class FxGsonTest {
         testValue(WithObsMapStr.class, mapOneObs, "{\"map\":{\"key1\":{\"name\":\"myObj1\"}}}", getter, setter);
         testValue(WithObsMapStr.class, mapTwoObs,
                 "{\"map\":{\"key1\":{\"name\":\"myObj1\"},\"key2\":{\"name\":\"myObj2\"}}}", getter, setter);
+    }
+
+    @Test
+    public void testCustomTreeMapIntProperty() {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        Map<Integer, CustomObject> mapEmpty = new TreeMap<>();
+        Map<Integer, CustomObject> mapOne = new TreeMap<>();
+        mapOne.put(1, one);
+        Map<Integer, CustomObject> mapTwo = new TreeMap<>();
+        mapTwo.put(1, one);
+        mapTwo.put(2, two);
+
+        ObservableMap<Integer, CustomObject> mapEmptyObs = FXCollections.observableMap(mapEmpty);
+        ObservableMap<Integer, CustomObject> mapOneObs = FXCollections.observableMap(mapOne);
+        ObservableMap<Integer, CustomObject> mapTwoObs = FXCollections.observableMap(mapTwo);
+
+        testProperty(WithMapIntProp.class, null, "{\"prop\":null}", o -> o.prop);
+        testProperty(WithMapIntProp.class, mapEmptyObs, "{\"prop\":{}}", o -> o.prop);
+        testProperty(WithMapIntProp.class, mapOneObs, "{\"prop\":{\"1\":{\"name\":\"myObj1\"}}}", o -> o.prop);
+        testProperty(WithMapIntProp.class, mapTwoObs,
+                "{\"prop\":{\"1\":{\"name\":\"myObj1\"},\"2\":{\"name\":\"myObj2\"}}}", o -> o.prop);
     }
 
     @Test
