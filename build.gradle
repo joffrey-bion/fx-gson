@@ -7,7 +7,7 @@ apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
 group = 'org.hildan.fxgson'
-version = '1.2.3'
+version = '2.0.0'
 description = 'A Gson extension to make it easy to deal with JavaFX properties.'
 ext.labels = ['json', 'gson', 'javafx', 'property']
 
@@ -46,7 +46,7 @@ ext {
 }
 
 bintray {
-    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : System.getenv('BINTRAY_USER')
+    user = project.hasProperty('bintrayUser') ? project.bintrayUser : System.getenv('BINTRAY_USER')
     key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : System.getenv('BINTRAY_KEY')
     publications = ['maven']
     publish = true // the version should be auto published after an upload

@@ -19,7 +19,7 @@ public abstract class PrimitiveTypeAdapter<T> extends TypeAdapter<T> {
     private final boolean crashOnNullValue;
 
     /**
-     * Creates a new {@link PrimitiveTypeAdapter}.
+     * Creates a new PrimitiveTypeAdapter.
      *
      * @param crashOnNullValue
      *         if true, this adapter will throw {@link NullPrimitiveException} when reading a null value. If false, this
@@ -62,6 +62,7 @@ public abstract class PrimitiveTypeAdapter<T> extends TypeAdapter<T> {
      * @return the converted Java object
      *
      * @throws IOException
+     *         if an I/O error occurs when reading the JSON
      */
     protected abstract T readNonNullValue(JsonReader in) throws IOException;
 }

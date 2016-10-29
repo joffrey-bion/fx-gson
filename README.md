@@ -69,24 +69,29 @@ Convincing, eh?
 
 ## Usage
 
-#### Using the pre-configured builders
+#### The simple way
 
-You can use the built-in `GsonBuilder`s directly:
+You can use the built-in factory methods directly:
 
     // to handle only Properties and Observable collections
-    Gson fxGson = FxGson.coreBuilder().create();
+    Gson fxGson = FxGson.create();
 
     // to also handle the Color & Font classes
-    Gson fxGsonWithExtras = FxGson.fullBuilder().create();
+    Gson fxGsonWithExtras = FxGson.createWithExtras();
 
-Because `FxGson` returns a builder, you can add your own configuration to it:
+`FxGson` can also return a builder so that you can add your own configuration to it:
 
-    Gson gson = FxGson.coreBuilder()
-                      .registerTypeAdapterFactory(new MyFactory())
-                      .setPrettyPrinting()
-                      .create();
+    Gson fxGson = FxGson.coreBuilder()
+                        .registerTypeAdapterFactory(new MyFactory())
+                        .disableHtmlEscaping()
+                        .create();
+
+    Gson fxGsonWithExtras = FxGson.fullBuilder()
+                                  .registerTypeAdapter(Pattern.class, new PatternSerializer())
+                                  .setPrettyPrinting()
+                                  .create();
                       
-You can find more info on the built-in `GsonBuilder`s [in the Wiki](https://github.com/joffrey-bion/fx-gson/wiki/Built-in-GsonBuilders).
+You can find more info on the built-in "core" and "full" builder [in the Wiki](https://github.com/joffrey-bion/fx-gson/wiki/Built-in-GsonBuilders).
 
 #### Configuring an existing builder to handle JavaFX properties
 
@@ -95,7 +100,7 @@ Sometimes you don't control the creation of the `GsonBuilder` you are using, bec
 In this case, use the provided helper methods to add `FxGson` configuration to an existing `GsonBuilder`:
 
     GsonBuilder builder = MyLib.getBuilder();
-    Gson gson = FxGson.addCoreSerializers(builder).create();
+    Gson gson = FxGson.addFxSupport(builder).create();
 
 #### Going full control
 
@@ -110,7 +115,7 @@ You will find more customization info in [this dedicated wiki page](https://gith
     }
 
     dependencies {
-        compile 'org.hildan.fxgson:fx-gson:1.2.3'
+        compile 'org.hildan.fxgson:fx-gson:2.0.0'
     }
 
 #### In Maven
@@ -118,7 +123,7 @@ You will find more customization info in [this dedicated wiki page](https://gith
     <dependency>
       <groupId>org.hildan.fxgson</groupId>
       <artifactId>fx-gson</artifactId>
-      <version>1.2.3</version>
+      <version>2.0.0</version>
       <type>pom</type>
     </dependency>
     
