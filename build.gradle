@@ -21,7 +21,7 @@ dependencies {
     testCompile 'junit:junit:4.+'
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
@@ -40,31 +40,40 @@ publishing {
     }
 }
 
+def getPropOrEnv = { String prop, String envVar, String defaultValue = null ->
+    if (project.hasProperty(prop)) {
+        return project.property(prop)
+    }
+    return System.getenv(envVar) ?: defaultValue
+}
+
 ext {
-    githubUser = project.hasProperty('githubUser') ? project.githubUser : System.getenv('GITHUB_USER')
+    githubUser = getPropOrEnv('githubUser', 'GITHUB_USER')
     githubRepoName = project.name
+    githubSlug = "$githubUser/$githubRepoName"
+    githubRepoUrl = "https://github.com/$githubSlug"
 }
 
 bintray {
-    user = project.hasProperty('bintrayUser') ? project.bintrayUser : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : System.getenv('BINTRAY_KEY')
+    user = getPropOrEnv('bintrayUser', 'BINTRAY_USER')
+    key = getPropOrEnv('bintrayApiKey', 'BINTRAY_KEY')
     publications = ['maven']
     publish = true // the version should be auto published after an upload
 
     pkg {
-        repo = project.hasProperty('bintrayRepoLibs') ? project.bintrayRepoLibs : System.getenv('BINTRAY_REPO_LIBS')
+        repo = getPropOrEnv('bintrayRepoLibs', 'BINTRAY_REPO_LIBS')
         name = project.name
         desc = project.description
         labels = project.labels
         licenses = ['MIT']
 
-        websiteUrl = 'https://github.com/' + githubUser + '/' + githubRepoName
-        issueTrackerUrl = 'https://github.com/' + githubUser + '/' + githubRepoName + '/issues'
-        vcsUrl = 'https://github.com/' + githubUser + '/' + githubRepoName + '.git'
-        githubRepo = githubUser + '/' + githubRepoName
-        githubReleaseNotesFile = 'README.md'
+        websiteUrl = githubRepoUrl
+        issueTrackerUrl = githubRepoUrl + '/issues'
+        vcsUrl = githubRepoUrl + '.git'
+        githubRepo = githubSlug
 
         version {
+            desc = project.description
             vcsTag = 'v' + project.version
             gpg { sign = true }
         }
