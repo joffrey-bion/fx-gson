@@ -69,28 +69,34 @@ Convincing, eh?
 
 ## Usage
 
+All you need to know is in the wiki, but here is a quick overview.
+
 #### The simple way
 
 You can use the built-in factory methods directly:
 
-    // to handle only Properties and Observable collections
-    Gson fxGson = FxGson.create();
+```java
+// to handle only Properties and Observable collections
+Gson fxGson = FxGson.create();
 
-    // to also handle the Color & Font classes
-    Gson fxGsonWithExtras = FxGson.createWithExtras();
+// to also handle the Color & Font classes
+Gson fxGsonWithExtras = FxGson.createWithExtras();
+```
 
 `FxGson` can also return a builder so that you can add your own configuration to it:
 
-    Gson fxGson = FxGson.coreBuilder()
-                        .registerTypeAdapterFactory(new MyFactory())
-                        .disableHtmlEscaping()
-                        .create();
+```java
+Gson fxGson = FxGson.coreBuilder()
+                    .registerTypeAdapterFactory(new MyFactory())
+                    .disableHtmlEscaping()
+                    .create();
 
-    Gson fxGsonWithExtras = FxGson.fullBuilder()
-                                  .registerTypeAdapter(Pattern.class, new PatternSerializer())
-                                  .setPrettyPrinting()
-                                  .create();
-                      
+Gson fxGsonWithExtras = FxGson.fullBuilder()
+                              .registerTypeAdapter(Pattern.class, new PatternSerializer())
+                              .setPrettyPrinting()
+                              .create();
+```
+
 You can find more info on the built-in "core" and "full" builder [in the Wiki](https://github.com/joffrey-bion/fx-gson/wiki/Built-in-GsonBuilders).
 
 #### Configuring an existing builder to handle JavaFX properties
