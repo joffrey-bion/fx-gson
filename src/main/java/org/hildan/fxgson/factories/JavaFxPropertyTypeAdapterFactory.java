@@ -12,6 +12,7 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SetProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -31,9 +32,18 @@ import org.hildan.fxgson.adapters.primitives.DoublePropertyTypeAdapter;
 import org.hildan.fxgson.adapters.primitives.FloatPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.primitives.IntegerPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.primitives.LongPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.primitives.NullPrimitiveException;
 
 /**
- * A {@link TypeAdapterFactory} for JavaFX {@link Property} types.
+ * A {@link TypeAdapterFactory} for all JavaFX {@link Property} types. It serializes the value of a property instead of
+ * the property object itself. It handles all primitive property types, the collection properties {@link ListProperty},
+ * {@link SetProperty}, and {@link MapProperty}, as well as the base {@link Property} itself.
+ * <p>
+ * During deserialization, the type adapters of this factory instantiate the "Simple" implementation of the relevant
+ * {@link Property} subclass. For instance, to deserialize an {@link IntegerProperty}, the {@link
+ * IntegerPropertyTypeAdapter} will create a {@link SimpleIntegerProperty}. If a JSON contains a null value for a
+ * primitive property, a {@link NullPrimitiveException} is thrown when trying to deserialize it, unless this factory is
+ * configured otherwise using the constructor {@link #JavaFxPropertyTypeAdapterFactory(boolean)}.
  */
 public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
 

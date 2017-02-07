@@ -66,11 +66,11 @@ public class FxGsonTest {
         Gson extraGsonSafe1 = new FxGsonBuilder().acceptNullPrimitives().withExtras().create();
         Gson extraGsonSafe2 = new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().withExtras().create();
 
-        allGsons = new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1, extraGson2, extraGson3,
-                extraGson4, coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
+        allGsons = new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1, extraGson2,
+                extraGson3, extraGson4, coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
         strictGsons =
-                new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1, extraGson2, extraGson3,
-                        extraGson4};
+                new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1, extraGson2,
+                        extraGson3, extraGson4};
         extraGsons = new Gson[]{extraGson1, extraGson2, extraGson3, extraGson4, extraGsonSafe1, extraGsonSafe2};
         safeGsons = new Gson[]{coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
     }

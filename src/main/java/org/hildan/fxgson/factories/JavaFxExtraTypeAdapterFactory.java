@@ -11,7 +11,7 @@ import org.hildan.fxgson.adapters.extras.ColorTypeAdapter;
 import org.hildan.fxgson.adapters.extras.FontTypeAdapter;
 
 /**
- * A {@link TypeAdapterFactory} for JavaFX secondary classes, such as {@link Color} and {@link Font}.
+ * A {@link TypeAdapterFactory} for JavaFX's {@link Color} and {@link Font} classes.
  */
 public class JavaFxExtraTypeAdapterFactory implements TypeAdapterFactory {
 
