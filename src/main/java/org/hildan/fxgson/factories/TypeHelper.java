@@ -2,8 +2,6 @@ package org.hildan.fxgson.factories;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Objects;
 
 import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +10,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A helper to handle {@link Type} and {@link TypeToken} objects creation.
  */
-class TypeHelper {
+final class TypeHelper {
+
+    private TypeHelper() throws InstantiationException {
+        throw new InstantiationException("Instances of this type are forbidden.");
+    }
 
     /**
      * Gets a {@link TypeToken} equivalent to the given one, but with the given raw type instead of the original one.
@@ -63,25 +65,6 @@ class TypeHelper {
         @Override
         public Type getOwnerType() {
             return ownerType;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            CustomParameterizedType that = (CustomParameterizedType) o;
-            return Objects.equals(rawType, that.rawType) &&
-                    Objects.equals(ownerType, that.ownerType) &&
-                    Arrays.equals(typeArguments, that.typeArguments);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(rawType, ownerType, typeArguments);
         }
     }
 }

@@ -24,7 +24,11 @@ import org.jetbrains.annotations.NotNull;
  * <li>Extra JavaFX classes: {@link Color}, {@link Font}</li>
  * </ul>
  */
-public class FxGson {
+public final class FxGson {
+
+    private FxGson() throws InstantiationException {
+        throw new InstantiationException("Instances of this type are forbidden.");
+    }
 
     /**
      * Creates a {@link Gson} pre-configured to handle JavaFX core classes. This is a shorthand for
