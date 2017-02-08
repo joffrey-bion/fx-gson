@@ -22,20 +22,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.hildan.fxgson.adapters.primitives.NullPrimitiveException;
 import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.hildan.fxgson.TestClassesExtra.WithColor;
-import static org.hildan.fxgson.TestClassesExtra.WithFont;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import static org.hildan.fxgson.TestClassesExtra.*;
 import static org.hildan.fxgson.TestClassesSimple.*;
 import static org.hildan.fxgson.TestClassesWithProp.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class FxGsonTest {
 
@@ -46,6 +43,8 @@ public class FxGsonTest {
     private static Gson[] safeGsons;
 
     private static Gson[] strictGsons;
+
+    private static Gson gsonSpecialFloat;
 
     @BeforeClass
     public static void createGsons() {
@@ -69,13 +68,14 @@ public class FxGsonTest {
         Gson extraGsonSafe1 = new FxGsonBuilder().acceptNullPrimitives().withExtras().create();
         Gson extraGsonSafe2 = new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().withExtras().create();
 
-        allGsons = new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1, extraGson2,
-                extraGson3, extraGson4, coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
-        strictGsons =
-                new Gson[]{coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1, extraGson2,
-                        extraGson3, extraGson4};
-        extraGsons = new Gson[]{extraGson1, extraGson2, extraGson3, extraGson4, extraGsonSafe1, extraGsonSafe2};
-        safeGsons = new Gson[]{coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
+        gsonSpecialFloat = FxGson.coreBuilder().serializeSpecialFloatingPointValues().create();
+
+        allGsons = new Gson[] {coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1, extraGson2,
+                extraGson3, extraGson4, coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2, gsonSpecialFloat};
+        strictGsons = new Gson[] {coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1,
+                extraGson2, extraGson3, extraGson4, gsonSpecialFloat};
+        extraGsons = new Gson[] {extraGson1, extraGson2, extraGson3, extraGson4, extraGsonSafe1, extraGsonSafe2};
+        safeGsons = new Gson[] {coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
     }
 
     @Test
@@ -299,10 +299,34 @@ public class FxGsonTest {
     }
 
     @Test
+    public void testFloatProperty_specialValues() {
+        testProperty(WithFloatProp.class, Float.NaN, "{\"prop\":NaN}", o -> o.prop, gsonSpecialFloat);
+        testProperty(WithFloatProp.class, Float.POSITIVE_INFINITY, "{\"prop\":Infinity}", o -> o.prop,
+                gsonSpecialFloat);
+        testProperty(WithFloatProp.class, Float.NEGATIVE_INFINITY, "{\"prop\":-Infinity}", o -> o.prop,
+                gsonSpecialFloat);
+    }
+
+    @Test
     public void testDoubleProperty() {
         testProperty(WithDoubleProp.class, 0d, "{\"prop\":0.0}", o -> o.prop);
         testProperty(WithDoubleProp.class, 2.5d, "{\"prop\":2.5}", o -> o.prop);
         testProperty(WithDoubleProp.class, -3.5d, "{\"prop\":-3.5}", o -> o.prop);
+    }
+
+    @Test
+    public void xxx() {
+        Gson gson = new Gson();
+        System.out.println(gson.fromJson("null", int.class));
+    }
+
+    @Test
+    public void testDoubleProperty_specialValues() {
+        testProperty(WithDoubleProp.class, Double.NaN, "{\"prop\":NaN}", o -> o.prop, gsonSpecialFloat);
+        testProperty(WithDoubleProp.class, Double.POSITIVE_INFINITY, "{\"prop\":Infinity}", o -> o.prop,
+                gsonSpecialFloat);
+        testProperty(WithDoubleProp.class, Double.NEGATIVE_INFINITY, "{\"prop\":-Infinity}", o -> o.prop,
+                gsonSpecialFloat);
     }
 
     @Test

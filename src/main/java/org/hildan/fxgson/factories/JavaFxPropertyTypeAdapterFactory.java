@@ -18,10 +18,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
-import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
-import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
 import org.hildan.fxgson.adapters.ListPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.MapPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.ObjectPropertyTypeAdapter;
@@ -33,6 +29,11 @@ import org.hildan.fxgson.adapters.primitives.FloatPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.primitives.IntegerPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.primitives.LongPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.primitives.NullPrimitiveException;
+
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * A {@link TypeAdapterFactory} for all JavaFX {@link Property} types. It serializes the value of a property instead of
@@ -84,22 +85,23 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
         // simple property types
 
         if (BooleanProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>) new BooleanPropertyTypeAdapter(crashOnNullPrimitives);
+            return (TypeAdapter<T>)new BooleanPropertyTypeAdapter(crashOnNullPrimitives,
+                    gson.getAdapter(boolean.class));
         }
         if (IntegerProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>) new IntegerPropertyTypeAdapter(crashOnNullPrimitives);
+            return (TypeAdapter<T>) new IntegerPropertyTypeAdapter(crashOnNullPrimitives, gson.getAdapter(int.class));
         }
         if (LongProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>) new LongPropertyTypeAdapter(crashOnNullPrimitives);
+            return (TypeAdapter<T>) new LongPropertyTypeAdapter(crashOnNullPrimitives, gson.getAdapter(long.class));
         }
         if (FloatProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>) new FloatPropertyTypeAdapter(crashOnNullPrimitives);
+            return (TypeAdapter<T>) new FloatPropertyTypeAdapter(crashOnNullPrimitives, gson.getAdapter(float.class));
         }
         if (DoubleProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>) new DoublePropertyTypeAdapter(crashOnNullPrimitives);
+            return (TypeAdapter<T>) new DoublePropertyTypeAdapter(crashOnNullPrimitives, gson.getAdapter(double.class));
         }
         if (StringProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>) new StringPropertyTypeAdapter();
+            return (TypeAdapter<T>) new StringPropertyTypeAdapter(gson.getAdapter(String.class));
         }
 
         // collection property types

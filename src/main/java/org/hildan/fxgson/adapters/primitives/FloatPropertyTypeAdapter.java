@@ -1,35 +1,26 @@
 package org.hildan.fxgson.adapters.primitives;
 
-import java.io.IOException;
-
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+import com.google.gson.TypeAdapter;
 
 /**
  * An implementation of {@link PrimitiveTypeAdapter} for JavaFX {@link FloatProperty}. It serializes the float value of
  * the property instead of the property itself.
  */
-public class FloatPropertyTypeAdapter extends PrimitiveTypeAdapter<FloatProperty> {
+public class FloatPropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter<Float, FloatProperty> {
 
-    public FloatPropertyTypeAdapter(boolean crashOnNullValue) {
-        super(crashOnNullValue);
-    }
-
-    @Override
-    public void write(JsonWriter out, FloatProperty value) throws IOException {
-        out.value(value.get());
-    }
-
-    @Override
-    protected FloatProperty createDefaultValue() {
-        return new SimpleFloatProperty();
-    }
-
-    @Override
-    public FloatProperty readNonNullValue(JsonReader in) throws IOException {
-        return new SimpleFloatProperty((float) in.nextDouble());
+    /**
+     * Creates a new FloatPropertyTypeAdapter.
+     *
+     * @param crashOnNullValue
+     *         if true, this adapter will throw {@link NullPrimitiveException} when reading a null value. If false, this
+     *         adapter will create a new simple property using the default constructor instead.
+     * @param delegate
+     *         a delegate adapter to use for the inner value of the property
+     */
+    public FloatPropertyTypeAdapter(boolean crashOnNullValue, TypeAdapter<Float> delegate) {
+        super(crashOnNullValue, delegate, FloatProperty::get, SimpleFloatProperty::new, SimpleFloatProperty::new);
     }
 }

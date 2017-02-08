@@ -16,9 +16,15 @@ import com.google.gson.stream.JsonWriter;
  */
 public class StringPropertyTypeAdapter extends TypeAdapter<StringProperty> {
 
+    private final TypeAdapter<String> delegate;
+
+    public StringPropertyTypeAdapter(TypeAdapter<String> delegate) {
+        this.delegate = delegate;
+    }
+
     @Override
     public void write(JsonWriter out, StringProperty value) throws IOException {
-        out.value(value.getValue());
+        delegate.write(out, value.getValue());
     }
 
     @Override
@@ -27,7 +33,7 @@ public class StringPropertyTypeAdapter extends TypeAdapter<StringProperty> {
             in.nextNull();
             return new SimpleStringProperty(null);
         } else {
-            return new SimpleStringProperty(in.nextString());
+            return new SimpleStringProperty(delegate.read(in));
         }
     }
 }

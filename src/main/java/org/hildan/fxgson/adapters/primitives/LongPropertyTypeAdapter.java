@@ -1,35 +1,26 @@
 package org.hildan.fxgson.adapters.primitives;
 
-import java.io.IOException;
-
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+import com.google.gson.TypeAdapter;
 
 /**
  * An implementation of {@link PrimitiveTypeAdapter} for JavaFX {@link LongProperty}. It serializes the long value of
  * the property instead of the property itself.
  */
-public class LongPropertyTypeAdapter extends PrimitiveTypeAdapter<LongProperty> {
+public class LongPropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter<Long, LongProperty> {
 
-    public LongPropertyTypeAdapter(boolean crashOnNullValue) {
-        super(crashOnNullValue);
-    }
-
-    @Override
-    public void write(JsonWriter out, LongProperty value) throws IOException {
-        out.value(value.get());
-    }
-
-    @Override
-    protected LongProperty createDefaultValue() {
-        return new SimpleLongProperty();
-    }
-
-    @Override
-    public LongProperty readNonNullValue(JsonReader in) throws IOException {
-        return new SimpleLongProperty(in.nextLong());
+    /**
+     * Creates a new LongPropertyTypeAdapter.
+     *
+     * @param crashOnNullValue
+     *         if true, this adapter will throw {@link NullPrimitiveException} when reading a null value. If false, this
+     *         adapter will create a new simple property using the default constructor instead.
+     * @param delegate
+     *         a delegate adapter to use for the inner value of the property
+     */
+    public LongPropertyTypeAdapter(boolean crashOnNullValue, TypeAdapter<Long> delegate) {
+        super(crashOnNullValue, delegate, LongProperty::get, SimpleLongProperty::new, SimpleLongProperty::new);
     }
 }
