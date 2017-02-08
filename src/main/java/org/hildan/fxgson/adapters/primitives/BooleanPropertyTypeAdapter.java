@@ -6,8 +6,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import com.google.gson.TypeAdapter;
 
 /**
- * An implementation of {@link PrimitiveTypeAdapter} for JavaFX {@link BooleanProperty}. It serializes the boolean value
- * of the property instead of the property itself.
+ * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link BooleanProperty}. It serializes the
+ * boolean value of the property instead of the property itself.
  */
 public class BooleanPropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter<Boolean, BooleanProperty> {
 

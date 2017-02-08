@@ -6,8 +6,8 @@ import javafx.beans.property.SimpleLongProperty;
 import com.google.gson.TypeAdapter;
 
 /**
- * An implementation of {@link PrimitiveTypeAdapter} for JavaFX {@link LongProperty}. It serializes the long value of
- * the property instead of the property itself.
+ * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link LongProperty}. It serializes the long
+ * value of the property instead of the property itself.
  */
 public class LongPropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter<Long, LongProperty> {
 

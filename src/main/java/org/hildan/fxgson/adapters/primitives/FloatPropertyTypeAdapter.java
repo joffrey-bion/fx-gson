@@ -6,8 +6,8 @@ import javafx.beans.property.SimpleFloatProperty;
 import com.google.gson.TypeAdapter;
 
 /**
- * An implementation of {@link PrimitiveTypeAdapter} for JavaFX {@link FloatProperty}. It serializes the float value of
- * the property instead of the property itself.
+ * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link FloatProperty}. It serializes the float
+ * value of the property instead of the property itself.
  */
 public class FloatPropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter<Float, FloatProperty> {
 

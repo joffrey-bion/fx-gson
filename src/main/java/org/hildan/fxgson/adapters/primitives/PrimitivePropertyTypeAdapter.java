@@ -17,14 +17,14 @@ import com.google.gson.stream.JsonWriter;
  * @param <P>
  *         the type that this adapter can serialize/deserialize
  */
-public abstract class PrimitiveTypeAdapter<I, P> extends TypeAdapter<P> {
+public abstract class PrimitivePropertyTypeAdapter<I, P> extends TypeAdapter<P> {
 
     private final boolean crashOnNullValue;
 
     private final TypeAdapter<I> delegate;
 
     /**
-     * Creates a new PrimitiveTypeAdapter.
+     * Creates a new PrimitivePropertyTypeAdapter.
      *
      * @param crashOnNullValue
      *         if true, this adapter will throw {@link NullPrimitiveException} when reading a null value. If false, this
@@ -32,7 +32,7 @@ public abstract class PrimitiveTypeAdapter<I, P> extends TypeAdapter<P> {
      * @param delegate
      *         a delegate adapter to use for the inner value of the property
      */
-    public PrimitiveTypeAdapter(boolean crashOnNullValue, TypeAdapter<I> delegate) {
+    public PrimitivePropertyTypeAdapter(boolean crashOnNullValue, TypeAdapter<I> delegate) {
         this.crashOnNullValue = crashOnNullValue;
         this.delegate = delegate;
     }

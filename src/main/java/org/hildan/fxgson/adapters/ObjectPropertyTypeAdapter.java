@@ -17,6 +17,12 @@ public class ObjectPropertyTypeAdapter<T> extends TypeAdapter<Property<T>> {
 
     private final TypeAdapter<T> delegate;
 
+    /**
+     * Creates a new ObjectPropertyTypeAdapter.
+     *
+     * @param delegate
+     *         a delegate adapter to use for the inner object value of the property
+     */
     public ObjectPropertyTypeAdapter(TypeAdapter<T> delegate) {
         this.delegate = delegate;
     }

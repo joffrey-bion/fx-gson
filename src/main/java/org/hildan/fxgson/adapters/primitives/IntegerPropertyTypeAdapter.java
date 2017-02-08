@@ -6,8 +6,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import com.google.gson.TypeAdapter;
 
 /**
- * An implementation of {@link PrimitiveTypeAdapter} for JavaFX {@link IntegerProperty}. It serializes the int value of
- * the property instead of the property itself.
+ * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link IntegerProperty}. It serializes the int
+ * value of the property instead of the property itself.
  */
 public class IntegerPropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter<Integer, IntegerProperty> {
 

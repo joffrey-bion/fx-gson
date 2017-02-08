@@ -18,6 +18,12 @@ public class SetPropertyTypeAdapter<T> extends TypeAdapter<SetProperty<T>> {
 
     private final TypeAdapter<ObservableSet<T>> delegate;
 
+    /**
+     * Creates a new SetPropertyTypeAdapter.
+     *
+     * @param delegate
+     *         a delegate adapter to use for the inner set value of the property
+     */
     public SetPropertyTypeAdapter(TypeAdapter<ObservableSet<T>> delegate) {
         this.delegate = delegate;
     }

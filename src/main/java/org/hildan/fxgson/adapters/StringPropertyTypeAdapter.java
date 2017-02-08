@@ -18,6 +18,12 @@ public class StringPropertyTypeAdapter extends TypeAdapter<StringProperty> {
 
     private final TypeAdapter<String> delegate;
 
+    /**
+     * Creates a new StringPropertyTypeAdapter.
+     *
+     * @param delegate
+     *         a delegate adapter to use for the inner string value of the property
+     */
     public StringPropertyTypeAdapter(TypeAdapter<String> delegate) {
         this.delegate = delegate;
     }

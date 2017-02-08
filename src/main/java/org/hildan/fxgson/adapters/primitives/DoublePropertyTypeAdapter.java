@@ -6,8 +6,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import com.google.gson.TypeAdapter;
 
 /**
- * An implementation of {@link PrimitiveTypeAdapter} for JavaFX {@link DoubleProperty}. It serializes the double value
- * of the property instead of the property itself.
+ * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link DoubleProperty}. It serializes the double
+ * value of the property instead of the property itself.
  */
 public class DoublePropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter<Double, DoubleProperty> {
 

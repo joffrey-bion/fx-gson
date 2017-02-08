@@ -18,6 +18,12 @@ public class MapPropertyTypeAdapter<K, V> extends TypeAdapter<MapProperty<K, V>>
 
     private final TypeAdapter<ObservableMap<K, V>> delegate;
 
+    /**
+     * Creates a new MapPropertyTypeAdapter.
+     *
+     * @param delegate
+     *         a delegate adapter to use for the inner map value of the property
+     */
     public MapPropertyTypeAdapter(TypeAdapter<ObservableMap<K, V>> delegate) {
         this.delegate = delegate;
     }

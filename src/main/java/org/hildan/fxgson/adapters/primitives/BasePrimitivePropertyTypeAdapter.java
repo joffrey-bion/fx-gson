@@ -5,7 +5,15 @@ import java.util.function.Supplier;
 
 import com.google.gson.TypeAdapter;
 
-class BasePrimitivePropertyTypeAdapter<I, P> extends PrimitiveTypeAdapter<I, P> {
+/**
+ * A more convenient implementation of {@link PrimitivePropertyTypeAdapter} that can be extended using lambdas.
+ *
+ * @param <I>
+ *         the primitive type inside the property
+ * @param <P>
+ *         the type that this adapter can serialize/deserialize
+ */
+class BasePrimitivePropertyTypeAdapter<I, P> extends PrimitivePropertyTypeAdapter<I, P> {
 
     private final Function<P, I> extractPrimitiveValue;
 
@@ -14,7 +22,7 @@ class BasePrimitivePropertyTypeAdapter<I, P> extends PrimitiveTypeAdapter<I, P> 
     private final Function<I, P> wrapPrimitiveValue;
 
     /**
-     * Creates a new PrimitiveTypeAdapter.
+     * Creates a new PrimitivePropertyTypeAdapter.
      *
      * @param crashOnNullValue
      *         if true, this adapter will throw {@link NullPrimitiveException} when reading a null value. If false, this

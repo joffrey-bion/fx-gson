@@ -18,6 +18,12 @@ public class ListPropertyTypeAdapter<T> extends TypeAdapter<ListProperty<T>> {
 
     private final TypeAdapter<ObservableList<T>> delegate;
 
+    /**
+     * Creates a new ListPropertyTypeAdapter.
+     *
+     * @param delegate
+     *         a delegate adapter to use for the inner list value of the property
+     */
     public ListPropertyTypeAdapter(TypeAdapter<ObservableList<T>> delegate) {
         this.delegate = delegate;
     }
