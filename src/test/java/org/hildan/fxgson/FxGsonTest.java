@@ -315,12 +315,6 @@ public class FxGsonTest {
     }
 
     @Test
-    public void xxx() {
-        Gson gson = new Gson();
-        System.out.println(gson.fromJson("null", int.class));
-    }
-
-    @Test
     public void testDoubleProperty_specialValues() {
         testProperty(WithDoubleProp.class, Double.NaN, "{\"prop\":NaN}", o -> o.prop, gsonSpecialFloat);
         testProperty(WithDoubleProp.class, Double.POSITIVE_INFINITY, "{\"prop\":Infinity}", o -> o.prop,
