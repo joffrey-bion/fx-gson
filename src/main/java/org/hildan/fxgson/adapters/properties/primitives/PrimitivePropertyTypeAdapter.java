@@ -1,4 +1,4 @@
-package org.hildan.fxgson.adapters.primitives;
+package org.hildan.fxgson.adapters.properties.primitives;
 
 import java.io.IOException;
 
@@ -19,9 +19,9 @@ import com.google.gson.stream.JsonWriter;
  */
 public abstract class PrimitivePropertyTypeAdapter<I, P> extends TypeAdapter<P> {
 
-    private final boolean crashOnNullValue;
-
     private final TypeAdapter<I> delegate;
+
+    private final boolean crashOnNullValue;
 
     /**
      * Creates a new PrimitivePropertyTypeAdapter.
@@ -33,13 +33,17 @@ public abstract class PrimitivePropertyTypeAdapter<I, P> extends TypeAdapter<P> 
      *         a delegate adapter to use for the inner value of the property
      */
     public PrimitivePropertyTypeAdapter(boolean crashOnNullValue, TypeAdapter<I> delegate) {
-        this.crashOnNullValue = crashOnNullValue;
         this.delegate = delegate;
+        this.crashOnNullValue = crashOnNullValue;
     }
 
     @Override
-    public void write(JsonWriter out, P value) throws IOException {
-        delegate.write(out, extractPrimitiveValue(value));
+    public void write(JsonWriter out, P property) throws IOException {
+        if (property == null) {
+            out.nullValue();
+            return;
+        }
+        delegate.write(out, extractPrimitiveValue(property));
     }
 
     @Override
@@ -47,8 +51,7 @@ public abstract class PrimitivePropertyTypeAdapter<I, P> extends TypeAdapter<P> 
         if (in.peek() == JsonToken.NULL) {
             in.nextNull();
             if (crashOnNullValue) {
-                String error = "Illegal null value for a primitive type at path " + in.getPath();
-                throw new NullPrimitiveException(error);
+                throw new NullPrimitiveException(in.getPath());
             } else {
                 return createDefaultProperty();
             }
@@ -57,22 +60,29 @@ public abstract class PrimitivePropertyTypeAdapter<I, P> extends TypeAdapter<P> 
         }
     }
 
+    /**
+     * Gets the current value of the given property.
+     *
+     * @param property
+     *         the property to get the value for
+     *
+     * @return the current value of the given property
+     */
     protected abstract I extractPrimitiveValue(P property);
 
     /**
-     * Creates a default T value. This is used when this adapter deserializes a null value from the input JSON, but only
-     * if this adapter is set not to crash.
+     * Creates a default property object. This is used when this adapter deserializes a null value from the input JSON,
+     * but only if this adapter is set not to crash (see {@link #PrimitivePropertyTypeAdapter(boolean, TypeAdapter)}).
      *
      * @return a default value to use when null is found
      */
     protected abstract P createDefaultProperty();
 
     /**
-     * Wraps the deserialized primitive value in a Property object of the right type. The next value of the reader is
-     * guaranteed to be non-null when this method is called.
+     * Wraps the deserialized primitive value in a Property object of the right type.
      *
      * @param deserializedValue
-     *         the deserialized inner primitive value of the property
+     *         the deserialized inner primitive value of the property, may not be null
      *
      * @return a new property object containing the given value
      */

@@ -1,4 +1,4 @@
-package org.hildan.fxgson.adapters.primitives;
+package org.hildan.fxgson.adapters.properties.primitives;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -9,7 +9,7 @@ import com.google.gson.TypeAdapter;
  * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link IntegerProperty}. It serializes the int
  * value of the property instead of the property itself.
  */
-public class IntegerPropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter<Integer, IntegerProperty> {
+public class IntegerPropertyTypeAdapter extends PrimitivePropertyTypeAdapter<Integer, IntegerProperty> {
 
     /**
      * Creates a new IntegerPropertyTypeAdapter.
@@ -21,6 +21,21 @@ public class IntegerPropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter
      *         a delegate adapter to use for the inner value of the property
      */
     public IntegerPropertyTypeAdapter(boolean crashOnNullValue, TypeAdapter<Integer> delegate) {
-        super(crashOnNullValue, delegate, IntegerProperty::get, SimpleIntegerProperty::new, SimpleIntegerProperty::new);
+        super(crashOnNullValue, delegate);
+    }
+
+    @Override
+    protected Integer extractPrimitiveValue(IntegerProperty property) {
+        return property.get();
+    }
+
+    @Override
+    protected IntegerProperty createDefaultProperty() {
+        return new SimpleIntegerProperty();
+    }
+
+    @Override
+    protected IntegerProperty wrapNonNullPrimitiveValue(Integer deserializedValue) {
+        return new SimpleIntegerProperty(deserializedValue);
     }
 }

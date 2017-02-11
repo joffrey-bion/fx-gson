@@ -1,22 +1,17 @@
-package org.hildan.fxgson.adapters;
-
-import java.io.IOException;
+package org.hildan.fxgson.adapters.properties;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
 
 import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A basic {@link TypeAdapter} for JavaFX {@link ListProperty}. It serializes the list inside the property instead of
  * the property itself.
  */
-public class ListPropertyTypeAdapter<T> extends TypeAdapter<ListProperty<T>> {
-
-    private final TypeAdapter<ObservableList<T>> delegate;
+public class ListPropertyTypeAdapter<T> extends PropertyTypeAdapter<ObservableList<T>, ListProperty<T>> {
 
     /**
      * Creates a new ListPropertyTypeAdapter.
@@ -25,16 +20,12 @@ public class ListPropertyTypeAdapter<T> extends TypeAdapter<ListProperty<T>> {
      *         a delegate adapter to use for the inner list value of the property
      */
     public ListPropertyTypeAdapter(TypeAdapter<ObservableList<T>> delegate) {
-        this.delegate = delegate;
+        super(delegate);
     }
 
+    @NotNull
     @Override
-    public void write(JsonWriter out, ListProperty<T> value) throws IOException {
-        delegate.write(out, value.getValue());
-    }
-
-    @Override
-    public ListProperty<T> read(JsonReader in) throws IOException {
-        return new SimpleListProperty<>(delegate.read(in));
+    protected ListProperty<T> createProperty(ObservableList<T> deserializedValue) {
+        return new SimpleListProperty<>(deserializedValue);
     }
 }

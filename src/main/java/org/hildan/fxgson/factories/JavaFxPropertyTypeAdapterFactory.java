@@ -18,22 +18,21 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
-import org.hildan.fxgson.adapters.ListPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.MapPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.ObjectPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.SetPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.StringPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.primitives.BooleanPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.primitives.DoublePropertyTypeAdapter;
-import org.hildan.fxgson.adapters.primitives.FloatPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.primitives.IntegerPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.primitives.LongPropertyTypeAdapter;
-import org.hildan.fxgson.adapters.primitives.NullPrimitiveException;
-
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
+import org.hildan.fxgson.adapters.properties.ListPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.properties.MapPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.properties.ObjectPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.properties.SetPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.properties.StringPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.properties.primitives.BooleanPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.properties.primitives.DoublePropertyTypeAdapter;
+import org.hildan.fxgson.adapters.properties.primitives.FloatPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.properties.primitives.IntegerPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.properties.primitives.LongPropertyTypeAdapter;
+import org.hildan.fxgson.adapters.properties.primitives.NullPrimitiveException;
 
 /**
  * A {@link TypeAdapterFactory} for all JavaFX {@link Property} types. It serializes the value of a property instead of
@@ -48,11 +47,12 @@ import com.google.gson.reflect.TypeToken;
  */
 public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
 
-    private final boolean crashOnNullPrimitives;
+    private final boolean strictPrimitives;
 
     /**
-     * Creates a new JavaFxPropertyTypeAdapterFactory. This default factory crashes when asked to deserialize a null
-     * JSON value for a primitive type property such as {@link IntegerProperty} or {@link BooleanProperty}.
+     * Creates a new JavaFxPropertyTypeAdapterFactory. This default factory throws a {@link NullPrimitiveException} when
+     * asked to deserialize a null JSON value for a primitive type property such as {@link IntegerProperty} or {@link
+     * BooleanProperty}.
      *
      * @see #JavaFxPropertyTypeAdapterFactory(boolean)
      */
@@ -63,13 +63,13 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
     /**
      * Creates a new JavaFxPropertyTypeAdapterFactory.
      *
-     * @param crashOnNullPrimitives
+     * @param throwOnNullPrimitives
      *         if true, null values in the JSON are not accepted for primitive properties like {@link IntegerProperty}
-     *         or {@link BooleanProperty} during deserialization. If false, a property is created with a default value
-     *         instead of crashing.
+     *         or {@link BooleanProperty} during deserialization, and cause a {@link NullPrimitiveException} to be
+     *         thrown. If false, a property is created with a default value instead of throwing an exception.
      */
-    public JavaFxPropertyTypeAdapterFactory(boolean crashOnNullPrimitives) {
-        this.crashOnNullPrimitives = crashOnNullPrimitives;
+    public JavaFxPropertyTypeAdapterFactory(boolean throwOnNullPrimitives) {
+        this.strictPrimitives = throwOnNullPrimitives;
     }
 
     @SuppressWarnings("unchecked")
@@ -85,20 +85,19 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
         // simple property types
 
         if (BooleanProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>)new BooleanPropertyTypeAdapter(crashOnNullPrimitives,
-                    gson.getAdapter(boolean.class));
+            return (TypeAdapter<T>) new BooleanPropertyTypeAdapter(strictPrimitives, gson.getAdapter(boolean.class));
         }
         if (IntegerProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>) new IntegerPropertyTypeAdapter(crashOnNullPrimitives, gson.getAdapter(int.class));
+            return (TypeAdapter<T>) new IntegerPropertyTypeAdapter(strictPrimitives, gson.getAdapter(int.class));
         }
         if (LongProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>) new LongPropertyTypeAdapter(crashOnNullPrimitives, gson.getAdapter(long.class));
+            return (TypeAdapter<T>) new LongPropertyTypeAdapter(strictPrimitives, gson.getAdapter(long.class));
         }
         if (FloatProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>) new FloatPropertyTypeAdapter(crashOnNullPrimitives, gson.getAdapter(float.class));
+            return (TypeAdapter<T>) new FloatPropertyTypeAdapter(strictPrimitives, gson.getAdapter(float.class));
         }
         if (DoubleProperty.class.isAssignableFrom(clazz)) {
-            return (TypeAdapter<T>) new DoublePropertyTypeAdapter(crashOnNullPrimitives, gson.getAdapter(double.class));
+            return (TypeAdapter<T>) new DoublePropertyTypeAdapter(strictPrimitives, gson.getAdapter(double.class));
         }
         if (StringProperty.class.isAssignableFrom(clazz)) {
             return (TypeAdapter<T>) new StringPropertyTypeAdapter(gson.getAdapter(String.class));

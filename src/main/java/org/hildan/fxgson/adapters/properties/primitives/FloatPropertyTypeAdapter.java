@@ -1,4 +1,4 @@
-package org.hildan.fxgson.adapters.primitives;
+package org.hildan.fxgson.adapters.properties.primitives;
 
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
@@ -9,7 +9,7 @@ import com.google.gson.TypeAdapter;
  * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link FloatProperty}. It serializes the float
  * value of the property instead of the property itself.
  */
-public class FloatPropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter<Float, FloatProperty> {
+public class FloatPropertyTypeAdapter extends PrimitivePropertyTypeAdapter<Float, FloatProperty> {
 
     /**
      * Creates a new FloatPropertyTypeAdapter.
@@ -21,6 +21,21 @@ public class FloatPropertyTypeAdapter extends BasePrimitivePropertyTypeAdapter<F
      *         a delegate adapter to use for the inner value of the property
      */
     public FloatPropertyTypeAdapter(boolean crashOnNullValue, TypeAdapter<Float> delegate) {
-        super(crashOnNullValue, delegate, FloatProperty::get, SimpleFloatProperty::new, SimpleFloatProperty::new);
+        super(crashOnNullValue, delegate);
+    }
+
+    @Override
+    protected Float extractPrimitiveValue(FloatProperty property) {
+        return property.get();
+    }
+
+    @Override
+    protected FloatProperty createDefaultProperty() {
+        return new SimpleFloatProperty();
+    }
+
+    @Override
+    protected FloatProperty wrapNonNullPrimitiveValue(Float deserializedValue) {
+        return new SimpleFloatProperty(deserializedValue);
     }
 }

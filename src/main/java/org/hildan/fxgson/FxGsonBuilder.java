@@ -9,7 +9,7 @@ import javafx.scene.text.Font;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.hildan.fxgson.adapters.primitives.NullPrimitiveException;
+import org.hildan.fxgson.adapters.properties.primitives.NullPrimitiveException;
 import org.hildan.fxgson.creators.ObservableListCreator;
 import org.hildan.fxgson.creators.ObservableMapCreator;
 import org.hildan.fxgson.creators.ObservableSetCreator;

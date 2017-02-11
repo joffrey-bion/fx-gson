@@ -22,7 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import org.hildan.fxgson.adapters.primitives.NullPrimitiveException;
+import org.hildan.fxgson.adapters.properties.primitives.NullPrimitiveException;
 import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
