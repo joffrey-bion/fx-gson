@@ -10,7 +10,7 @@ and deserialize values into properties.
 
 ## Why FX Gson?
 
-In JavaFX, POJOs usually contain `Property` objects instead of primitives. When serialized with Gson, we don't want to
+In JavaFX, POJOs usually contain `Property` objects instead of primitives. When serialized, we usually don't want to
 see the internals of such `Property` objects in the produced JSON, but rather the actual value held by the property.
 
 For instance, suppose the `Person` class is defined like this:
@@ -31,8 +31,8 @@ Here is how it is serialized:
 
 <table>
     <tr>
-        <th>With Gson</th>
-        <th>With FxGson</th>
+        <th>With vanilla Gson</th>
+        <th>With FxGson-configured Gson</th>
     </tr>
     <tr>
         <td>
@@ -69,48 +69,42 @@ Convincing, eh?
 
 ## Usage
 
-All you need to know is in the wiki, but here is a quick overview.
+All you need to know is [in the wiki](https://github.com/joffrey-bion/fx-gson/wiki/Basic-FX-Gson-usage), but here is a 
+quick overview.
 
-#### The simple way
+You can use FX Gson in multiple ways depending on the degree of customization you need:
+- directly [create a ready-to-go `Gson`](https://github.com/joffrey-bion/fx-gson/wiki/Basic-FX-Gson-usage#simple-ways-matter) able to serialize JavaFX properties
 
-You can use the built-in factory methods directly:
+    ```java
+    // to handle only Properties and Observable collections
+    Gson fxGson = FxGson.create();
+    
+    // to also handle the Color & Font classes
+    Gson fxGsonWithExtras = FxGson.createWithExtras();
+    ```
 
-```java
-// to handle only Properties and Observable collections
-Gson fxGson = FxGson.create();
+- [create a pre-configured `GsonBuilder`](https://github.com/joffrey-bion/fx-gson/wiki/Basic-FX-Gson-usage#using-pre-configured-gsonbuilders) that you can further configure yourself
 
-// to also handle the Color & Font classes
-Gson fxGsonWithExtras = FxGson.createWithExtras();
-```
+    ```java
+    Gson fxGson = FxGson.coreBuilder()
+                        .registerTypeAdapterFactory(new MyFactory())
+                        .disableHtmlEscaping()
+                        .create();
+    
+    Gson fxGsonWithExtras = FxGson.fullBuilder()
+                                  .registerTypeAdapter(Pattern.class, new PatternSerializer())
+                                  .setPrettyPrinting()
+                                  .create();
+    ```
 
-`FxGson` can also return a builder so that you can add your own configuration to it:
+- [add JavaFX configuration to an existing `GsonBuilder`](https://github.com/joffrey-bion/fx-gson/wiki/Basic-FX-Gson-usage#adding-javafx-support-to-an-existing-gsonbuilder)
 
-```java
-Gson fxGson = FxGson.coreBuilder()
-                    .registerTypeAdapterFactory(new MyFactory())
-                    .disableHtmlEscaping()
-                    .create();
-
-Gson fxGsonWithExtras = FxGson.fullBuilder()
-                              .registerTypeAdapter(Pattern.class, new PatternSerializer())
-                              .setPrettyPrinting()
-                              .create();
-```
-
-You can find more info on the built-in "core" and "full" builder [in the Wiki](https://github.com/joffrey-bion/fx-gson/wiki/Built-in-GsonBuilders).
-
-#### Configuring an existing builder to handle JavaFX properties
-
-Sometimes you don't control the creation of the `GsonBuilder` you are using, because you take it from some library or
- some other piece of code.
-In this case, use the provided helper methods to add `FxGson` configuration to an existing `GsonBuilder`:
-
+    ```java
     GsonBuilder builder = MyLib.getBuilder();
     Gson gson = FxGson.addFxSupport(builder).create();
+    ```
 
-#### Going full control
-
-You will find more customization info in [this dedicated wiki page](https://github.com/joffrey-bion/fx-gson/wiki/Customize-FX-Gson).
+- [cherry-pick some pieces of FX Gson configuration](https://github.com/joffrey-bion/fx-gson/wiki/Customize-FX-Gson) and customize it to fit your needs
 
 ### Add the dependency
  
