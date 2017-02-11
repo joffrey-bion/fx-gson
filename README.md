@@ -5,10 +5,14 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/57327660a0ca35004baf8bfb/badge.svg)](https://www.versioneye.com/user/projects/57327660a0ca35004baf8bfb)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/fx-gson/blob/master/LICENSE)
 
-A set of type adapters for [Google Gson](https://github.com/google/gson) to serialize JavaFX properties as their values,
-and deserialize values into properties.
+FX Gson is a set of type adapters for [Google Gson](https://github.com/google/gson) to serialize JavaFX properties as 
+their values, and deserialize values into properties.
 
-## Why FX Gson?
+FX Gson simply removes the property "wrapping" and delegates the serialization of the value to the Gson. This means that 
+any configuration you add to Gson regarding a type will be taken into account when serializing a property of that type. 
+This is true for objects and primitives.
+
+## Why use FX Gson?
 
 In JavaFX, POJOs usually contain `Property` objects instead of primitives. When serialized, we usually don't want to
 see the internals of such `Property` objects in the produced JSON, but rather the actual value held by the property.
@@ -64,8 +68,7 @@ Here is how it is serialized:
     </tr>
 </table>
 
-
-Convincing, eh?
+This produces a more human-readable output, and make manual modifications of the JSON easier.
 
 ## Usage
 
@@ -107,6 +110,12 @@ You can use FX Gson in multiple ways depending on the degree of customization yo
 - [cherry-pick some pieces of FX Gson configuration](https://github.com/joffrey-bion/fx-gson/wiki/Customize-FX-Gson) and customize it to fit your needs
 
 ### Add the dependency
+
+#### Manually
+ 
+You may directly download the JAR from 
+[FX Gson's Bintray Repository](https://bintray.com/joffrey-bion/maven/fx-gson/_latestVersion), although I recommend
+using a build tool such as [Gradle](https://gradle.org/).
  
 #### In Gradle
 
@@ -119,6 +128,8 @@ You can use FX Gson in multiple ways depending on the degree of customization yo
     }
 
 #### In Maven
+
+I personally recommend using Gradle, but if you must:
 
     <dependency>
       <groupId>org.hildan.fxgson</groupId>
