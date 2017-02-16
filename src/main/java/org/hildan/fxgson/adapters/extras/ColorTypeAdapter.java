@@ -35,6 +35,21 @@ public class ColorTypeAdapter extends TypeAdapter<Color> {
             in.nextNull();
             return null;
         }
-        return Color.web(in.nextString());
+        String value = in.nextString();
+        try {
+            return Color.web(value);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidColorException(value, in.getPath(), e);
+        }
+    }
+
+    public static class InvalidColorException extends RuntimeException {
+
+        private static final String MSG_TEMPLATE =
+                "Invalid color format '%s' at path %s, please use a format supported by Color.web()";
+
+        InvalidColorException(String value, String path, Throwable cause) {
+            super(String.format(MSG_TEMPLATE, value, path), cause);
+        }
     }
 }
