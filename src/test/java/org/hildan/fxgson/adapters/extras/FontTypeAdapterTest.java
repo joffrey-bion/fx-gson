@@ -31,10 +31,10 @@ public class FontTypeAdapterTest {
         // no exotic fonts as the test must pass on most machines
         return new FontExpectation[]{
                 new FontExpectation(Font.font("System", FontWeight.NORMAL, 12.0), "\"System,Regular,12.0\""),
-                new FontExpectation(Font.font("Arial", FontWeight.BOLD, 10.0), "\"Arial,Bold,10.0\""),
-                new FontExpectation(Font.font("Arial", FontPosture.ITALIC, 10.0), "\"Arial,Italic,10.0\""),
-                new FontExpectation(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 10.0),
-                        "\"Arial,Bold Italic,10.0\""),
+                new FontExpectation(Font.font("SansSerif", FontWeight.BOLD, 10.0), "\"SansSerif,Bold,10.0\""),
+                new FontExpectation(Font.font("System", FontPosture.ITALIC, 10.0), "\"System,Italic,10.0\""),
+                new FontExpectation(Font.font("System", FontWeight.BOLD, FontPosture.ITALIC, 10.0),
+                        "\"System,Bold Italic,10.0\""),
                 new FontExpectation(Font.font("SansSerif", FontWeight.BOLD, FontPosture.ITALIC, 20.0),
                         "\"SansSerif,Bold Italic,20.0\""),
                 new FontExpectation(null, "null")
