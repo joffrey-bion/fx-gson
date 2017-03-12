@@ -77,8 +77,8 @@ public class FxGsonBuilder {
     /**
      * Configures this {@code FxGsonBuilder} to accept null values for primitive properties during deserialization. The
      * deserialized property contains the default value for the primitive type, such as 0 for a numeric types, or false
-     * for the boolean type. If this method is not used, the default behaviour is to throw a {@link
-     * NullPrimitiveException} when encountering a null value for a primitive property.
+     * for the boolean type. If this method is not used, the default behaviour is to throw a
+     * {@link NullPrimitiveException} when encountering a null value for a primitive property.
      *
      * @return this {@code FxGsonBuilder}, for use with the builder pattern
      */

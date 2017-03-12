@@ -22,17 +22,48 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.hildan.fxgson.adapters.properties.primitives.NullPrimitiveException;
 import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import static org.hildan.fxgson.TestClassesExtra.*;
-import static org.hildan.fxgson.TestClassesSimple.*;
-import static org.hildan.fxgson.TestClassesWithProp.*;
-import static org.junit.Assert.*;
+import static org.hildan.fxgson.TestClassesExtra.WithColor;
+import static org.hildan.fxgson.TestClassesExtra.WithFont;
+import static org.hildan.fxgson.TestClassesSimple.CustomObject;
+import static org.hildan.fxgson.TestClassesSimple.WithBoolean;
+import static org.hildan.fxgson.TestClassesSimple.WithCustomObject;
+import static org.hildan.fxgson.TestClassesSimple.WithDouble;
+import static org.hildan.fxgson.TestClassesSimple.WithFloat;
+import static org.hildan.fxgson.TestClassesSimple.WithInteger;
+import static org.hildan.fxgson.TestClassesSimple.WithList;
+import static org.hildan.fxgson.TestClassesSimple.WithLong;
+import static org.hildan.fxgson.TestClassesSimple.WithMapInt;
+import static org.hildan.fxgson.TestClassesSimple.WithMapStr;
+import static org.hildan.fxgson.TestClassesSimple.WithSet;
+import static org.hildan.fxgson.TestClassesSimple.WithString;
+import static org.hildan.fxgson.TestClassesWithProp.WithBooleanProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithColorProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithDoubleProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithFloatProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithFontProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithGenericProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithIntegerProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithListProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithLongProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithMapIntProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithMapStrProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithObjectProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithObsList;
+import static org.hildan.fxgson.TestClassesWithProp.WithObsMapInt;
+import static org.hildan.fxgson.TestClassesWithProp.WithObsMapStr;
+import static org.hildan.fxgson.TestClassesWithProp.WithObsSet;
+import static org.hildan.fxgson.TestClassesWithProp.WithSetProp;
+import static org.hildan.fxgson.TestClassesWithProp.WithStringProp;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 public class FxGsonTest {
 
@@ -70,12 +101,38 @@ public class FxGsonTest {
 
         gsonSpecialFloat = FxGson.coreBuilder().serializeSpecialFloatingPointValues().create();
 
-        allGsons = new Gson[] {coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1, extraGson2,
-                extraGson3, extraGson4, coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2, gsonSpecialFloat};
-        strictGsons = new Gson[] {coreGson1, coreGson2, coreGson3, coreGson4, coreGson5, coreGson6, extraGson1,
-                extraGson2, extraGson3, extraGson4, gsonSpecialFloat};
-        extraGsons = new Gson[] {extraGson1, extraGson2, extraGson3, extraGson4, extraGsonSafe1, extraGsonSafe2};
-        safeGsons = new Gson[] {coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
+        allGsons = new Gson[]{
+                coreGson1,
+                coreGson2,
+                coreGson3,
+                coreGson4,
+                coreGson5,
+                coreGson6,
+                extraGson1,
+                extraGson2,
+                extraGson3,
+                extraGson4,
+                coreGsonSafe1,
+                coreGsonSafe2,
+                extraGsonSafe1,
+                extraGsonSafe2,
+                gsonSpecialFloat
+        };
+        strictGsons = new Gson[]{
+                coreGson1,
+                coreGson2,
+                coreGson3,
+                coreGson4,
+                coreGson5,
+                coreGson6,
+                extraGson1,
+                extraGson2,
+                extraGson3,
+                extraGson4,
+                gsonSpecialFloat
+        };
+        extraGsons = new Gson[]{extraGson1, extraGson2, extraGson3, extraGson4, extraGsonSafe1, extraGsonSafe2};
+        safeGsons = new Gson[]{coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
     }
 
     @Test

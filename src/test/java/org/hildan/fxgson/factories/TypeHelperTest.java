@@ -25,5 +25,4 @@ public class TypeHelperTest {
             assertEquals(targetException.getClass(), InstantiationException.class);
         }
     }
-
 }

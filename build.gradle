@@ -4,6 +4,7 @@ plugins { id "com.jfrog.bintray" version "1.6" }
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'checkstyle'
 apply plugin: 'maven-publish'
 
 group = 'org.hildan.fxgson'
@@ -19,6 +20,11 @@ dependencies {
     compile 'com.google.code.gson:gson:2.+'
     compile 'org.jetbrains:annotations:15.0'
     testCompile 'junit:junit:4.+'
+}
+
+checkstyle {
+    maxWarnings = 0
+    toolVersion = '7.6'
 }
 
 task sourcesJar(type: Jar) {

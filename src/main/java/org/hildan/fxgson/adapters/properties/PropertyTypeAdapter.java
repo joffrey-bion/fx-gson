@@ -29,7 +29,7 @@ abstract class PropertyTypeAdapter<I, P extends Property<? extends I>> extends T
      * @param innerValueTypeAdapter
      *         a delegate adapter to use for the inner value of the property
      */
-    public PropertyTypeAdapter(TypeAdapter<I> innerValueTypeAdapter) {
+    PropertyTypeAdapter(TypeAdapter<I> innerValueTypeAdapter) {
         delegate = innerValueTypeAdapter;
     }
 

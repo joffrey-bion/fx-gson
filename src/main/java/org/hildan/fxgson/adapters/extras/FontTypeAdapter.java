@@ -106,7 +106,8 @@ public class FontTypeAdapter extends TypeAdapter<Font> {
         }
 
         static InvalidFontException invalidSize(String value, String path, Throwable cause) {
-            return new InvalidFontException("Invalid size for the font at path " + path + ", got '" + value + "'", cause);
+            return new InvalidFontException("Invalid size for the font at path " + path + ", got '" + value + "'",
+                    cause);
         }
     }
 }
