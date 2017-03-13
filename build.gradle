@@ -85,3 +85,5 @@ bintray {
         }
     }
 }
+
+apply from: 'gradle/scripts/release.gradle'

@@ -1,0 +1,7 @@
+user=joffrey-bion
+project=fx-gson
+since-tag=v1.1
+bug-labels=bug
+enhancement-labels=enhancement
+exclude-labels=wontfix,duplicate,invalid
+release-url=https://bintray.com/joffrey-bion/maven/fx-gson/%s
