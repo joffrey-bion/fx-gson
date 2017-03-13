@@ -1,7 +1,9 @@
 package org.hildan.fxgson.test;
 
 public class Expectation<T> {
+
     public final T object;
+
     public final String json;
 
     public Expectation(T object, String json) {
