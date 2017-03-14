@@ -1,5 +1,6 @@
 package org.hildan.fxgson.adapters.properties;
 
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -17,9 +18,12 @@ public class StringPropertyTypeAdapter extends PropertyTypeAdapter<String, Strin
      *
      * @param delegate
      *         a delegate adapter to use for the inner string value of the property
+     * @param throwOnNullProperty
+     *         if true, this adapter will throw {@link NullPropertyException} when given a null {@link Property} to
+     *         serialize
      */
-    public StringPropertyTypeAdapter(TypeAdapter<String> delegate) {
-        super(delegate);
+    public StringPropertyTypeAdapter(TypeAdapter<String> delegate, boolean throwOnNullProperty) {
+        super(delegate, throwOnNullProperty);
     }
 
     @NotNull

@@ -19,23 +19,32 @@ import org.jetbrains.annotations.Nullable;
  * @param <P>
  *         the property type that this adapter can serialize/deserialize, containing a value of type I
  */
-abstract class PropertyTypeAdapter<I, P extends Property<? extends I>> extends TypeAdapter<P> {
+public abstract class PropertyTypeAdapter<I, P extends Property<? extends I>> extends TypeAdapter<P> {
 
     private final TypeAdapter<I> delegate;
+
+    private final boolean throwOnNullProperty;
 
     /**
      * Creates a new PropertyTypeAdapter.
      *
      * @param innerValueTypeAdapter
      *         a delegate adapter to use for the inner value of the property
+     * @param throwOnNullProperty
+     *         if true, this adapter will throw {@link NullPropertyException} when given a null {@link Property} to
+     *         serialize
      */
-    PropertyTypeAdapter(TypeAdapter<I> innerValueTypeAdapter) {
-        delegate = innerValueTypeAdapter;
+    PropertyTypeAdapter(TypeAdapter<I> innerValueTypeAdapter, boolean throwOnNullProperty) {
+        this.delegate = innerValueTypeAdapter;
+        this.throwOnNullProperty = throwOnNullProperty;
     }
 
     @Override
     public void write(JsonWriter out, P property) throws IOException {
         if (property == null) {
+            if (throwOnNullProperty) {
+                throw new NullPropertyException();
+            }
             out.nullValue();
             return;
         }

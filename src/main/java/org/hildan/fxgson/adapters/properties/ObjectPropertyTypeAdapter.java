@@ -17,9 +17,12 @@ public class ObjectPropertyTypeAdapter<T> extends PropertyTypeAdapter<T, Propert
      *
      * @param delegate
      *         a delegate adapter to use for the inner object value of the property
+     * @param throwOnNullProperty
+     *         if true, this adapter will throw {@link NullPropertyException} when given a null {@link Property} to
+     *         serialize
      */
-    public ObjectPropertyTypeAdapter(TypeAdapter<T> delegate) {
-        super(delegate);
+    public ObjectPropertyTypeAdapter(TypeAdapter<T> delegate, boolean throwOnNullProperty) {
+        super(delegate, throwOnNullProperty);
     }
 
     @NotNull

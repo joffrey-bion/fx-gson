@@ -1,6 +1,7 @@
 package org.hildan.fxgson.adapters.properties;
 
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
 
@@ -18,9 +19,12 @@ public class ListPropertyTypeAdapter<T> extends PropertyTypeAdapter<ObservableLi
      *
      * @param delegate
      *         a delegate adapter to use for the inner list value of the property
+     * @param throwOnNullProperty
+     *         if true, this adapter will throw {@link NullPropertyException} when given a null {@link Property} to
+     *         serialize
      */
-    public ListPropertyTypeAdapter(TypeAdapter<ObservableList<T>> delegate) {
-        super(delegate);
+    public ListPropertyTypeAdapter(TypeAdapter<ObservableList<T>> delegate, boolean throwOnNullProperty) {
+        super(delegate, throwOnNullProperty);
     }
 
     @NotNull

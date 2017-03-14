@@ -1,5 +1,6 @@
 package org.hildan.fxgson.adapters.properties;
 
+import javafx.beans.property.Property;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.ObservableSet;
@@ -18,9 +19,12 @@ public class SetPropertyTypeAdapter<T> extends PropertyTypeAdapter<ObservableSet
      *
      * @param delegate
      *         a delegate adapter to use for the inner set value of the property
+     * @param throwOnNullProperty
+     *         if true, this adapter will throw {@link NullPropertyException} when given a null {@link Property} to
+     *         serialize
      */
-    public SetPropertyTypeAdapter(TypeAdapter<ObservableSet<T>> delegate) {
-        super(delegate);
+    public SetPropertyTypeAdapter(TypeAdapter<ObservableSet<T>> delegate, boolean throwOnNullProperty) {
+        super(delegate, throwOnNullProperty);
     }
 
     @NotNull

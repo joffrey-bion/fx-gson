@@ -13,6 +13,11 @@ import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.LongProperty;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +29,7 @@ import javafx.scene.text.FontWeight;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.hildan.fxgson.adapters.properties.NullPropertyException;
 import org.hildan.fxgson.adapters.properties.primitives.NullPrimitiveException;
 import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
 import org.junit.BeforeClass;
@@ -71,7 +77,9 @@ public class FxGsonTest {
 
     private static Gson[] extraGsons;
 
-    private static Gson[] safeGsons;
+    private static Gson[] safePrimitivesGsons;
+
+    private static Gson[] safePropertiesGsons;
 
     private static Gson[] strictGsons;
 
@@ -94,10 +102,25 @@ public class FxGsonTest {
         Gson extraGson3 = new FxGsonBuilder().withExtras().create();
         Gson extraGson4 = new FxGsonBuilder(new GsonBuilder()).withExtras().create();
 
-        Gson coreGsonSafe1 = new FxGsonBuilder().acceptNullPrimitives().create();
-        Gson coreGsonSafe2 = new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().create();
-        Gson extraGsonSafe1 = new FxGsonBuilder().acceptNullPrimitives().withExtras().create();
-        Gson extraGsonSafe2 = new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().withExtras().create();
+        Gson coreGsonSafePrimitives1 = new FxGsonBuilder().acceptNullPrimitives().create();
+        Gson coreGsonSafePrimitives2 = new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().create();
+        Gson extraGsonSafePrimitives1 = new FxGsonBuilder().acceptNullPrimitives().withExtras().create();
+        Gson extraGsonSafePrimitives2 =
+                new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().withExtras().create();
+
+        Gson coreGsonSafeProps1 = new FxGsonBuilder().acceptNullProperties().create();
+        Gson coreGsonSafeProps2 = new FxGsonBuilder(new GsonBuilder()).acceptNullProperties().create();
+        Gson extraGsonSafeProps1 = new FxGsonBuilder().acceptNullProperties().withExtras().create();
+        Gson extraGsonSafeProps2 = new FxGsonBuilder(new GsonBuilder()).acceptNullProperties().withExtras().create();
+
+        Gson coreGsonSafe1 = new FxGsonBuilder().acceptNullProperties().acceptNullPrimitives().create();
+        Gson coreGsonSafe2 =
+                new FxGsonBuilder(new GsonBuilder()).acceptNullProperties().acceptNullPrimitives().create();
+        Gson extraGsonSafe1 = new FxGsonBuilder().acceptNullProperties().acceptNullPrimitives().withExtras().create();
+        Gson extraGsonSafe2 = new FxGsonBuilder(new GsonBuilder()).acceptNullProperties()
+                                                                  .acceptNullPrimitives()
+                                                                  .withExtras()
+                                                                  .create();
 
         gsonSpecialFloat = FxGson.coreBuilder().serializeSpecialFloatingPointValues().create();
 
@@ -132,7 +155,26 @@ public class FxGsonTest {
                 gsonSpecialFloat
         };
         extraGsons = new Gson[]{extraGson1, extraGson2, extraGson3, extraGson4, extraGsonSafe1, extraGsonSafe2};
-        safeGsons = new Gson[]{coreGsonSafe1, coreGsonSafe2, extraGsonSafe1, extraGsonSafe2};
+        safePropertiesGsons = new Gson[]{
+                coreGsonSafeProps1,
+                coreGsonSafeProps2,
+                extraGsonSafeProps1,
+                extraGsonSafeProps2,
+                coreGsonSafe1,
+                coreGsonSafe2,
+                extraGsonSafe1,
+                extraGsonSafe2
+        };
+        safePrimitivesGsons = new Gson[]{
+                coreGsonSafePrimitives1,
+                coreGsonSafePrimitives2,
+                extraGsonSafePrimitives1,
+                extraGsonSafePrimitives2,
+                coreGsonSafe1,
+                coreGsonSafe2,
+                extraGsonSafe1,
+                extraGsonSafe2
+        };
     }
 
     @Test
@@ -251,6 +293,38 @@ public class FxGsonTest {
     }
 
     /**
+     * Tests the serialization of an inner value of an object with each of the provided {@link Gson}s.
+     *
+     * @param baseClass
+     *         the class of object to test
+     * @param expectedJson
+     *         the expected output JSON
+     * @param inputValue
+     *         the input value of the field to test
+     * @param setter
+     *         a function to set the input value within an object of baseClass
+     * @param gsons
+     *         the {@link Gson}s to use for serialization/deserialization tests
+     * @param <B>
+     *         the type of the object containing the field to test
+     * @param <V>
+     *         the type of the value to test inside the object
+     */
+    private static <B, V> void testSerialize(Class<B> baseClass, String expectedJson, V inputValue,
+                                             BiConsumer<B, V> setter, Gson... gsons) {
+        try {
+            B baseObj = baseClass.newInstance();
+            setter.accept(baseObj, inputValue);
+
+            for (Gson gson : gsons) {
+                assertEquals("Incorrect JSON generated", expectedJson, gson.toJson(baseObj));
+            }
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new IllegalArgumentException("Cannot run the test on class '" + baseClass.getSimpleName() + "'", e);
+        }
+    }
+
+    /**
      * Tests the serialization/deserialization of the given value of a {@link Property} inside an object. The property
      * is checked not to be null after deserialization. Uses both the core {@link GsonBuilder} and the one with extras.
      *
@@ -316,6 +390,7 @@ public class FxGsonTest {
         testProperty(WithBooleanProp.class, false, "{\"prop\":false}", o -> o.prop);
     }
 
+    // FIXME this test doesn't prove that all calls properly fail, we should use theories here
     @Test(expected = NullPrimitiveException.class)
     public void testNullPrimitivesFail() {
         testDeserialize(WithBooleanProp.class, "{\"prop\":null}", null, o -> o.prop.get(), strictGsons);
@@ -327,11 +402,38 @@ public class FxGsonTest {
 
     @Test
     public void testNullPrimitivesDefault() {
-        testDeserialize(WithBooleanProp.class, "{\"prop\":null}", false, o -> o.prop.get(), safeGsons);
-        testDeserialize(WithIntegerProp.class, "{\"prop\":null}", 0, o -> o.prop.get(), safeGsons);
-        testDeserialize(WithLongProp.class, "{\"prop\":null}", 0L, o -> o.prop.get(), safeGsons);
-        testDeserialize(WithFloatProp.class, "{\"prop\":null}", 0f, o -> o.prop.get(), safeGsons);
-        testDeserialize(WithDoubleProp.class, "{\"prop\":null}", 0d, o -> o.prop.get(), safeGsons);
+        testDeserialize(WithBooleanProp.class, "{\"prop\":null}", false, o -> o.prop.get(), safePrimitivesGsons);
+        testDeserialize(WithIntegerProp.class, "{\"prop\":null}", 0, o -> o.prop.get(), safePrimitivesGsons);
+        testDeserialize(WithLongProp.class, "{\"prop\":null}", 0L, o -> o.prop.get(), safePrimitivesGsons);
+        testDeserialize(WithFloatProp.class, "{\"prop\":null}", 0f, o -> o.prop.get(), safePrimitivesGsons);
+        testDeserialize(WithDoubleProp.class, "{\"prop\":null}", 0d, o -> o.prop.get(), safePrimitivesGsons);
+    }
+
+    // FIXME this test doesn't prove that all calls properly fail, we should use theories here
+    @Test(expected = NullPropertyException.class)
+    public void testNullPropertiesFail() {
+        testSerialize(WithBooleanProp.class, "{\"prop\":null}", (BooleanProperty) null, (o, v) -> o.prop = v,
+                strictGsons);
+        testSerialize(WithIntegerProp.class, "{\"prop\":null}", (IntegerProperty) null, (o, v) -> o.prop = v,
+                strictGsons);
+        testSerialize(WithLongProp.class, "{\"prop\":null}", (LongProperty) null, (o, v) -> o.prop = v, strictGsons);
+        testSerialize(WithFloatProp.class, "{\"prop\":null}", (FloatProperty) null, (o, v) -> o.prop = v, strictGsons);
+        testSerialize(WithDoubleProp.class, "{\"prop\":null}", (DoubleProperty) null, (o, v) -> o.prop = v,
+                strictGsons);
+    }
+
+    @Test
+    public void testNullPropertiesAccepted() {
+        testSerialize(WithBooleanProp.class, "{\"prop\":null}", (BooleanProperty) null, (o, v) -> o.prop = v,
+                safePropertiesGsons);
+        testSerialize(WithIntegerProp.class, "{\"prop\":null}", (IntegerProperty) null, (o, v) -> o.prop = v,
+                safePropertiesGsons);
+        testSerialize(WithLongProp.class, "{\"prop\":null}", (LongProperty) null, (o, v) -> o.prop = v,
+                safePropertiesGsons);
+        testSerialize(WithFloatProp.class, "{\"prop\":null}", (FloatProperty) null, (o, v) -> o.prop = v,
+                safePropertiesGsons);
+        testSerialize(WithDoubleProp.class, "{\"prop\":null}", (DoubleProperty) null, (o, v) -> o.prop = v,
+                safePropertiesGsons);
     }
 
     @Test

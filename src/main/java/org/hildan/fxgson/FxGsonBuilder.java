@@ -9,6 +9,7 @@ import javafx.scene.text.Font;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.hildan.fxgson.adapters.properties.NullPropertyException;
 import org.hildan.fxgson.adapters.properties.primitives.NullPrimitiveException;
 import org.hildan.fxgson.creators.ObservableListCreator;
 import org.hildan.fxgson.creators.ObservableMapCreator;
@@ -24,7 +25,9 @@ public class FxGsonBuilder {
 
     private final GsonBuilder builder;
 
-    private boolean crashOnNullPrimitives = true;
+    private boolean strictProperties = true;
+
+    private boolean strictPrimitives = true;
 
     private boolean includeExtras = false;
 
@@ -57,7 +60,7 @@ public class FxGsonBuilder {
                .registerTypeAdapter(ObservableList.class, new ObservableListCreator())
                .registerTypeAdapter(ObservableSet.class, new ObservableSetCreator())
                .registerTypeAdapter(ObservableMap.class, new ObservableMapCreator())
-               .registerTypeAdapterFactory(new JavaFxPropertyTypeAdapterFactory(crashOnNullPrimitives));
+               .registerTypeAdapterFactory(new JavaFxPropertyTypeAdapterFactory(strictProperties, strictPrimitives));
         if (includeExtras) {
             builder.registerTypeAdapterFactory(new JavaFxExtraTypeAdapterFactory());
         }
@@ -75,6 +78,18 @@ public class FxGsonBuilder {
     }
 
     /**
+     * Configures this {@code FxGsonBuilder} to accept null values for properties during serialization. If this method
+     * is not used, the default behaviour is to throw a {@link NullPropertyException} when encountering a null value
+     * for a property.
+     *
+     * @return this {@code FxGsonBuilder}, for use with the builder pattern
+     */
+    public FxGsonBuilder acceptNullProperties() {
+        strictProperties = false;
+        return this;
+    }
+
+    /**
      * Configures this {@code FxGsonBuilder} to accept null values for primitive properties during deserialization. The
      * deserialized property contains the default value for the primitive type, such as 0 for a numeric types, or false
      * for the boolean type. If this method is not used, the default behaviour is to throw a
@@ -83,7 +98,7 @@ public class FxGsonBuilder {
      * @return this {@code FxGsonBuilder}, for use with the builder pattern
      */
     public FxGsonBuilder acceptNullPrimitives() {
-        crashOnNullPrimitives = false;
+        strictPrimitives = false;
         return this;
     }
 
