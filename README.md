@@ -1,7 +1,7 @@
 # FX Gson
 
-[![Bintray](https://img.shields.io/bintray/v/joffrey-bion/maven/fx-gson.svg)](https://bintray.com/joffrey-bion/maven/fx-gson/_latestVersion)
-[![Travis Build](https://img.shields.io/travis/joffrey-bion/fx-gson/master.svg)](https://travis-ci.org/joffrey-bion/fx-gson)
+[![Download](https://api.bintray.com/packages/joffrey-bion/maven/fx-gson/images/download.svg) ](https://bintray.com/joffrey-bion/maven/fx-gson/_latestVersion)
+[![Build Status](https://travis-ci.org/joffrey-bion/fx-gson.svg?branch=master)](https://travis-ci.org/joffrey-bion/fx-gson)
 [![Dependency Status](https://www.versioneye.com/user/projects/57327660a0ca35004baf8bfb/badge.svg)](https://www.versioneye.com/user/projects/57327660a0ca35004baf8bfb)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/fx-gson/blob/master/LICENSE)
 
