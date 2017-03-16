@@ -1,6 +1,6 @@
 # FX Gson
 
-[![Download](https://api.bintray.com/packages/joffrey-bion/maven/fx-gson/images/download.svg) ](https://bintray.com/joffrey-bion/maven/fx-gson/_latestVersion)
+[![Download](https://api.bintray.com/packages/joffrey-bion/maven/fx-gson/images/download.svg)](https://bintray.com/joffrey-bion/maven/fx-gson/_latestVersion)
 [![Build Status](https://travis-ci.org/joffrey-bion/fx-gson.svg?branch=master)](https://travis-ci.org/joffrey-bion/fx-gson)
 [![Dependency Status](https://www.versioneye.com/user/projects/57327660a0ca35004baf8bfb/badge.svg)](https://www.versioneye.com/user/projects/57327660a0ca35004baf8bfb)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/fx-gson/blob/master/LICENSE)
@@ -28,10 +28,10 @@ For instance, suppose the `Person` class is defined like this:
             this.lastName = new SimpleStringProperty(lastName);
         }
         
-        // getters / setters / prop getters
+        // getters, setters, and property getters are omitted for brevity
     }
     
-Here is how it is serialized:
+Here is how `new Person("Hans", "Muster")` is serialized:
 
 <table>
     <tr>
