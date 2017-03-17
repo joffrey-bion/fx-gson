@@ -109,34 +109,38 @@ You can use FX Gson in multiple ways depending on the degree of customization yo
 
 - [cherry-pick some pieces of FX Gson configuration](https://github.com/joffrey-bion/fx-gson/wiki/Customize-FX-Gson) and customize it to fit your needs
 
-### Add the dependency
+## Setup
 
-#### Manually
+### Manual download
  
 You may directly download the JAR from 
 [FX Gson's Bintray Repository](https://bintray.com/joffrey-bion/maven/fx-gson/_latestVersion), although I recommend
 using a build tool such as [Gradle](https://gradle.org/).
  
-#### In Gradle
+### Gradle
 
-    repositories {
-        jcenter()
-    }
+```groovy
+repositories {
+    jcenter()
+}
 
-    dependencies {
-        compile 'org.hildan.fxgson:fx-gson:2.0.1'
-    }
+dependencies {
+    compile 'org.hildan.fxgson:fx-gson:2.0.1' // replace with latest version
+}
+```
 
-#### In Maven
+## Maven
 
 I personally recommend using Gradle, but if you must:
 
-    <dependency>
-      <groupId>org.hildan.fxgson</groupId>
-      <artifactId>fx-gson</artifactId>
-      <version>2.0.1</version>
-      <type>pom</type>
-    </dependency>
+```xml
+<dependency>
+   <groupId>org.hildan.fxgson</groupId>
+   <artifactId>fx-gson</artifactId>
+   <version>2.0.1</version> <!-- replace with latest version -->
+   <type>pom</type>
+</dependency>
+```    
     
 Note: the artifact is on Bintray JCenter, not in Maven Central, so make sure you point your maven to JCenter by adding 
 the repo to your `settings.xml` using the URL `http://jcenter.bintray.com`.
