@@ -8,7 +8,7 @@ apply plugin: 'checkstyle'
 apply plugin: 'maven-publish'
 
 group = 'org.hildan.fxgson'
-version = '2.0.1'
+version = '3.0.0'
 description = 'A set of type adapters for Google Gson to make JavaFX properties serialization more natural.'
 ext.labels = ['json', 'gson', 'javafx', 'property']
 

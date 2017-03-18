@@ -1,5 +1,17 @@
 # Change Log
 
+## [v3.0.0](https://bintray.com/joffrey-bion/maven/fx-gson/3.0.0) (2017-03-18)
+[Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v2.0.1...v3.0.0)
+
+**Implemented enhancements:**
+
+- Clarify exception for invalid Color string [\#11](https://github.com/joffrey-bion/fx-gson/issues/11)
+- Add option for null properties serialization [\#10](https://github.com/joffrey-bion/fx-gson/issues/10)
+
+**Fixed bugs:**
+
+- Incorrect serialization/deserialization of italic fonts [\#8](https://github.com/joffrey-bion/fx-gson/issues/8)
+
 ## [v2.0.1](https://bintray.com/joffrey-bion/maven/fx-gson/2.0.1) (2017-02-09)
 [Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v2.0.0...v2.0.1)
 
