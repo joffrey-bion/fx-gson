@@ -19,17 +19,19 @@ see the internals of such `Property` objects in the produced JSON, but rather th
 
 For instance, suppose the `Person` class is defined like this:
 
-    public class Person {
-        private final StringProperty firstName;
-        private final StringProperty lastName;
+```java
+public class Person {
+    private final StringProperty firstName;
+    private final StringProperty lastName;
 
-        public Person(String firstName, String lastName) {
-            this.firstName = new SimpleStringProperty(firstName);
-            this.lastName = new SimpleStringProperty(lastName);
-        }
-        
-        // getters, setters, and property getters are omitted for brevity
+    public Person(String firstName, String lastName) {
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
     }
+    
+    // getters, setters, and property getters are omitted for brevity
+}
+```
     
 Here is how `new Person("Hans", "Muster")` is serialized:
 
