@@ -1,6 +1,7 @@
 package org.hildan.fxgson;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -34,14 +35,31 @@ import org.hildan.fxgson.TestClassesSimple.CustomObject;
 class TestClassesWithProp {
 
     private static boolean propEquals(Property<?> p1, Property<?> p2) {
-        if (p1 == null) {
-            return p2 == null;
+        return propEquals(p1, p2, Objects::equals);
+    }
+
+    private static <T, U> boolean propEquals(Property<? extends T> p1, Property<? extends U> p2,
+                                             BiFunction<? super T, ? super U, Boolean> equals) {
+        if (p1 == p2) {
+            return true;
         }
-        return p2 != null && Objects.equals(p1.getValue(), p2.getValue());
+        if (p1 == null || p2 == null) {
+            return false;
+        }
+        T v1 = p1.getValue();
+        U v2 = p2.getValue();
+        return equals.apply(v1, v2);
     }
 
     static class WithBooleanProp {
         BooleanProperty prop = new SimpleBooleanProperty();
+
+        public WithBooleanProp() {
+        }
+
+        public WithBooleanProp(boolean value) {
+            this.prop = new SimpleBooleanProperty(value);
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -64,6 +82,13 @@ class TestClassesWithProp {
     static class WithIntegerProp {
         IntegerProperty prop = new SimpleIntegerProperty();
 
+        public WithIntegerProp() {
+        }
+
+        public WithIntegerProp(int value) {
+            this.prop = new SimpleIntegerProperty(value);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -84,6 +109,13 @@ class TestClassesWithProp {
 
     static class WithLongProp {
         LongProperty prop = new SimpleLongProperty();
+
+        public WithLongProp() {
+        }
+
+        public WithLongProp(long value) {
+            this.prop = new SimpleLongProperty(value);
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -106,6 +138,13 @@ class TestClassesWithProp {
     static class WithFloatProp {
         FloatProperty prop = new SimpleFloatProperty();
 
+        public WithFloatProp() {
+        }
+
+        public WithFloatProp(float value) {
+            this.prop = new SimpleFloatProperty(value);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -126,6 +165,13 @@ class TestClassesWithProp {
 
     static class WithDoubleProp {
         DoubleProperty prop = new SimpleDoubleProperty();
+
+        public WithDoubleProp() {
+        }
+
+        public WithDoubleProp(double value) {
+            this.prop = new SimpleDoubleProperty(value);
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -148,6 +194,13 @@ class TestClassesWithProp {
     static class WithStringProp {
         StringProperty prop = new SimpleStringProperty();
 
+        public WithStringProp() {
+        }
+
+        public WithStringProp(String value) {
+            this.prop = new SimpleStringProperty(value);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -168,6 +221,13 @@ class TestClassesWithProp {
 
     static class WithObjectProp {
         ObjectProperty<CustomObject> prop = new SimpleObjectProperty<>();
+
+        public WithObjectProp() {
+        }
+
+        public WithObjectProp(CustomObject value) {
+            this.prop = new SimpleObjectProperty<>(value);
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -190,6 +250,13 @@ class TestClassesWithProp {
     static class WithGenericProp {
         Property<CustomObject> prop = new SimpleObjectProperty<>();
 
+        public WithGenericProp() {
+        }
+
+        public WithGenericProp(CustomObject value) {
+            this.prop = new SimpleObjectProperty<>(value);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -208,8 +275,43 @@ class TestClassesWithProp {
         }
     }
 
+    static class WithPropOfGenericProp {
+        Property<Property<CustomObject>> prop = new SimpleObjectProperty<>(new SimpleObjectProperty<>());
+
+        public WithPropOfGenericProp() {
+        }
+
+        public WithPropOfGenericProp(CustomObject value) {
+            this.prop = new SimpleObjectProperty<>(new SimpleObjectProperty<>(value));
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            WithPropOfGenericProp that = (WithPropOfGenericProp) o;
+            return propEquals(prop, that.prop, TestClassesWithProp::propEquals);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(prop);
+        }
+    }
+
     static class WithFontProp {
         Property<Font> prop = new SimpleObjectProperty<>();
+
+        public WithFontProp() {
+        }
+
+        public WithFontProp(Font value) {
+            this.prop = new SimpleObjectProperty<>(value);
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -232,6 +334,13 @@ class TestClassesWithProp {
     static class WithColorProp {
         Property<Color> prop = new SimpleObjectProperty<>();
 
+        public WithColorProp() {
+        }
+
+        public WithColorProp(Color value) {
+            this.prop = new SimpleObjectProperty<>(value);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -252,6 +361,13 @@ class TestClassesWithProp {
 
     static class WithObsList {
         ObservableList<CustomObject> list;
+
+        public WithObsList() {
+        }
+
+        public WithObsList(ObservableList<CustomObject> value) {
+            this.list = value;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -274,6 +390,13 @@ class TestClassesWithProp {
     static class WithObsSet {
         ObservableSet<CustomObject> set;
 
+        public WithObsSet() {
+        }
+
+        public WithObsSet(ObservableSet<CustomObject> value) {
+            this.set = value;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -294,6 +417,13 @@ class TestClassesWithProp {
 
     static class WithObsMapInt {
         ObservableMap<Integer, CustomObject> map;
+
+        public WithObsMapInt() {
+        }
+
+        public WithObsMapInt(ObservableMap<Integer, CustomObject> value) {
+            this.map = value;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -316,6 +446,13 @@ class TestClassesWithProp {
     static class WithObsMapStr {
         ObservableMap<String, CustomObject> map;
 
+        public WithObsMapStr() {
+        }
+
+        public WithObsMapStr(ObservableMap<String, CustomObject> value) {
+            this.map = value;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -336,6 +473,13 @@ class TestClassesWithProp {
 
     static class WithListProp {
         ListProperty<CustomObject> prop = new SimpleListProperty<>();
+
+        public WithListProp() {
+        }
+
+        public WithListProp(ObservableList<CustomObject> value) {
+            this.prop = new SimpleListProperty<>(value);
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -358,6 +502,13 @@ class TestClassesWithProp {
     static class WithSetProp {
         SetProperty<CustomObject> prop = new SimpleSetProperty<>();
 
+        public WithSetProp() {
+        }
+
+        public WithSetProp(ObservableSet<CustomObject> value) {
+            this.prop = new SimpleSetProperty<>(value);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -379,6 +530,13 @@ class TestClassesWithProp {
     static class WithMapIntProp {
         MapProperty<Integer, CustomObject> prop = new SimpleMapProperty<>();
 
+        public WithMapIntProp() {
+        }
+
+        public WithMapIntProp(ObservableMap<Integer, CustomObject> value) {
+            this.prop = new SimpleMapProperty<>(value);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -399,6 +557,13 @@ class TestClassesWithProp {
 
     static class WithMapStrProp {
         MapProperty<String, CustomObject> prop = new SimpleMapProperty<>();
+
+        public WithMapStrProp() {
+        }
+
+        public WithMapStrProp(ObservableMap<String, CustomObject> value) {
+            this.prop = new SimpleMapProperty<>(value);
+        }
 
         @Override
         public boolean equals(Object o) {

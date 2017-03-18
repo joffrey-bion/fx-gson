@@ -10,6 +10,13 @@ class TestClassesSimple {
     static class WithBoolean {
         boolean value;
 
+        public WithBoolean() {
+        }
+
+        public WithBoolean(boolean value) {
+            this.value = value;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -30,6 +37,13 @@ class TestClassesSimple {
 
     static class WithInteger {
         int value;
+
+        public WithInteger() {
+        }
+
+        public WithInteger(int value) {
+            this.value = value;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -52,6 +66,13 @@ class TestClassesSimple {
     static class WithLong {
         long value;
 
+        public WithLong() {
+        }
+
+        public WithLong(long value) {
+            this.value = value;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -72,6 +93,13 @@ class TestClassesSimple {
 
     static class WithFloat {
         float value;
+
+        public WithFloat() {
+        }
+
+        public WithFloat(float value) {
+            this.value = value;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -94,6 +122,13 @@ class TestClassesSimple {
     static class WithDouble {
         double value;
 
+        public WithDouble() {
+        }
+
+        public WithDouble(double value) {
+            this.value = value;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -114,6 +149,13 @@ class TestClassesSimple {
 
     static class WithString {
         String value;
+
+        public WithString() {
+        }
+
+        public WithString(String value) {
+            this.value = value;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -136,6 +178,13 @@ class TestClassesSimple {
     static class WithCustomObject {
         CustomObject value;
 
+        public WithCustomObject() {
+        }
+
+        public WithCustomObject(CustomObject value) {
+            this.value = value;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -156,6 +205,13 @@ class TestClassesSimple {
 
     static class WithList {
         List<CustomObject> list;
+
+        public WithList() {
+        }
+
+        public WithList(List<CustomObject> list) {
+            this.list = list;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -178,6 +234,13 @@ class TestClassesSimple {
     static class WithSet {
         Set<CustomObject> set;
 
+        public WithSet() {
+        }
+
+        public WithSet(Set<CustomObject> set) {
+            this.set = set;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -199,6 +262,13 @@ class TestClassesSimple {
     static class WithMapInt {
         Map<Integer, CustomObject> map;
 
+        public WithMapInt() {
+        }
+
+        public WithMapInt(Map<Integer, CustomObject> map) {
+            this.map = map;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -219,6 +289,13 @@ class TestClassesSimple {
 
     static class WithMapStr {
         Map<String, CustomObject> map;
+
+        public WithMapStr() {
+        }
+
+        public WithMapStr(Map<String, CustomObject> map) {
+            this.map = map;
+        }
 
         @Override
         public boolean equals(Object o) {
