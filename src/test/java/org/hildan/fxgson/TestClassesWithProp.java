@@ -54,10 +54,10 @@ class TestClassesWithProp {
     static class WithBooleanProp {
         BooleanProperty prop = new SimpleBooleanProperty();
 
-        public WithBooleanProp() {
+        WithBooleanProp() {
         }
 
-        public WithBooleanProp(boolean value) {
+        WithBooleanProp(boolean value) {
             this.prop = new SimpleBooleanProperty(value);
         }
 
@@ -82,10 +82,10 @@ class TestClassesWithProp {
     static class WithIntegerProp {
         IntegerProperty prop = new SimpleIntegerProperty();
 
-        public WithIntegerProp() {
+        WithIntegerProp() {
         }
 
-        public WithIntegerProp(int value) {
+        WithIntegerProp(int value) {
             this.prop = new SimpleIntegerProperty(value);
         }
 
@@ -110,10 +110,10 @@ class TestClassesWithProp {
     static class WithLongProp {
         LongProperty prop = new SimpleLongProperty();
 
-        public WithLongProp() {
+        WithLongProp() {
         }
 
-        public WithLongProp(long value) {
+        WithLongProp(long value) {
             this.prop = new SimpleLongProperty(value);
         }
 
@@ -138,10 +138,10 @@ class TestClassesWithProp {
     static class WithFloatProp {
         FloatProperty prop = new SimpleFloatProperty();
 
-        public WithFloatProp() {
+        WithFloatProp() {
         }
 
-        public WithFloatProp(float value) {
+        WithFloatProp(float value) {
             this.prop = new SimpleFloatProperty(value);
         }
 
@@ -166,10 +166,10 @@ class TestClassesWithProp {
     static class WithDoubleProp {
         DoubleProperty prop = new SimpleDoubleProperty();
 
-        public WithDoubleProp() {
+        WithDoubleProp() {
         }
 
-        public WithDoubleProp(double value) {
+        WithDoubleProp(double value) {
             this.prop = new SimpleDoubleProperty(value);
         }
 
@@ -194,10 +194,10 @@ class TestClassesWithProp {
     static class WithStringProp {
         StringProperty prop = new SimpleStringProperty();
 
-        public WithStringProp() {
+        WithStringProp() {
         }
 
-        public WithStringProp(String value) {
+        WithStringProp(String value) {
             this.prop = new SimpleStringProperty(value);
         }
 
@@ -222,10 +222,10 @@ class TestClassesWithProp {
     static class WithObjectProp {
         ObjectProperty<CustomObject> prop = new SimpleObjectProperty<>();
 
-        public WithObjectProp() {
+        WithObjectProp() {
         }
 
-        public WithObjectProp(CustomObject value) {
+        WithObjectProp(CustomObject value) {
             this.prop = new SimpleObjectProperty<>(value);
         }
 
@@ -250,10 +250,10 @@ class TestClassesWithProp {
     static class WithGenericProp {
         Property<CustomObject> prop = new SimpleObjectProperty<>();
 
-        public WithGenericProp() {
+        WithGenericProp() {
         }
 
-        public WithGenericProp(CustomObject value) {
+        WithGenericProp(CustomObject value) {
             this.prop = new SimpleObjectProperty<>(value);
         }
 
@@ -278,10 +278,10 @@ class TestClassesWithProp {
     static class WithPropOfGenericProp {
         Property<Property<CustomObject>> prop = new SimpleObjectProperty<>(new SimpleObjectProperty<>());
 
-        public WithPropOfGenericProp() {
+        WithPropOfGenericProp() {
         }
 
-        public WithPropOfGenericProp(CustomObject value) {
+        WithPropOfGenericProp(CustomObject value) {
             this.prop = new SimpleObjectProperty<>(new SimpleObjectProperty<>(value));
         }
 
@@ -306,10 +306,10 @@ class TestClassesWithProp {
     static class WithFontProp {
         Property<Font> prop = new SimpleObjectProperty<>();
 
-        public WithFontProp() {
+        WithFontProp() {
         }
 
-        public WithFontProp(Font value) {
+        WithFontProp(Font value) {
             this.prop = new SimpleObjectProperty<>(value);
         }
 
@@ -334,10 +334,10 @@ class TestClassesWithProp {
     static class WithColorProp {
         Property<Color> prop = new SimpleObjectProperty<>();
 
-        public WithColorProp() {
+        WithColorProp() {
         }
 
-        public WithColorProp(Color value) {
+        WithColorProp(Color value) {
             this.prop = new SimpleObjectProperty<>(value);
         }
 
@@ -362,10 +362,10 @@ class TestClassesWithProp {
     static class WithObsList {
         ObservableList<CustomObject> list;
 
-        public WithObsList() {
+        WithObsList() {
         }
 
-        public WithObsList(ObservableList<CustomObject> value) {
+        WithObsList(ObservableList<CustomObject> value) {
             this.list = value;
         }
 
@@ -390,10 +390,10 @@ class TestClassesWithProp {
     static class WithObsSet {
         ObservableSet<CustomObject> set;
 
-        public WithObsSet() {
+        WithObsSet() {
         }
 
-        public WithObsSet(ObservableSet<CustomObject> value) {
+        WithObsSet(ObservableSet<CustomObject> value) {
             this.set = value;
         }
 
@@ -418,10 +418,10 @@ class TestClassesWithProp {
     static class WithObsMapInt {
         ObservableMap<Integer, CustomObject> map;
 
-        public WithObsMapInt() {
+        WithObsMapInt() {
         }
 
-        public WithObsMapInt(ObservableMap<Integer, CustomObject> value) {
+        WithObsMapInt(ObservableMap<Integer, CustomObject> value) {
             this.map = value;
         }
 
@@ -446,10 +446,10 @@ class TestClassesWithProp {
     static class WithObsMapStr {
         ObservableMap<String, CustomObject> map;
 
-        public WithObsMapStr() {
+        WithObsMapStr() {
         }
 
-        public WithObsMapStr(ObservableMap<String, CustomObject> value) {
+        WithObsMapStr(ObservableMap<String, CustomObject> value) {
             this.map = value;
         }
 
@@ -474,10 +474,10 @@ class TestClassesWithProp {
     static class WithListProp {
         ListProperty<CustomObject> prop = new SimpleListProperty<>();
 
-        public WithListProp() {
+        WithListProp() {
         }
 
-        public WithListProp(ObservableList<CustomObject> value) {
+        WithListProp(ObservableList<CustomObject> value) {
             this.prop = new SimpleListProperty<>(value);
         }
 
@@ -502,10 +502,10 @@ class TestClassesWithProp {
     static class WithSetProp {
         SetProperty<CustomObject> prop = new SimpleSetProperty<>();
 
-        public WithSetProp() {
+        WithSetProp() {
         }
 
-        public WithSetProp(ObservableSet<CustomObject> value) {
+        WithSetProp(ObservableSet<CustomObject> value) {
             this.prop = new SimpleSetProperty<>(value);
         }
 
@@ -530,10 +530,10 @@ class TestClassesWithProp {
     static class WithMapIntProp {
         MapProperty<Integer, CustomObject> prop = new SimpleMapProperty<>();
 
-        public WithMapIntProp() {
+        WithMapIntProp() {
         }
 
-        public WithMapIntProp(ObservableMap<Integer, CustomObject> value) {
+        WithMapIntProp(ObservableMap<Integer, CustomObject> value) {
             this.prop = new SimpleMapProperty<>(value);
         }
 
@@ -558,10 +558,10 @@ class TestClassesWithProp {
     static class WithMapStrProp {
         MapProperty<String, CustomObject> prop = new SimpleMapProperty<>();
 
-        public WithMapStrProp() {
+        WithMapStrProp() {
         }
 
-        public WithMapStrProp(ObservableMap<String, CustomObject> value) {
+        WithMapStrProp(ObservableMap<String, CustomObject> value) {
             this.prop = new SimpleMapProperty<>(value);
         }
 

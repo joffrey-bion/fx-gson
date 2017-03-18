@@ -10,10 +10,10 @@ class TestClassesSimple {
     static class WithBoolean {
         boolean value;
 
-        public WithBoolean() {
+        WithBoolean() {
         }
 
-        public WithBoolean(boolean value) {
+        WithBoolean(boolean value) {
             this.value = value;
         }
 
@@ -38,10 +38,10 @@ class TestClassesSimple {
     static class WithInteger {
         int value;
 
-        public WithInteger() {
+        WithInteger() {
         }
 
-        public WithInteger(int value) {
+        WithInteger(int value) {
             this.value = value;
         }
 
@@ -66,10 +66,10 @@ class TestClassesSimple {
     static class WithLong {
         long value;
 
-        public WithLong() {
+        WithLong() {
         }
 
-        public WithLong(long value) {
+        WithLong(long value) {
             this.value = value;
         }
 
@@ -94,10 +94,10 @@ class TestClassesSimple {
     static class WithFloat {
         float value;
 
-        public WithFloat() {
+        WithFloat() {
         }
 
-        public WithFloat(float value) {
+        WithFloat(float value) {
             this.value = value;
         }
 
@@ -122,10 +122,10 @@ class TestClassesSimple {
     static class WithDouble {
         double value;
 
-        public WithDouble() {
+        WithDouble() {
         }
 
-        public WithDouble(double value) {
+        WithDouble(double value) {
             this.value = value;
         }
 
@@ -150,10 +150,10 @@ class TestClassesSimple {
     static class WithString {
         String value;
 
-        public WithString() {
+        WithString() {
         }
 
-        public WithString(String value) {
+        WithString(String value) {
             this.value = value;
         }
 
@@ -178,10 +178,10 @@ class TestClassesSimple {
     static class WithCustomObject {
         CustomObject value;
 
-        public WithCustomObject() {
+        WithCustomObject() {
         }
 
-        public WithCustomObject(CustomObject value) {
+        WithCustomObject(CustomObject value) {
             this.value = value;
         }
 
@@ -206,10 +206,10 @@ class TestClassesSimple {
     static class WithList {
         List<CustomObject> list;
 
-        public WithList() {
+        WithList() {
         }
 
-        public WithList(List<CustomObject> list) {
+        WithList(List<CustomObject> list) {
             this.list = list;
         }
 
@@ -234,10 +234,10 @@ class TestClassesSimple {
     static class WithSet {
         Set<CustomObject> set;
 
-        public WithSet() {
+        WithSet() {
         }
 
-        public WithSet(Set<CustomObject> set) {
+        WithSet(Set<CustomObject> set) {
             this.set = set;
         }
 
@@ -262,10 +262,10 @@ class TestClassesSimple {
     static class WithMapInt {
         Map<Integer, CustomObject> map;
 
-        public WithMapInt() {
+        WithMapInt() {
         }
 
-        public WithMapInt(Map<Integer, CustomObject> map) {
+        WithMapInt(Map<Integer, CustomObject> map) {
             this.map = map;
         }
 
@@ -290,10 +290,10 @@ class TestClassesSimple {
     static class WithMapStr {
         Map<String, CustomObject> map;
 
-        public WithMapStr() {
+        WithMapStr() {
         }
 
-        public WithMapStr(Map<String, CustomObject> map) {
+        WithMapStr(Map<String, CustomObject> map) {
             this.map = map;
         }
 
