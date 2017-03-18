@@ -127,7 +127,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.hildan.fxgson:fx-gson:2.0.1' // replace with latest version
+    compile 'org.hildan.fxgson:fx-gson:3.0.0' // replace with latest version
 }
 ```
 
@@ -139,7 +139,7 @@ I personally recommend using Gradle, but if you must:
 <dependency>
    <groupId>org.hildan.fxgson</groupId>
    <artifactId>fx-gson</artifactId>
-   <version>2.0.1</version> <!-- replace with latest version -->
+   <version>3.0.0</version> <!-- replace with latest version -->
    <type>pom</type>
 </dependency>
 ```    
