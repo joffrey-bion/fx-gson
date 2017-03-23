@@ -14,10 +14,12 @@ ext.labels = ['json', 'gson', 'javafx', 'property']
 
 sourceCompatibility = 1.8
 
-repositories { mavenCentral() }
+repositories {
+    mavenCentral()
+}
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.+'
+    compile 'com.google.code.gson:gson:2.7'
     compile 'org.jetbrains:annotations:15.0'
     testCompile 'junit:junit:4.+'
 }
@@ -25,25 +27,6 @@ dependencies {
 checkstyle {
     maxWarnings = 0
     toolVersion = '7.6'
-}
-
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    from javadoc.destinationDir
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
-            // additional jars
-            artifact sourcesJar { classifier "sources" }
-            artifact javadocJar { classifier "javadoc" }
-        }
-    }
 }
 
 def getPropOrEnv = { String prop, String envVar, String defaultValue = null ->
@@ -58,6 +41,47 @@ ext {
     githubRepoName = project.name
     githubSlug = "$githubUser/$githubRepoName"
     githubRepoUrl = "https://github.com/$githubSlug"
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            // additional jars
+            artifact sourcesJar
+            artifact javadocJar
+            pom.withXml {
+                asNode().appendNode('name', project.name)
+                asNode().appendNode('description', project.description)
+                asNode().appendNode('url', githubRepoUrl)
+
+                Object licenses = asNode().appendNode('licenses')
+                Object license = licenses.appendNode('license')
+                license.appendNode('name', 'The MIT License')
+                license.appendNode('url', 'https://opensource.org/licenses/MIT')
+
+                Object scm = asNode().appendNode('scm')
+                scm.appendNode('url', githubRepoUrl)
+                scm.appendNode('connection', 'scm:git:' + githubRepoUrl + '.git')
+                scm.appendNode('developerConnection', 'scm:git:git@github.com:' + githubSlug + '.git')
+
+                Object developers = asNode().appendNode('developers')
+                Object developer = developers.appendNode('developer')
+                developer.appendNode('name', 'Joffrey Bion')
+                developer.appendNode('email', 'joffrey.bion@gmail.com')
+            }
+        }
+    }
 }
 
 bintray {
