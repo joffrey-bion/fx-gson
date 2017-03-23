@@ -111,7 +111,7 @@ You can use FX Gson in multiple ways depending on the degree of customization yo
 
 - [cherry-pick some pieces of FX Gson configuration](https://github.com/joffrey-bion/fx-gson/wiki/Customize-FX-Gson) and customize it to fit your needs
 
-## Setup
+## Setup - adding the dependency
 
 ### Manual download
  
@@ -122,34 +122,19 @@ using a build tool such as [Gradle](https://gradle.org/).
 ### Gradle
 
 ```groovy
-repositories {
-    jcenter()
-}
-
-dependencies {
-    compile 'org.hildan.fxgson:fx-gson:3.0.0' // replace with latest version
-}
+compile 'org.hildan.fxgson:fx-gson:3.1.0'
 ```
 
-## Maven
-
-I personally recommend using Gradle, but if you must:
+### Maven
 
 ```xml
 <dependency>
    <groupId>org.hildan.fxgson</groupId>
    <artifactId>fx-gson</artifactId>
-   <version>3.0.0</version> <!-- replace with latest version -->
+   <version>3.1.0</version> <!-- replace with latest version -->
    <type>pom</type>
 </dependency>
 ```    
-    
-Note: the artifact is on Bintray JCenter, not in Maven Central, so make sure you point your maven to JCenter by adding 
-the repo to your `settings.xml` using the URL `http://jcenter.bintray.com`.
-
-You can find a complete XML example in the "Set me up!" blue rectangle on the 
-[JCenter home page](https://bintray.com/bintray/jcenter).
-
 ## License
 
 Code released under [the MIT license](https://github.com/joffrey-bion/io-utils/blob/master/LICENSE)
