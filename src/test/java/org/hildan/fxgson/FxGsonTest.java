@@ -1,7 +1,5 @@
 package org.hildan.fxgson;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,6 +30,7 @@ import com.google.gson.GsonBuilder;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
 import org.hildan.fxgson.adapters.properties.primitives.NullPrimitiveException;
 import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
+import org.hildan.fxgson.test.TestUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
@@ -75,7 +74,6 @@ import static org.hildan.fxgson.TestClassesWithProp.WithSetProp;
 import static org.hildan.fxgson.TestClassesWithProp.WithStringProp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 @RunWith(Theories.class)
 public class FxGsonTest {
@@ -160,17 +158,7 @@ public class FxGsonTest {
 
     @Test
     public void fxGson_cantBeInstantiated() throws IllegalAccessException, InstantiationException {
-        final Class<?> cls = FxGson.class;
-        final Constructor<?> c = cls.getDeclaredConstructors()[0];
-        c.setAccessible(true);
-        try {
-            c.newInstance();
-            fail();
-        } catch (InvocationTargetException ite) {
-            Throwable targetException = ite.getTargetException();
-            assertNotNull(targetException);
-            assertEquals(targetException.getClass(), InstantiationException.class);
-        }
+        TestUtils.assertCannotBeInstantiated(FxGson.class);
     }
 
     /**
