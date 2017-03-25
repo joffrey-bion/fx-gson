@@ -92,7 +92,6 @@ publishing {
     publications {
         maven(MavenPublication) {
             from components.java
-            // additional jars
             artifact sourcesJar
             artifact javadocJar
             pom.withXml {
@@ -110,7 +109,7 @@ bintray {
     user = getPropOrEnv('bintrayUser', 'BINTRAY_USER')
     key = getPropOrEnv('bintrayApiKey', 'BINTRAY_KEY')
     publications = ['maven']
-    publish = true // the version should be auto published after an upload
+    publish = true
 
     pkg {
         repo = getPropOrEnv('bintrayRepoLibs', 'BINTRAY_REPO_LIBS')
