@@ -5,12 +5,14 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'checkstyle'
+apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
 
 group = 'org.hildan.fxgson'
 version = '3.1.0'
 description = 'A set of type adapters for Google Gson to make JavaFX properties serialization more natural.'
 ext.labels = ['json', 'gson', 'javafx', 'property']
+ext.licenses = ['MIT']
 
 sourceCompatibility = 1.8
 
@@ -28,6 +30,17 @@ checkstyle {
     maxWarnings = 0
     toolVersion = '7.6'
 }
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 1.0
+            }
+        }
+    }
+}
+check.dependsOn jacocoTestCoverageVerification
 
 def getPropOrEnv = { String prop, String envVar, String defaultValue = null ->
     if (project.hasProperty(prop)) {
@@ -104,7 +117,7 @@ bintray {
         name = project.name
         desc = project.description
         labels = project.labels
-        licenses = ['MIT']
+        licenses = project.licenses
 
         websiteUrl = githubRepoUrl
         issueTrackerUrl = githubRepoUrl + '/issues'
