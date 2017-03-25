@@ -28,6 +28,7 @@ import org.hildan.fxgson.TestClassesWithProp.WithDoubleProp;
 import org.hildan.fxgson.TestClassesWithProp.WithFloatProp;
 import org.hildan.fxgson.TestClassesWithProp.WithIntegerProp;
 import org.hildan.fxgson.TestClassesWithProp.WithLongProp;
+import org.hildan.fxgson.TestClassesWithProp.WithObjectProp;
 import org.hildan.fxgson.TestClassesWithProp.WithStringProp;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
 import org.hildan.fxgson.adapters.properties.primitives.NullPrimitiveException;
@@ -180,19 +181,33 @@ public class FxGsonSimpleTest {
     private static <T> void testSerialization(Gson gson, T value, Property<?> propValue, Object wrapper,
                                               Object propWrapper) {
         String vJson = vanillaGson.toJson(value);
+
+        // the value should be serialized like vanilla Gson would
         assertEquals(vJson, gson.toJson(value));
-        assertEquals(vJson, gson.toJson(propValue));
+        // same rule apply when the value is contained in an object
         assertEquals(String.format("{\"value\":%s}", vJson), gson.toJson(wrapper));
+
+        // a property containing the value should be serialized as Gson would serialize the value itself
+        assertEquals(vJson, gson.toJson(propValue));
+        // same rule apply when the property is contained in an object
         assertEquals(String.format("{\"prop\":%s}", vJson), gson.toJson(propWrapper));
     }
 
     private static <T> void testDeserialization(Gson gson, T value, Property<?> propValue, Object wrapper,
                                                 Object propWrapper, Type type) {
+        // we use the vanilla Gson serialized string as test input
         String vJson = vanillaGson.toJson(value);
+
+        // the value should be deserialized like vanilla Gson would
+        // we assume vanilla Gson would correctly yield the test value when deserializing the produced JSON
         assertEquals(value, gson.fromJson(vJson, type));
+        // same rule applies if the value is wrapped in a container
+        assertEquals(wrapper, gson.fromJson(String.format("{\"value\":%s}", vJson), wrapper.getClass()));
+
+        // a property of the value should be deserialized as expected
         // properties don't override equals, so we need to compare the values
         assertEquals(propValue.getValue(), gson.fromJson(vJson, propValue.getClass()).getValue());
-        assertEquals(wrapper, gson.fromJson(String.format("{\"value\":%s}", vJson), wrapper.getClass()));
+        // same rule applies if the property is wrapped in a container
         assertEquals(propWrapper, gson.fromJson(String.format("{\"prop\":%s}", vJson), propWrapper.getClass()));
     }
 
@@ -246,6 +261,55 @@ public class FxGsonSimpleTest {
     }
 
     @Theory
+    public void testNullPropertiesAccepted_boolean(@FromDataPoints("safeProperties") Gson gson) {
+        WithBooleanProp propContainer = new WithBooleanProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void testNullPropertiesAccepted_int(@FromDataPoints("safeProperties") Gson gson) {
+        WithIntegerProp propContainer = new WithIntegerProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void testNullPropertiesAccepted_long(@FromDataPoints("safeProperties") Gson gson) {
+        WithLongProp propContainer = new WithLongProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void testNullPropertiesAccepted_float(@FromDataPoints("safeProperties") Gson gson) {
+        WithFloatProp propContainer = new WithFloatProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void testNullPropertiesAccepted_double(@FromDataPoints("safeProperties") Gson gson) {
+        WithDoubleProp propContainer = new WithDoubleProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void testNullPropertiesAccepted_string(@FromDataPoints("safeProperties") Gson gson) {
+        WithStringProp propContainer = new WithStringProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void testNullPropertiesAccepted_object(@FromDataPoints("safeProperties") Gson gson) {
+        WithObjectProp propContainer = new WithObjectProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
     public void testNullPropertiesFail_boolean(@FromDataPoints("strictProperties") Gson gson) {
         thrown.expect(NullPropertyException.class);
         WithBooleanProp propContainer = new WithBooleanProp();
@@ -281,6 +345,22 @@ public class FxGsonSimpleTest {
     public void testNullPropertiesFail_double(@FromDataPoints("strictProperties") Gson gson) {
         thrown.expect(NullPropertyException.class);
         WithDoubleProp propContainer = new WithDoubleProp();
+        propContainer.prop = null;
+        gson.toJson(propContainer);
+    }
+
+    @Theory
+    public void testNullPropertiesFail_string(@FromDataPoints("strictProperties") Gson gson) {
+        thrown.expect(NullPropertyException.class);
+        WithStringProp propContainer = new WithStringProp();
+        propContainer.prop = null;
+        gson.toJson(propContainer);
+    }
+
+    @Theory
+    public void testNullPropertiesFail_object(@FromDataPoints("strictProperties") Gson gson) {
+        thrown.expect(NullPropertyException.class);
+        WithObjectProp propContainer = new WithObjectProp();
         propContainer.prop = null;
         gson.toJson(propContainer);
     }
