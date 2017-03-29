@@ -115,8 +115,8 @@ bintray {
         repo = getPropOrEnv('bintrayRepoLibs', 'BINTRAY_REPO_LIBS')
         name = project.name
         desc = project.description
-        labels = project.labels
-        licenses = project.licenses
+        labels = project.labels ?: [project.name]
+        licenses = project.licenses ?: []
 
         websiteUrl = githubRepoUrl
         issueTrackerUrl = githubRepoUrl + '/issues'
