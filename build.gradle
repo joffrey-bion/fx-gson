@@ -18,17 +18,26 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url  "https://dl.bintray.com/joffrey-bion/maven"
+    }
+}
+
+configurations {
+    checkstyleConfig
 }
 
 dependencies {
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'org.jetbrains:annotations:15.0'
     testCompile 'junit:junit:4.+'
+    checkstyleConfig 'org.hildan.checkstyle:checkstyle-config:1.1.0'
 }
 
 checkstyle {
     maxWarnings = 0
     toolVersion = '7.6'
+    config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, "checkstyle.xml")
 }
 
 jacocoTestCoverageVerification {
