@@ -40,6 +40,7 @@ import org.junit.runner.RunWith;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import static org.hildan.fxgson.TestClassesExtra.WithColor;
 import static org.hildan.fxgson.TestClassesExtra.WithFont;
 import static org.hildan.fxgson.TestClassesSimple.CustomObject;
@@ -72,6 +73,7 @@ import static org.hildan.fxgson.TestClassesWithProp.WithObsMapStr;
 import static org.hildan.fxgson.TestClassesWithProp.WithObsSet;
 import static org.hildan.fxgson.TestClassesWithProp.WithSetProp;
 import static org.hildan.fxgson.TestClassesWithProp.WithStringProp;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 

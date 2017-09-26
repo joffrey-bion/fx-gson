@@ -37,7 +37,7 @@ public class FontTypeAdapterTest {
                         "\"System,Bold Italic,10.0\""),
                 new FontExpectation(Font.font("SansSerif", FontWeight.BOLD, FontPosture.ITALIC, 20.0),
                         "\"SansSerif,Bold Italic,20.0\""),
-                new FontExpectation(null, "null")
+                new FontExpectation(null, "null"),
         };
     }
 

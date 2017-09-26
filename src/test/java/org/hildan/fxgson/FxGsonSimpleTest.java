@@ -49,12 +49,12 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Theories.class)
 public class FxGsonSimpleTest {
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     private static Gson vanillaGson;
 
     private static Gson vanillaGsonSpecialFloat;
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -174,7 +174,7 @@ public class FxGsonSimpleTest {
                 IntegerProperty.class,
                 LongProperty.class,
                 FloatProperty.class,
-                DoubleProperty.class
+                DoubleProperty.class,
         };
     }
 

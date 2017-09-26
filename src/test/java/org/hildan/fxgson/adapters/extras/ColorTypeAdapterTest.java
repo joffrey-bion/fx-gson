@@ -29,7 +29,7 @@ public class ColorTypeAdapterTest {
         return new ColorExpectation[]{
                 new ColorExpectation(Color.BLUE, "\"#0000ffff\""),
                 new ColorExpectation(Color.RED, "\"#ff0000ff\""),
-                new ColorExpectation(null, "null")
+                new ColorExpectation(null, "null"),
         };
     }
 
