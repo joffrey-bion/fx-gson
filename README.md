@@ -3,7 +3,6 @@
 [![Bintray Download](https://img.shields.io/github/release/joffrey-bion/fx-gson.svg?label=bintray)](https://bintray.com/joffrey-bion/maven/fx-gson/_latestVersion)
 [![Maven central version](https://img.shields.io/maven-central/v/org.hildan.fxgson/fx-gson.svg)](http://mvnrepository.com/artifact/org.hildan.fxgson/fx-gson)
 [![Build Status](https://travis-ci.org/joffrey-bion/fx-gson.svg?branch=master)](https://travis-ci.org/joffrey-bion/fx-gson)
-[![Dependency Status](https://www.versioneye.com/user/projects/57327660a0ca35004baf8bfb/badge.svg)](https://www.versioneye.com/user/projects/57327660a0ca35004baf8bfb)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/fx-gson/blob/master/LICENSE)
 
 FX Gson is a set of type adapters for [Google Gson](https://github.com/google/gson) to serialize JavaFX properties as 
