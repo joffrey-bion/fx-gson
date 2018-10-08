@@ -34,7 +34,7 @@ public abstract class PropertyTypeAdapter<I, P extends Property<? extends I>> ex
      *         if true, this adapter will throw {@link NullPropertyException} when given a null {@link Property} to
      *         serialize
      */
-    PropertyTypeAdapter(TypeAdapter<I> innerValueTypeAdapter, boolean throwOnNullProperty) {
+    public PropertyTypeAdapter(TypeAdapter<I> innerValueTypeAdapter, boolean throwOnNullProperty) {
         this.delegate = innerValueTypeAdapter;
         this.throwOnNullProperty = throwOnNullProperty;
     }
