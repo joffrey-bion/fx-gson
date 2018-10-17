@@ -1,5 +1,5 @@
 // bintray plugin is used to upload artifacts to a bintray repo
-plugins { id "com.jfrog.bintray" version "1.7.3" }
+plugins { id "com.jfrog.bintray" version "1.8.4" }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
