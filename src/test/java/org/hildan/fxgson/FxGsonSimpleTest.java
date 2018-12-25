@@ -36,15 +36,14 @@ import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 @RunWith(Theories.class)
 public class FxGsonSimpleTest {
@@ -53,11 +52,8 @@ public class FxGsonSimpleTest {
 
     private static Gson vanillaGsonSpecialFloat;
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void setUp() {
         vanillaGson = new Gson();
         vanillaGsonSpecialFloat = new GsonBuilder().serializeSpecialFloatingPointValues().create();
     }
@@ -72,7 +68,7 @@ public class FxGsonSimpleTest {
         Gson gson6 = new FxGsonBuilder().builder()
                                         .registerTypeAdapterFactory(new JavaFxPropertyTypeAdapterFactory())
                                         .create();
-        return new Gson[]{gson1, gson2, gson3, gson4, gson5, gson6};
+        return new Gson[] {gson1, gson2, gson3, gson4, gson5, gson6};
     }
 
     @DataPoints({"all", "extra", "strictProperties", "strictPrimitives"})
@@ -81,42 +77,42 @@ public class FxGsonSimpleTest {
         Gson gson2 = FxGson.fullBuilder().create();
         Gson gson3 = new FxGsonBuilder().withExtras().create();
         Gson gson4 = new FxGsonBuilder(new GsonBuilder()).withExtras().create();
-        return new Gson[]{gson1, gson2, gson3, gson4};
+        return new Gson[] {gson1, gson2, gson3, gson4};
     }
 
     @DataPoints({"all", "strictProperties", "safePrimitives"})
     public static Gson[] safePrimitivesGsons() {
         Gson gson1 = new FxGsonBuilder().acceptNullPrimitives().create();
         Gson gson2 = new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().create();
-        return new Gson[]{gson1, gson2};
+        return new Gson[] {gson1, gson2};
     }
 
     @DataPoints({"all", "strictProperties", "safePrimitives", "extra"})
     public static Gson[] safePrimitivesAndExtraGsons() {
         Gson gson1 = new FxGsonBuilder().acceptNullPrimitives().withExtras().create();
         Gson gson2 = new FxGsonBuilder(new GsonBuilder()).acceptNullPrimitives().withExtras().create();
-        return new Gson[]{gson1, gson2};
+        return new Gson[] {gson1, gson2};
     }
 
     @DataPoints({"all", "safeProperties", "strictPrimitives"})
     public static Gson[] safePropertiesGsons() {
         Gson gson1 = new FxGsonBuilder().acceptNullProperties().create();
         Gson gson2 = new FxGsonBuilder(new GsonBuilder()).acceptNullProperties().create();
-        return new Gson[]{gson1, gson2};
+        return new Gson[] {gson1, gson2};
     }
 
     @DataPoints({"all", "safeProperties", "strictPrimitives", "extra"})
     public static Gson[] safePropertiesAndExtraGsons() {
         Gson gson1 = new FxGsonBuilder().acceptNullProperties().withExtras().create();
         Gson gson2 = new FxGsonBuilder(new GsonBuilder()).acceptNullProperties().withExtras().create();
-        return new Gson[]{gson1, gson2};
+        return new Gson[] {gson1, gson2};
     }
 
     @DataPoints({"all", "safeProperties", "safePrimitives"})
     public static Gson[] safePropertiesAndPrimitivesGsons() {
         Gson gson1 = new FxGsonBuilder().acceptNullProperties().acceptNullPrimitives().create();
         Gson gson2 = new FxGsonBuilder(new GsonBuilder()).acceptNullProperties().acceptNullPrimitives().create();
-        return new Gson[]{gson1, gson2};
+        return new Gson[] {gson1, gson2};
     }
 
     @DataPoints({"all", "safeProperties", "safePrimitives", "extra"})
@@ -126,7 +122,7 @@ public class FxGsonSimpleTest {
                                                          .acceptNullPrimitives()
                                                          .withExtras()
                                                          .create();
-        return new Gson[]{gson1, gson2};
+        return new Gson[] {gson1, gson2};
     }
 
     @DataPoints({"all", "specialFloat"})
@@ -134,42 +130,42 @@ public class FxGsonSimpleTest {
         Gson gson1 = FxGson.coreBuilder().serializeSpecialFloatingPointValues().create();
         Gson gson2 = new FxGsonBuilder().builder().serializeSpecialFloatingPointValues().create();
         Gson gson3 = new FxGsonBuilder(new GsonBuilder()).builder().serializeSpecialFloatingPointValues().create();
-        return new Gson[]{gson1, gson2, gson3};
+        return new Gson[] {gson1, gson2, gson3};
     }
 
     @DataPoints
     public static boolean[] bools() {
-        return new boolean[]{true, false};
+        return new boolean[] {true, false};
     }
 
     @DataPoints
     public static int[] ints() {
-        return new int[]{-3, 0, 42};
+        return new int[] {-3, 0, 42};
     }
 
     @DataPoints
     public static long[] longs() {
-        return new long[]{-3, 0, 42};
+        return new long[] {-3, 0, 42};
     }
 
     @DataPoints
     public static float[] floats() {
-        return new float[]{-3.5f, 0f, 42.3f};
+        return new float[] {-3.5f, 0f, 42.3f};
     }
 
     @DataPoints
     public static double[] doubles() {
-        return new double[]{-3.5d, 0d, 42.3d};
+        return new double[] {-3.5d, 0d, 42.3d};
     }
 
     @DataPoints
     public static String[] strings() {
-        return new String[]{null, "", " ", "test"};
+        return new String[] {null, "", " ", "test"};
     }
 
     @DataPoints
     public static Class<?>[] primitivePropertyClasses() {
-        return new Class<?>[]{
+        return new Class<?>[] {
                 BooleanProperty.class,
                 IntegerProperty.class,
                 LongProperty.class,
@@ -179,7 +175,7 @@ public class FxGsonSimpleTest {
     }
 
     private static <T> void testSerialization(Gson gson, T value, Property<?> propValue, Object wrapper,
-                                              Object propWrapper) {
+            Object propWrapper) {
         String vJson = vanillaGson.toJson(value);
 
         // the value should be serialized like vanilla Gson would
@@ -194,7 +190,7 @@ public class FxGsonSimpleTest {
     }
 
     private static <T> void testDeserialization(Gson gson, T value, Property<?> propValue, Object wrapper,
-                                                Object propWrapper, Type type) {
+            Object propWrapper, Type type) {
         // we use the vanilla Gson serialized string as test input
         String vJson = vanillaGson.toJson(value);
 
@@ -212,13 +208,13 @@ public class FxGsonSimpleTest {
     }
 
     private static <T> void testBothWays(Gson gson, @NotNull T value, Property<?> propValue, Object wrapper,
-                                         Object propWrapper) {
+            Object propWrapper) {
         testSerialization(gson, value, propValue, wrapper, propWrapper);
         testDeserialization(gson, value, propValue, wrapper, propWrapper, value.getClass());
     }
 
     private static <T> void testBothWays(Gson gson, @Nullable T value, Property<?> propValue, Object wrapper,
-                                         Object propWrapper, Type typeOfValue) {
+            Object propWrapper, Type typeOfValue) {
         testSerialization(gson, value, propValue, wrapper, propWrapper);
         testDeserialization(gson, value, propValue, wrapper, propWrapper, typeOfValue);
     }
@@ -256,8 +252,9 @@ public class FxGsonSimpleTest {
 
     @Theory
     public void testNullPrimitivesFail(Class<?> primitivePropertyClass, @FromDataPoints("strictPrimitives") Gson gson) {
-        thrown.expect(NullPrimitiveException.class);
-        gson.fromJson("null", primitivePropertyClass);
+        assertThrows(NullPrimitiveException.class, () -> {
+            gson.fromJson("null", primitivePropertyClass);
+        });
     }
 
     @Theory
@@ -311,58 +308,65 @@ public class FxGsonSimpleTest {
 
     @Theory
     public void testNullPropertiesFail_boolean(@FromDataPoints("strictProperties") Gson gson) {
-        thrown.expect(NullPropertyException.class);
-        WithBooleanProp propContainer = new WithBooleanProp();
-        propContainer.prop = null;
-        gson.toJson(propContainer);
+        assertThrows(NullPropertyException.class, () -> {
+            WithBooleanProp propContainer = new WithBooleanProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
     }
 
     @Theory
     public void testNullPropertiesFail_int(@FromDataPoints("strictProperties") Gson gson) {
-        thrown.expect(NullPropertyException.class);
-        WithIntegerProp propContainer = new WithIntegerProp();
-        propContainer.prop = null;
-        gson.toJson(propContainer);
+        assertThrows(NullPropertyException.class, () -> {
+            WithIntegerProp propContainer = new WithIntegerProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
     }
 
     @Theory
     public void testNullPropertiesFail_long(@FromDataPoints("strictProperties") Gson gson) {
-        thrown.expect(NullPropertyException.class);
-        WithLongProp propContainer = new WithLongProp();
-        propContainer.prop = null;
-        gson.toJson(propContainer);
+        assertThrows(NullPropertyException.class, () -> {
+            WithLongProp propContainer = new WithLongProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
     }
 
     @Theory
     public void testNullPropertiesFail_float(@FromDataPoints("strictProperties") Gson gson) {
-        thrown.expect(NullPropertyException.class);
-        WithFloatProp propContainer = new WithFloatProp();
-        propContainer.prop = null;
-        gson.toJson(propContainer);
+        assertThrows(NullPropertyException.class, () -> {
+            WithFloatProp propContainer = new WithFloatProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
     }
 
     @Theory
     public void testNullPropertiesFail_double(@FromDataPoints("strictProperties") Gson gson) {
-        thrown.expect(NullPropertyException.class);
-        WithDoubleProp propContainer = new WithDoubleProp();
-        propContainer.prop = null;
-        gson.toJson(propContainer);
+        assertThrows(NullPropertyException.class, () -> {
+            WithDoubleProp propContainer = new WithDoubleProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
     }
 
     @Theory
     public void testNullPropertiesFail_string(@FromDataPoints("strictProperties") Gson gson) {
-        thrown.expect(NullPropertyException.class);
-        WithStringProp propContainer = new WithStringProp();
-        propContainer.prop = null;
-        gson.toJson(propContainer);
+        assertThrows(NullPropertyException.class, () -> {
+            WithStringProp propContainer = new WithStringProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
     }
 
     @Theory
     public void testNullPropertiesFail_object(@FromDataPoints("strictProperties") Gson gson) {
-        thrown.expect(NullPropertyException.class);
-        WithObjectProp propContainer = new WithObjectProp();
-        propContainer.prop = null;
-        gson.toJson(propContainer);
+        assertThrows(NullPropertyException.class, () -> {
+            WithObjectProp propContainer = new WithObjectProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
     }
 
     public static void assertPropertyEquals(Property<?> expected, Property<?> actual) {
