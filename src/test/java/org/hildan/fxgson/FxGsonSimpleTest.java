@@ -15,8 +15,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.hildan.fxgson.TestClassesSimple.WithBoolean;
 import org.hildan.fxgson.TestClassesSimple.WithDouble;
 import org.hildan.fxgson.TestClassesSimple.WithFloat;
@@ -41,6 +39,9 @@ import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -126,7 +127,7 @@ public class FxGsonSimpleTest {
     }
 
     @DataPoints({"all", "specialFloat"})
-    public static Gson[] specialFLoatGsons() {
+    public static Gson[] specialFloatGsons() {
         Gson gson1 = FxGson.coreBuilder().serializeSpecialFloatingPointValues().create();
         Gson gson2 = new FxGsonBuilder().builder().serializeSpecialFloatingPointValues().create();
         Gson gson3 = new FxGsonBuilder(new GsonBuilder()).builder().serializeSpecialFloatingPointValues().create();

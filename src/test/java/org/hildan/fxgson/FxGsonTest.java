@@ -25,6 +25,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import org.hildan.fxgson.TestClassesCustom.CustomFactory;
+import org.hildan.fxgson.TestClassesCustom.WithCustomListProp;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
 import org.hildan.fxgson.adapters.properties.primitives.NullPrimitiveException;
 import org.hildan.fxgson.factories.JavaFxPropertyTypeAdapterFactory;
@@ -71,7 +73,6 @@ import static org.hildan.fxgson.TestClassesWithProp.WithObsMapStr;
 import static org.hildan.fxgson.TestClassesWithProp.WithObsSet;
 import static org.hildan.fxgson.TestClassesWithProp.WithSetProp;
 import static org.hildan.fxgson.TestClassesWithProp.WithStringProp;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
@@ -154,16 +155,37 @@ public class FxGsonTest {
         return new Gson[] {gson1, gson2, gson3};
     }
 
+    @DataPoints({"all", "strictProperties", "strictPrimitives", "custom"})
+    public static Gson[] gsonsWithCustomListProp() {
+        Gson gson1 = FxGson.coreBuilder().registerTypeAdapterFactory(new CustomFactory()).create();
+        Gson gson2 = new FxGsonBuilder().builder().registerTypeAdapterFactory(new CustomFactory()).create();
+        Gson gson3 = new FxGsonBuilder(new GsonBuilder().registerTypeAdapterFactory(new CustomFactory())).create();
+        return new Gson[] {gson1, gson2, gson3};
+    }
+
+    @DataPoints({"all", "strictProperties", "strictPrimitives", "custom", "extra"})
+    public static Gson[] gsonsWithCustomListPropAndExtras() {
+        Gson gson1 = FxGson.fullBuilder().registerTypeAdapterFactory(new CustomFactory()).create();
+        Gson gson2 = new FxGsonBuilder().withExtras()
+                                        .builder()
+                                        .registerTypeAdapterFactory(new CustomFactory())
+                                        .create();
+        GsonBuilder customBuilder = new GsonBuilder().registerTypeAdapterFactory(new CustomFactory());
+        Gson gson3 = new FxGsonBuilder(customBuilder).withExtras().create();
+        return new Gson[] {gson1, gson2, gson3};
+    }
+
     @Test
     public void fxGson_cantBeInstantiated() throws IllegalAccessException, InstantiationException {
         TestUtils.assertCannotBeInstantiated(FxGson.class);
     }
 
     /**
-     * Tests the serialization/deserialization of an inner value of an object (for the given value) with each of the
-     * provided {@link Gson}s. <p> This method checks that the value is the same after a serialization-deserialization
-     * cycle. If an expected JSON is provided, this method also checks if the serialized object gives the expected
-     * JSON.
+     * Tests the serialization/deserialization of an inner value of an object (for the given value) with the provided
+     * {@link Gson}.
+     * <p>
+     * This method checks that the value is the same after a serialization-deserialization cycle. If an expected JSON is
+     * provided, this method also checks if the serialized object gives the expected JSON.
      *
      * @param baseClass
      *         the class of object to test
@@ -203,7 +225,7 @@ public class FxGsonTest {
     }
 
     /**
-     * Tests the deserialization of an inner value of an object with each of the provided {@link Gson}s.
+     * Tests the deserialization of an inner value of an object with each of the provided {@link Gson}.
      *
      * @param baseClass
      *         the class of object to test
@@ -227,7 +249,7 @@ public class FxGsonTest {
     }
 
     /**
-     * Tests the serialization of an inner value of an object with each of the provided {@link Gson}s.
+     * Tests the serialization of an inner value of an object with each of the provided {@link Gson}.
      *
      * @param baseClass
      *         the class of object to test
@@ -258,7 +280,7 @@ public class FxGsonTest {
 
     /**
      * Tests the serialization/deserialization of the given value of a {@link Property} inside an object. The property
-     * is checked not to be null after deserialization. Uses both the core {@link GsonBuilder} and the one with extras.
+     * is checked not to be null after deserialization.
      *
      * @param baseClass
      *         the class of object to test
@@ -480,6 +502,22 @@ public class FxGsonTest {
         testValue(WithObsList.class, listOne, "{\"list\":[{\"name\":\"myObj1\"}]}", getter, setter, gson);
         testValue(WithObsList.class, listTwo, "{\"list\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}", getter,
                 setter, gson);
+    }
+
+    @Theory
+    public void testCustomListProperty(@FromDataPoints("custom") Gson gson) {
+        CustomObject one = new CustomObject("myObj1");
+        CustomObject two = new CustomObject("myObj2");
+
+        ObservableList<CustomObject> listEmpty = FXCollections.observableArrayList();
+        ObservableList<CustomObject> listOne = FXCollections.observableArrayList(one);
+        ObservableList<CustomObject> listTwo = FXCollections.observableArrayList(one, two);
+
+        testProperty(WithCustomListProp.class, null, "{\"prop\":null}", o -> o.prop, gson);
+        testProperty(WithCustomListProp.class, listEmpty, "{\"prop\":[]}", o -> o.prop, gson);
+        testProperty(WithCustomListProp.class, listOne, "{\"prop\":[{\"name\":\"myObj1\"}]}", o -> o.prop, gson);
+        testProperty(WithCustomListProp.class, listTwo, "{\"prop\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}",
+                o -> o.prop, gson);
     }
 
     @Theory

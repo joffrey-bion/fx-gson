@@ -10,18 +10,19 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.MapProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleMapProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
-import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
-import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
 import org.hildan.fxgson.adapters.properties.ListPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.properties.MapPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
@@ -34,6 +35,11 @@ import org.hildan.fxgson.adapters.properties.primitives.FloatPropertyTypeAdapter
 import org.hildan.fxgson.adapters.properties.primitives.IntegerPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.properties.primitives.LongPropertyTypeAdapter;
 import org.hildan.fxgson.adapters.properties.primitives.NullPrimitiveException;
+
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * A {@link TypeAdapterFactory} for all JavaFX {@link Property} types. It serializes the value of a property instead of
@@ -83,60 +89,63 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
     @SuppressWarnings("unchecked")
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        Class<? super T> clazz = type.getRawType();
+        Class<? super T> cls = type.getRawType();
 
-        // this factory only handles JavaFX property types
-        if (!Property.class.isAssignableFrom(clazz)) {
+        // shortcut (this factory only handles JavaFX Property subtypes)
+        if (!Property.class.isAssignableFrom(cls)) {
             return null;
         }
 
-        // simple property types
+        // simple property types and subtypes
 
-        if (BooleanProperty.class.isAssignableFrom(clazz)) {
+        if (BooleanProperty.class.isAssignableFrom(cls)) {
             return (TypeAdapter<T>) new BooleanPropertyTypeAdapter(gson.getAdapter(boolean.class), strictProperties,
                     strictPrimitives);
         }
-        if (IntegerProperty.class.isAssignableFrom(clazz)) {
+        if (IntegerProperty.class.isAssignableFrom(cls)) {
             return (TypeAdapter<T>) new IntegerPropertyTypeAdapter(gson.getAdapter(int.class), strictProperties,
                     strictPrimitives);
         }
-        if (LongProperty.class.isAssignableFrom(clazz)) {
+        if (LongProperty.class.isAssignableFrom(cls)) {
             return (TypeAdapter<T>) new LongPropertyTypeAdapter(gson.getAdapter(long.class), strictProperties,
                     strictPrimitives);
         }
-        if (FloatProperty.class.isAssignableFrom(clazz)) {
+        if (FloatProperty.class.isAssignableFrom(cls)) {
             return (TypeAdapter<T>) new FloatPropertyTypeAdapter(gson.getAdapter(float.class), strictProperties,
                     strictPrimitives);
         }
-        if (DoubleProperty.class.isAssignableFrom(clazz)) {
+        if (DoubleProperty.class.isAssignableFrom(cls)) {
             return (TypeAdapter<T>) new DoublePropertyTypeAdapter(gson.getAdapter(double.class), strictProperties,
                     strictPrimitives);
         }
-        if (StringProperty.class.isAssignableFrom(clazz)) {
+        if (StringProperty.class.isAssignableFrom(cls)) {
             return (TypeAdapter<T>) new StringPropertyTypeAdapter(gson.getAdapter(String.class), strictProperties);
         }
 
-        // collection property types
+        // We should not handle subclasses, as users may want to use custom implementations.
+        // Moreover, we are currently unable to get the type parameter of the generic property classes if we are
+        // dealing with subclasses.
+        // This is why we are using equals() instead i=of isAssignableFrom() here.
 
-        if (ListProperty.class.isAssignableFrom(clazz)) {
+        if (ListProperty.class.equals(cls) || SimpleListProperty.class.equals(cls)) {
             TypeAdapter<?> delegate = gson.getAdapter(TypeHelper.withRawType(type, ObservableList.class));
             return new ListPropertyTypeAdapter(delegate, strictProperties);
         }
-        if (SetProperty.class.isAssignableFrom(clazz)) {
+        if (SetProperty.class.equals(cls) || SimpleSetProperty.class.equals(cls)) {
             TypeAdapter<?> delegate = gson.getAdapter(TypeHelper.withRawType(type, ObservableSet.class));
             return new SetPropertyTypeAdapter(delegate, strictProperties);
         }
-        if (MapProperty.class.isAssignableFrom(clazz)) {
+        if (MapProperty.class.equals(cls) || SimpleMapProperty.class.equals(cls)) {
             TypeAdapter<?> delegate = gson.getAdapter(TypeHelper.withRawType(type, ObservableMap.class));
             return new MapPropertyTypeAdapter(delegate, strictProperties);
         }
+        if (Property.class.equals(cls) || ObjectProperty.class.equals(cls) || SimpleObjectProperty.class.equals(cls)) {
+            Type[] typeParams = ((ParameterizedType) type.getType()).getActualTypeArguments();
+            Type param = typeParams[0];
+            TypeAdapter<?> delegate = gson.getAdapter(TypeToken.get(param));
+            return (TypeAdapter<T>) new ObjectPropertyTypeAdapter<>(delegate, strictProperties);
+        }
 
-        // generic Property<?> type
-
-        Type[] typeParams = ((ParameterizedType) type.getType()).getActualTypeArguments();
-        Type param = typeParams[0];
-        // null factory skipPast because the nested type argument might also be a Property
-        TypeAdapter<?> delegate = gson.getAdapter(TypeToken.get(param));
-        return (TypeAdapter<T>) new ObjectPropertyTypeAdapter<>(delegate, strictProperties);
+        return null;
     }
 }
