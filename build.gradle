@@ -1,5 +1,8 @@
 // bintray plugin is used to upload artifacts to a bintray repo
-plugins { id "com.jfrog.bintray" version "1.8.4" }
+plugins {
+    id "com.jfrog.bintray" version "1.8.4"
+    id "org.hildan.github.changelog" version "0.8.0"
+}
 
 apply plugin: 'java'
 apply plugin: 'checkstyle'
@@ -144,3 +147,10 @@ apply from: 'gradle/scripts/release.gradle'
 
 bintrayUpload.dependsOn(build)
 release.dependsOn(bintrayUpload)
+
+changelog {
+    sinceTag = "v1.2"
+    releaseUrlTemplate = "https://bintray.com/joffrey-bion/maven/fx-gson/%s"
+    releaseUrlTagTransform = { it.substring(1) }
+    customTagByIssueNumber = [12: "v3.1.0"]
+}
