@@ -26,7 +26,7 @@ configurations {
 }
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.google.code.gson:gson:2.8.6'
     compile 'org.jetbrains:annotations:15.0'
     testCompile 'junit:junit:4.+'
     checkstyleConfig 'org.hildan.checkstyle:checkstyle-config:2.1.0'
