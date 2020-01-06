@@ -7,6 +7,21 @@ dist: trusty
 jdk:
   - oraclejdk8
 
+env:
+  global:
+    - GITHUB_USER=joffrey-bion
+    - BINTRAY_USER=joffrey-bion
+    - BINTRAY_REPO=maven
+    - secure: jt4bmwjzs4ROyLmendYvp0oL6wcDZjs5QOvD1w58xbXYoRDqW4W0V4SXOyq15q1DiPm6SuZPygQxGEpXn2PO6u+DCv9kQ1S69Xm3nfN4VFFd93MHB0bAG1Exsr3LTse5FHnWLOiE/vbIgV+uvZl6tnY/A+EeAhxWG/jZTb6dvW/hLW9s+l3MaEBLDjoIrDoy5qiRaVjdfhLcqy+Pw6qM/RQBAwddEM9WILlKI/fXFDKZHa++6bVkbCT0LflSz642621LLxl+WuS/gzoDCGC1v5YoTnegg/O8zHAwwCXMhJxXJIpubGqWkLZJBh8zdm/o2955bgZJYLJtlKY8bk7pXiVRv8ezDJNO4p+mgEqIKTNTGXr6PBGsr1+uP8DaH1iElvwf94YMhl3PDItBtj+NUMzwi/Jg8IK/0w0sID2XWbO3ST1BdY7Ajs9l2DV5NvUA7+dFeNw/2t5VXmEcrNoFk/7qiWtTFXUEFlOeOFy7XAGdqvXZHQNCRNOQETfOyXP+IbCx6hf54xPt5TBP0azvvjKmxVX8mYJ4vBw/QkIimXsBdY8FbffDFb9T+T0NxpzDD2SLEeNjn6ARSuaYMPPFX7N9YVkvST3Fw8qmWITOb9JiKvw2rd2AFeW5gs0fhr11SFTfqncQPXlIAOPMopYSb3tG2bfEHLklgujBVYZe78g=
+    - secure: EAVQPEaCpxxC7qLh5Xb/jubhvx5nQ7L6x8lqvLKOtLilEdNLC+uoliATIxPQ9BydkwFzaPlxjCIdYCBGjXk5umgjxQ41kvYTl5GwG20Olp6lKWB6HeC5/93QeL4vOZhf6/kNejyh+t/OIGK0w/KHEpZ4OatKjosUUziqzP5nJnPNHSN93E1iQnHry9k3MT251M72Z6McL3XqZaS5pOfz5KyQowY5jTal2T+iVBrsrrh4+WcN/Tg3hHCqhYtF59tWnl4vEpBQHQD1zENVx1CgNtmkKkxFXSxFSDb+l5Iyrc2tTEEC8Lp6miS/AmmCs/DtAmHsVXKLH0HHsTsNt3Q1/LZc2u6O9SBaROSLs/ejOHt793gimoeIUUz/K2sByxguIk03xKYnm6EvD/egdZzoJ+IW0l8QU2X0M7OF2eKtUFKJx2lR/tc4qao5zJwfwghsAUDQyA1VbPgn8DjMIzmBoWMtircLMEHikisyXA/fxgxBct/O0eN6rvHB7Z/I+9duXBgpTHM8k+94WROK5ZPCoVAOwS4q+IQLEZzRx6t/UjXJIsE5CsVMuALNiNhdiXSJ4wdAocaecx+ODb0rNMrbaxSeC1YF3Sc/TvcPh4ShwUhz3aHZJH9+VlGWG6EH0MohlPgaA1Dx90tvjDlB5p0jNpYWD6LFra/qW95E4cW1nP0=
+    - secure: ujQojacgxZBNMRNzVxC9AvVbLILzcJejiM/92a94+9+VgDHiG6mpbnuuJq5yU+9tzcLwv4AXazfLG6KrsFk3qtlCxuJnZZDx+lZPxDqaZIBTBmdj2Ia+YMMtWg/6oikI/fJlRm/cfZqblLHz4+AWEyi2DKi29VaykfJZ7i3MifNYQo+wF/Hjf3sElq1b9lcHZqCVkmDAGtwvPKd8aovsOwISoOsjAUeJMvj5621D9pleJv1pMmtCXc5gjJwifxs4QRcfc/VdDFbZgVUyBeQ65Rfrbyso32Bc0KO0L4+FvwcHI0XSGfshRog+6rjS8BWHBzBwX2NoeHi90zZX9/HENCOv7lEVwmg/MVzeIb61B0XV6vcIgj2bTdNc32NFrbt0kxIHSK+dZNwCuU78RnXrHFXu23/6mYKygLFYFP5S4OyVbS8qpUvbA7WTE6tIRhEBrWXuy+9Et0xJtBZncY0dbs9b1+e53yOV2kndSG4C/8IR3KpPEQGLuztSJgD8mfHGM9IuKlNWtI7ngBgAglPq7+iRcmplx0p5CJrVY6ima2OIDGPoOrSQoQW+YG69BYdEB8r15F2wkDHeZADAm3BcwYlABe/56q0fg/Q0Jt52gkfJR7Q3jQNs0jkAwPzeOIy8uYFBj38C/q56yaSehAfEtsygG2NuGiFLlR5JrlKJH2g=
+
+deploy:
+  - provider: script
+    script: ./gradlew bintrayUpload
+    on:
+      tags: true
+
 # These files change at every build, and should not be cached
 # https://docs.travis-ci.com/user/languages/java/#Caching
 before_cache:
