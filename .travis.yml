@@ -1,7 +1,9 @@
 language: java
 
+# Necessary to allow insallation of Oracle's JDK8 (not openJDK)
 dist: trusty
 
+# Necessary to use JavaFX classes
 jdk:
   - oraclejdk8
 
