@@ -111,6 +111,10 @@ You can use FX Gson in multiple ways depending on the degree of customization yo
 
 - [cherry-pick some pieces of FX Gson configuration](https://github.com/joffrey-bion/fx-gson/wiki/Customize-FX-Gson) and customize it to fit your needs
 
+## Java version compatiblity
+
+Starting from FX Gson 4.0.0, the library is published as a Java Jigsaw module (Java 9+).
+
 ## Setup - adding the dependency
 
 ### Manual download
