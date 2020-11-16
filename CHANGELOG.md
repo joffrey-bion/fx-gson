@@ -1,5 +1,12 @@
 # Change Log
 
+## [4.0.0](https://bintray.com/joffrey-bion/maven/fx-gson/.0.0) (2020-11-16)
+[Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v3.1.2...4.0.0)
+
+**Closed issues:**
+
+- Java 9 Modular compatibility [\#17](https://github.com/joffrey-bion/fx-gson/issues/17)
+
 ## [v3.1.2](https://bintray.com/joffrey-bion/maven/fx-gson/3.1.2) (2018-12-26)
 [Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v3.1.1...v3.1.2)
 

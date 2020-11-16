@@ -10,7 +10,7 @@ apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
 
 group = 'org.hildan.fxgson'
-version = '3.1.2'
+version = '4.0.0'
 description = 'A set of type adapters for Google Gson to make JavaFX properties serialization more natural.'
 ext.labels = ['json', 'gson', 'javafx', 'property']
 ext.licenses = ['MIT']
@@ -145,6 +145,7 @@ bintrayUpload.dependsOn(build)
 release.dependsOn(bintrayUpload)
 
 changelog {
+    futureVersionTag = project.version
     sinceTag = "v1.2"
     releaseUrlTemplate = "https://bintray.com/joffrey-bion/maven/fx-gson/%s"
     releaseUrlTagTransform = { it.substring(1) }
