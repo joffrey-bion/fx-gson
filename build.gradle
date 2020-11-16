@@ -26,15 +26,15 @@ configurations {
 }
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.8.6'
-    compile 'org.jetbrains:annotations:18.0.0'
-    testCompile 'junit:junit:4.+'
-    checkstyleConfig 'org.hildan.checkstyle:checkstyle-config:2.1.0'
+    compile("com.google.code.gson:gson:2.8.6")
+    compile("org.jetbrains:annotations:18.0.0")
+    testCompile("junit:junit:4.+")
+    checkstyleConfig("org.hildan.checkstyle:checkstyle-config:2.4.1")
 }
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '8.2'
+    toolVersion = "8.29"
     config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, "checkstyle.xml")
 }
 

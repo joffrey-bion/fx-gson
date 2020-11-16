@@ -12,6 +12,7 @@ import com.google.gson.InstanceCreator;
  */
 public class ObservableSetCreator implements InstanceCreator<ObservableSet<?>> {
 
+    @Override
     public ObservableSet<?> createInstance(Type type) {
         // No need to use a parametrized set since the actual instance will have the raw type anyway.
         return FXCollections.observableSet();

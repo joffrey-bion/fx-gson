@@ -5,6 +5,9 @@ package org.hildan.fxgson.adapters.properties;
  */
 public class NullPropertyException extends RuntimeException {
 
+    /**
+     * Constructs a new NullPropertyException.
+     */
     public NullPropertyException() {
         super("Null properties are forbidden");
     }

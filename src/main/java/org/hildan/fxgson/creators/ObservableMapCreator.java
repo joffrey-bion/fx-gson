@@ -12,6 +12,7 @@ import com.google.gson.InstanceCreator;
  */
 public class ObservableMapCreator implements InstanceCreator<ObservableMap<?, ?>> {
 
+    @Override
     public ObservableMap<?, ?> createInstance(Type type) {
         // No need to use a parametrized map since the actual instance will have the raw type anyway.
         return FXCollections.observableHashMap();

@@ -482,7 +482,7 @@ public class FxGsonTest {
         testProperty(WithListProp.class, listEmpty, "{\"prop\":[]}", o -> o.prop, gson);
         testProperty(WithListProp.class, listOne, "{\"prop\":[{\"name\":\"myObj1\"}]}", o -> o.prop, gson);
         testProperty(WithListProp.class, listTwo, "{\"prop\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}",
-                o -> o.prop, gson);
+            o -> o.prop, gson);
     }
 
     @Theory
@@ -501,7 +501,7 @@ public class FxGsonTest {
         testValue(WithObsList.class, listEmpty, "{\"list\":[]}", getter, setter, gson);
         testValue(WithObsList.class, listOne, "{\"list\":[{\"name\":\"myObj1\"}]}", getter, setter, gson);
         testValue(WithObsList.class, listTwo, "{\"list\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}", getter,
-                setter, gson);
+            setter, gson);
     }
 
     @Theory
@@ -517,7 +517,7 @@ public class FxGsonTest {
         testProperty(WithCustomListProp.class, listEmpty, "{\"prop\":[]}", o -> o.prop, gson);
         testProperty(WithCustomListProp.class, listOne, "{\"prop\":[{\"name\":\"myObj1\"}]}", o -> o.prop, gson);
         testProperty(WithCustomListProp.class, listTwo, "{\"prop\":[{\"name\":\"myObj1\"},{\"name\":\"myObj2\"}]}",
-                o -> o.prop, gson);
+            o -> o.prop, gson);
     }
 
     @Theory
@@ -780,7 +780,7 @@ public class FxGsonTest {
     public void testObject(@FromDataPoints("all") Gson gson) {
         CustomObject obj = new CustomObject("myValue");
         testValue(WithCustomObject.class, obj, "{\"value\":{\"name\":\"myValue\"}}", o -> o.value,
-                (o, v) -> o.value = v, gson);
+            (o, v) -> o.value = v, gson);
         testValue(WithCustomObject.class, null, "{\"value\":null}", o -> o.value, (o, v) -> o.value = v, gson);
     }
 

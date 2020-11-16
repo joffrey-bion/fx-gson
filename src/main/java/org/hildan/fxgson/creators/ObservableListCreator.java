@@ -12,6 +12,7 @@ import com.google.gson.InstanceCreator;
  */
 public class ObservableListCreator implements InstanceCreator<ObservableList<?>> {
 
+    @Override
     public ObservableList<?> createInstance(Type type) {
         // No need to use a parametrized list since the actual instance will have the raw type anyway.
         return FXCollections.observableArrayList();
