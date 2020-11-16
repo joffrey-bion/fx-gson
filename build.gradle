@@ -1,10 +1,9 @@
-// bintray plugin is used to upload artifacts to a bintray repo
 plugins {
     id("com.jfrog.bintray") version "1.8.4"
     id("org.hildan.github.changelog") version "0.8.0"
 }
 
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'checkstyle'
 apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
@@ -14,6 +13,11 @@ version = '3.1.2'
 description = 'A set of type adapters for Google Gson to make JavaFX properties serialization more natural.'
 ext.labels = ['json', 'gson', 'javafx', 'property']
 ext.licenses = ['MIT']
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
 
 sourceCompatibility = 1.8
 
@@ -26,9 +30,9 @@ configurations {
 }
 
 dependencies {
-    compile("com.google.code.gson:gson:2.8.6")
-    compile("org.jetbrains:annotations:18.0.0")
-    testCompile("junit:junit:4.+")
+    api("com.google.code.gson:gson:2.8.6")
+    implementation("org.jetbrains:annotations:18.0.0")
+    testImplementation("junit:junit:4.+")
     checkstyleConfig("org.hildan.checkstyle:checkstyle-config:2.4.1")
 }
 
@@ -65,16 +69,6 @@ ext {
     ossrhKey = getPropOrEnv('ossrhKey', 'OSSRH_KEY')
 }
 
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'sources'
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    from javadoc.destinationDir
-    classifier = 'javadoc'
-}
-
 def pomConfig = {
     scm {
         url githubRepoUrl
@@ -99,8 +93,6 @@ publishing {
     publications {
         maven(MavenPublication) {
             from components.java
-            artifact sourcesJar
-            artifact javadocJar
             pom.withXml {
                 def root = asNode()
                 root.appendNode('name', project.name)
