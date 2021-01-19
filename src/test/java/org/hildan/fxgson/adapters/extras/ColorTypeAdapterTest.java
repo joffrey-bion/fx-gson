@@ -6,7 +6,6 @@ import java.io.StringReader;
 import javafx.scene.paint.Color;
 
 import com.google.gson.stream.JsonReader;
-import org.hildan.fxgson.adapters.extras.ColorTypeAdapter.InvalidColorException;
 import org.hildan.fxgson.test.Expectation;
 import org.hildan.fxgson.test.TestUtils;
 import org.junit.Test;
@@ -43,7 +42,7 @@ public class ColorTypeAdapterTest {
         TestUtils.testRead(new ColorTypeAdapter(), expectation);
     }
 
-    @Test(expected = InvalidColorException.class)
+    @Test(expected = ColorTypeAdapter.InvalidColorException.class)
     public void read_invalid() throws IOException {
         JsonReader jsonReader = new JsonReader(new StringReader("\"not a color\""));
         new ColorTypeAdapter().read(jsonReader);

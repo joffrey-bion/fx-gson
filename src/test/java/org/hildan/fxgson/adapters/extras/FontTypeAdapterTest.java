@@ -8,7 +8,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
 import com.google.gson.stream.JsonReader;
-import org.hildan.fxgson.adapters.extras.FontTypeAdapter.InvalidFontException;
 import org.hildan.fxgson.test.Expectation;
 import org.hildan.fxgson.test.TestUtils;
 import org.junit.Test;
@@ -51,13 +50,13 @@ public class FontTypeAdapterTest {
         TestUtils.testRead(new FontTypeAdapter(), expectation);
     }
 
-    @Test(expected = InvalidFontException.class)
+    @Test(expected = FontTypeAdapter.InvalidFontException.class)
     public void read_throwsIfNot3Parts() throws IOException {
         JsonReader jsonReader = new JsonReader(new StringReader("\"not enough components\""));
         new FontTypeAdapter().read(jsonReader);
     }
 
-    @Test(expected = InvalidFontException.class)
+    @Test(expected = FontTypeAdapter.InvalidFontException.class)
     public void read_throwsIfInvalidSize() throws IOException {
         JsonReader jsonReader = new JsonReader(new StringReader("\"third,is not a,size\""));
         new FontTypeAdapter().read(jsonReader);
