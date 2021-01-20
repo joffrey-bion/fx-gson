@@ -62,7 +62,7 @@ changelog {
     futureVersionTag = project.version.toString()
     sinceTag = "v1.2"
     releaseUrlTemplate = "https://bintray.com/joffrey-bion/maven/fx-gson/%s"
-    releaseUrlTagTransform = { it.substring(1) }
+    releaseUrlTagTransform = { it.removePrefix("v") }
     customTagByIssueNumber = mapOf(12 to "v3.1.0")
 }
 

@@ -35,4 +35,6 @@ jobs:
           BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
           OSSRH_USER_TOKEN: ${{ secrets.OSSRH_USER_TOKEN }}
           OSSRH_KEY: ${{ secrets.OSSRH_KEY }}
-        run: ./gradlew -Pversion=${{ github.event.release.tag_name }} bintrayUpload
+        run: |
+          tag=$(echo ${{ github.event.release.tag_name }} | sed s/v//)
+          ./gradlew -Pversion=$tag bintrayUpload
