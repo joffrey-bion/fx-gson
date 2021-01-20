@@ -1,7 +1,14 @@
 # Change Log
 
-## [4.0.0](https://bintray.com/joffrey-bion/maven/fx-gson/.0.0) (2020-11-16)
-[Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v3.1.2...4.0.0)
+## [4.0.1](https://bintray.com/joffrey-bion/maven/fx-gson/4.0.1) (2021-01-20)
+[Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v4.0.0...4.0.1)
+
+**Fixed bugs:**
+
+- Tests are broken on JDK 13\+ [\#18](https://github.com/joffrey-bion/fx-gson/issues/18)
+
+## [v4.0.0](https://bintray.com/joffrey-bion/maven/fx-gson/4.0.0) (2020-11-16)
+[Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v3.1.2...v4.0.0)
 
 **Closed issues:**
 
@@ -25,7 +32,7 @@
 
 - issue \#15 Make PropertyTypeAdapter constructor public [\#16](https://github.com/joffrey-bion/fx-gson/pull/16) ([@antoine-guillou](https://github.com/antoine-guillou))
 
-## [v3.1.0](https://bintray.com/joffrey-bion/maven/fx-gson/3.1.0) (2017-03-24)
+## [v3.1.0](https://bintray.com/joffrey-bion/maven/fx-gson/3.1.0) (2017-03-23)
 [Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v3.0.0...v3.1.0)
 
 **Closed issues:**
@@ -69,20 +76,20 @@
 
 - ColorTypeAdapter should not rely on Color.toString\(\) [\#3](https://github.com/joffrey-bion/fx-gson/issues/3)
 
-## [v1.2.2](https://bintray.com/joffrey-bion/maven/fx-gson/1.2.2) (2016-09-15)
+## [v1.2.2](https://bintray.com/joffrey-bion/maven/fx-gson/1.2.2) (2016-09-14)
 [Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v1.2.1...v1.2.2)
 
 **Fixed bugs:**
 
 - Property\<Font\> crashes serialization [\#2](https://github.com/joffrey-bion/fx-gson/issues/2)
 
-## [v1.2.1](https://bintray.com/joffrey-bion/maven/fx-gson/1.2.1) (2016-09-15)
+## [v1.2.1](https://bintray.com/joffrey-bion/maven/fx-gson/1.2.1) (2016-09-14)
 [Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v1.2...v1.2.1)
 
 **Fixed bugs:**
 
 - Null values incorrectly deserialized for Font and Color [\#1](https://github.com/joffrey-bion/fx-gson/issues/1)
 
-## [v1.2](https://bintray.com/joffrey-bion/maven/fx-gson/1.2) (2016-05-16)
+## [v1.2](https://bintray.com/joffrey-bion/maven/fx-gson/1.2) (2016-05-15)
 [Full Changelog](https://github.com/joffrey-bion/fx-gson/compare/v1.1...v1.2)
 
