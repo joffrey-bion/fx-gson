@@ -126,7 +126,13 @@ using a build tool such as [Gradle](https://gradle.org/).
 ### Gradle
 
 ```groovy
-compile 'org.hildan.fxgson:fx-gson:3.1.2'
+compile 'org.hildan.fxgson:fx-gson:$VERSION'
+```
+
+or with the Kotlin DSL:
+
+```kotlin
+compile("org.hildan.fxgson:fx-gson:$VERSION")
 ```
 
 ### Maven
@@ -135,7 +141,7 @@ compile 'org.hildan.fxgson:fx-gson:3.1.2'
 <dependency>
    <groupId>org.hildan.fxgson</groupId>
    <artifactId>fx-gson</artifactId>
-   <version>3.1.2</version> <!-- replace with latest version -->
+   <version>$VERSION</version> <!-- replace with latest version -->
    <type>pom</type>
 </dependency>
 ```    
