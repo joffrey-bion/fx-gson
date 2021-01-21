@@ -125,7 +125,7 @@ public class JavaFxPropertyTypeAdapterFactory implements TypeAdapterFactory {
         // We should not handle subclasses, as users may want to use custom implementations.
         // Moreover, we are currently unable to get the type parameter of the generic property classes if we are
         // dealing with subclasses.
-        // This is why we are using equals() instead i=of isAssignableFrom() here.
+        // This is why we are using equals() instead of isAssignableFrom() here.
 
         if (ListProperty.class.equals(cls) || SimpleListProperty.class.equals(cls)) {
             TypeAdapter<?> delegate = gson.getAdapter(TypeHelper.withRawType(type, ObservableList.class));
