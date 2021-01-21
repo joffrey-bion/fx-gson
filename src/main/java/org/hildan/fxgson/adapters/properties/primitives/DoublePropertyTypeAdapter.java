@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 
 import com.google.gson.TypeAdapter;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link DoubleProperty}. It serializes the double
@@ -30,18 +31,21 @@ public class DoublePropertyTypeAdapter extends PrimitivePropertyTypeAdapter<Doub
         super(delegate, throwOnNullProperty, crashOnNullValue);
     }
 
+    @NotNull
     @Override
     protected Double extractPrimitiveValue(DoubleProperty property) {
         return property.get();
     }
 
+    @NotNull
     @Override
     protected DoubleProperty createDefaultProperty() {
         return new SimpleDoubleProperty();
     }
 
+    @NotNull
     @Override
-    protected DoubleProperty wrapNonNullPrimitiveValue(Double deserializedValue) {
+    protected DoubleProperty wrapNonNullPrimitiveValue(@NotNull Double deserializedValue) {
         return new SimpleDoubleProperty(deserializedValue);
     }
 }

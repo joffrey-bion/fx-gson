@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleFloatProperty;
 
 import com.google.gson.TypeAdapter;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link FloatProperty}. It serializes the float
@@ -30,18 +31,21 @@ public class FloatPropertyTypeAdapter extends PrimitivePropertyTypeAdapter<Float
         super(delegate, throwOnNullProperty, crashOnNullValue);
     }
 
+    @NotNull
     @Override
     protected Float extractPrimitiveValue(FloatProperty property) {
         return property.get();
     }
 
+    @NotNull
     @Override
     protected FloatProperty createDefaultProperty() {
         return new SimpleFloatProperty();
     }
 
+    @NotNull
     @Override
-    protected FloatProperty wrapNonNullPrimitiveValue(Float deserializedValue) {
+    protected FloatProperty wrapNonNullPrimitiveValue(@NotNull Float deserializedValue) {
         return new SimpleFloatProperty(deserializedValue);
     }
 }

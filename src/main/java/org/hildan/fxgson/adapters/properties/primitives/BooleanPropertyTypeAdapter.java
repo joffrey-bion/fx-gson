@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 
 import com.google.gson.TypeAdapter;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link BooleanProperty}. It serializes the
@@ -30,18 +31,21 @@ public class BooleanPropertyTypeAdapter extends PrimitivePropertyTypeAdapter<Boo
         super(delegate, throwOnNullProperty, crashOnNullValue);
     }
 
+    @NotNull
     @Override
     protected Boolean extractPrimitiveValue(BooleanProperty property) {
         return property.get();
     }
 
+    @NotNull
     @Override
     protected BooleanProperty createDefaultProperty() {
         return new SimpleBooleanProperty();
     }
 
+    @NotNull
     @Override
-    protected BooleanProperty wrapNonNullPrimitiveValue(Boolean deserializedValue) {
+    protected BooleanProperty wrapNonNullPrimitiveValue(@NotNull Boolean deserializedValue) {
         return new SimpleBooleanProperty(deserializedValue);
     }
 }

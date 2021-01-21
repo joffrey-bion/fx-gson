@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 import com.google.gson.TypeAdapter;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link IntegerProperty}. It serializes the int
@@ -30,18 +31,21 @@ public class IntegerPropertyTypeAdapter extends PrimitivePropertyTypeAdapter<Int
         super(delegate, throwOnNullProperty, crashOnNullValue);
     }
 
+    @NotNull
     @Override
     protected Integer extractPrimitiveValue(IntegerProperty property) {
         return property.getValue();
     }
 
+    @NotNull
     @Override
     protected IntegerProperty createDefaultProperty() {
         return new SimpleIntegerProperty();
     }
 
+    @NotNull
     @Override
-    protected IntegerProperty wrapNonNullPrimitiveValue(Integer deserializedValue) {
+    protected IntegerProperty wrapNonNullPrimitiveValue(@NotNull Integer deserializedValue) {
         return new SimpleIntegerProperty(deserializedValue);
     }
 }

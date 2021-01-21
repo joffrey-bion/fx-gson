@@ -9,6 +9,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An abstract base for {@link TypeAdapter}s of primitive values. By default, it throws {@link NullPrimitiveException}
@@ -81,6 +82,7 @@ public abstract class PrimitivePropertyTypeAdapter<I, P extends Property<?>> ext
      *
      * @return the current value of the given property
      */
+    @NotNull
     protected abstract I extractPrimitiveValue(P property);
 
     /**
@@ -90,6 +92,7 @@ public abstract class PrimitivePropertyTypeAdapter<I, P extends Property<?>> ext
      *
      * @return a default value to use when null is found
      */
+    @NotNull
     protected abstract P createDefaultProperty();
 
     /**
@@ -100,5 +103,6 @@ public abstract class PrimitivePropertyTypeAdapter<I, P extends Property<?>> ext
      *
      * @return a new property object containing the given value
      */
-    protected abstract P wrapNonNullPrimitiveValue(I deserializedValue);
+    @NotNull
+    protected abstract P wrapNonNullPrimitiveValue(@NotNull I deserializedValue);
 }

@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleLongProperty;
 
 import com.google.gson.TypeAdapter;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An implementation of {@link PrimitivePropertyTypeAdapter} for JavaFX {@link LongProperty}. It serializes the long
@@ -29,18 +30,21 @@ public class LongPropertyTypeAdapter extends PrimitivePropertyTypeAdapter<Long, 
         super(delegate, throwOnNullProperty, crashOnNullValue);
     }
 
+    @NotNull
     @Override
     protected Long extractPrimitiveValue(LongProperty property) {
         return property.get();
     }
 
+    @NotNull
     @Override
     protected LongProperty createDefaultProperty() {
         return new SimpleLongProperty();
     }
 
+    @NotNull
     @Override
-    protected LongProperty wrapNonNullPrimitiveValue(Long deserializedValue) {
+    protected LongProperty wrapNonNullPrimitiveValue(@NotNull Long deserializedValue) {
         return new SimpleLongProperty(deserializedValue);
     }
 }
