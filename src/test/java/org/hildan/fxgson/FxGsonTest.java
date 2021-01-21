@@ -1,16 +1,7 @@
 package org.hildan.fxgson;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
@@ -24,7 +15,6 @@ import javafx.collections.ObservableSet;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
 import org.hildan.fxgson.TestClassesCustom.CustomFactory;
 import org.hildan.fxgson.TestClassesCustom.WithCustomListProp;
 import org.hildan.fxgson.adapters.properties.NullPropertyException;
@@ -38,8 +28,16 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import static org.hildan.fxgson.TestClassesExtra.WithColor;
 import static org.hildan.fxgson.TestClassesExtra.WithFont;
@@ -74,6 +72,7 @@ import static org.hildan.fxgson.TestClassesWithProp.WithObsSet;
 import static org.hildan.fxgson.TestClassesWithProp.WithSetProp;
 import static org.hildan.fxgson.TestClassesWithProp.WithStringProp;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 
@@ -175,17 +174,34 @@ public class FxGsonTest {
         return new Gson[] {gson1, gson2, gson3};
     }
 
-    @Test
-    public void fxGson_cantBeInstantiated() throws IllegalAccessException, InstantiationException {
-        TestUtils.assertCannotBeInstantiated(FxGson.class);
+    @DataPoints("primitivePropertyClasses")
+    public static Class<?>[] primitivePropertyClasses() {
+        return new Class<?>[] {
+                BooleanProperty.class,
+                IntegerProperty.class,
+                LongProperty.class,
+                FloatProperty.class,
+                DoubleProperty.class,
+        };
+    }
+
+    @DataPoints("classesWithPrimitivePropertyFields")
+    public static Class<?>[] classesWithPrimitivePropertyFields() {
+        return new Class<?>[] {
+                WithBooleanProp.class,
+                WithIntegerProp.class,
+                WithLongProp.class,
+                WithFloatProp.class,
+                WithDoubleProp.class,
+        };
     }
 
     /**
      * Tests the serialization/deserialization of an inner value of an object (for the given value) with the provided
      * {@link Gson}.
      * <p>
-     * This method checks that the value is the same after a serialization-deserialization cycle. If an expected JSON is
-     * provided, this method also checks if the serialized object gives the expected JSON.
+     * This method checks that the value is the same after a serialization-deserialization cycle.
+     * If an expected JSON is provided, this method also checks if the serialized object gives the expected JSON.
      *
      * @param baseClass
      *         the class of object to test
@@ -225,62 +241,8 @@ public class FxGsonTest {
     }
 
     /**
-     * Tests the deserialization of an inner value of an object with each of the provided {@link Gson}.
-     *
-     * @param baseClass
-     *         the class of object to test
-     * @param inputJson
-     *         the input JSON to test
-     * @param expectedValue
-     *         the expected deserialized value of the field to test
-     * @param getter
-     *         a function to access the field to test within an object of baseClass
-     * @param gson
-     *         the {@link Gson} to use for serialization/deserialization tests
-     * @param <B>
-     *         the type of the object containing the field to test
-     * @param <V>
-     *         the type of the value to test inside the object
-     */
-    private static <B, V> void testDeserialize(Class<B> baseClass, String inputJson, V expectedValue,
-            Function<B, V> getter, Gson gson) {
-        B deserialized = gson.fromJson(inputJson, baseClass);
-        assertEquals("Incorrect deserialized value", expectedValue, getter.apply(deserialized));
-    }
-
-    /**
-     * Tests the serialization of an inner value of an object with each of the provided {@link Gson}.
-     *
-     * @param baseClass
-     *         the class of object to test
-     * @param expectedJson
-     *         the expected output JSON
-     * @param inputValue
-     *         the input value of the field to test
-     * @param setter
-     *         a function to set the input value within an object of baseClass
-     * @param gson
-     *         the {@link Gson} to use for serialization/deserialization tests
-     * @param <B>
-     *         the type of the object containing the field to test
-     * @param <V>
-     *         the type of the value to test inside the object
-     */
-    private static <B, V> void testSerialize(Class<B> baseClass, String expectedJson, V inputValue,
-            BiConsumer<B, V> setter, Gson gson) {
-        try {
-            B baseObj = baseClass.newInstance();
-            setter.accept(baseObj, inputValue);
-
-            assertEquals("Incorrect JSON generated", expectedJson, gson.toJson(baseObj));
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new IllegalArgumentException("Cannot run the test on class '" + baseClass.getSimpleName() + "'", e);
-        }
-    }
-
-    /**
-     * Tests the serialization/deserialization of the given value of a {@link Property} inside an object. The property
-     * is checked not to be null after deserialization.
+     * Tests the serialization/deserialization of the given value of a {@link Property} inside an object.
+     * The property is checked not to be null after deserialization.
      *
      * @param baseClass
      *         the class of object to test
@@ -312,98 +274,166 @@ public class FxGsonTest {
         testValue(baseClass, valueToTest, expectedJson, valueGetter, valueSetter, gson);
     }
 
+    @Test
+    public void fxGson_cantBeInstantiated() {
+        TestUtils.assertCannotBeInstantiated(FxGson.class);
+    }
+
+    @Theory
+    public void deserializeNullPrimitivePropFails(
+            @FromDataPoints("primitivePropertyClasses") Class<?> primitivePropertyClass,
+            @FromDataPoints("strictPrimitives") Gson gson) {
+        assertThrows(NullPrimitiveException.class, () -> gson.fromJson("null", primitivePropertyClass));
+    }
+
+    @Theory
+    public void deserializeWrapperWithNullPrimitivePropFails(
+            @FromDataPoints("classesWithPrimitivePropertyFields") Class<?> primitivePropertyClass,
+            @FromDataPoints("strictPrimitives") Gson gson) {
+        assertThrows(NullPrimitiveException.class, () -> gson.fromJson("{\"prop\":null}", primitivePropertyClass));
+    }
+
+    @Theory
+    public void deserializeNullPrimitiveProperties_defaultValue_boolean(@FromDataPoints("safePrimitives") Gson gson) {
+        assertFalse(gson.fromJson("{\"prop\":null}", WithBooleanProp.class).prop.get());
+    }
+
+    @Theory
+    public void deserializeNullPrimitiveProperties_defaultValue_integer(@FromDataPoints("safePrimitives") Gson gson) {
+        assertEquals(0, gson.fromJson("{\"prop\":null}", WithIntegerProp.class).prop.get());
+    }
+
+    @Theory
+    public void deserializeNullPrimitiveProperties_defaultValue_long(@FromDataPoints("safePrimitives") Gson gson) {
+        assertEquals(0L, gson.fromJson("{\"prop\":null}", WithLongProp.class).prop.get());
+    }
+
+    @Theory
+    public void deserializeNullPrimitiveProperties_defaultValue_float(@FromDataPoints("safePrimitives") Gson gson) {
+        assertEquals(0f, gson.fromJson("{\"prop\":null}", WithFloatProp.class).prop.get(), 0.0001);
+    }
+
+    @Theory
+    public void deserializeNullPrimitiveProperties_defaultValue_double(@FromDataPoints("safePrimitives") Gson gson) {
+        assertEquals(0d, gson.fromJson("{\"prop\":null}", WithDoubleProp.class).prop.get(), 0.0001);
+    }
+
+    @Theory
+    public void serializeNullProperty_boolean_ok(@FromDataPoints("safeProperties") Gson gson) {
+        WithBooleanProp propContainer = new WithBooleanProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void serializeNullProperty_integer_ok(@FromDataPoints("safeProperties") Gson gson) {
+        WithIntegerProp propContainer = new WithIntegerProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void serializeNullProperty_long_ok(@FromDataPoints("safeProperties") Gson gson) {
+        WithLongProp propContainer = new WithLongProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void serializeNullProperty_float_ok(@FromDataPoints("safeProperties") Gson gson) {
+        WithFloatProp propContainer = new WithFloatProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void serializeNullProperty_double_ok(@FromDataPoints("safeProperties") Gson gson) {
+        WithDoubleProp propContainer = new WithDoubleProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void serializeNullProperty_string_ok(@FromDataPoints("safeProperties") Gson gson) {
+        WithStringProp propContainer = new WithStringProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void serializeNullProperty_object_ok(@FromDataPoints("safeProperties") Gson gson) {
+        WithObjectProp propContainer = new WithObjectProp();
+        propContainer.prop = null;
+        assertEquals("{\"prop\":null}", gson.toJson(propContainer));
+    }
+
+    @Theory
+    public void serializeNullProperty_boolean_fail(@FromDataPoints("strictProperties") Gson gson) {
+        assertThrows(NullPropertyException.class, () -> {
+            WithBooleanProp propContainer = new WithBooleanProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
+    }
+
+    @Theory
+    public void serializeNullProperty_int_fail(@FromDataPoints("strictProperties") Gson gson) {
+        assertThrows(NullPropertyException.class, () -> {
+            WithIntegerProp propContainer = new WithIntegerProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
+    }
+
+    @Theory
+    public void serializeNullProperty_long_fail(@FromDataPoints("strictProperties") Gson gson) {
+        assertThrows(NullPropertyException.class, () -> {
+            WithLongProp propContainer = new WithLongProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
+    }
+
+    @Theory
+    public void serializeNullProperty_float_fail(@FromDataPoints("strictProperties") Gson gson) {
+        assertThrows(NullPropertyException.class, () -> {
+            WithFloatProp propContainer = new WithFloatProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
+    }
+
+    @Theory
+    public void serializeNullProperty_double_fail(@FromDataPoints("strictProperties") Gson gson) {
+        assertThrows(NullPropertyException.class, () -> {
+            WithDoubleProp propContainer = new WithDoubleProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
+    }
+
+    @Theory
+    public void serializeNullProperty_string_fail(@FromDataPoints("strictProperties") Gson gson) {
+        assertThrows(NullPropertyException.class, () -> {
+            WithStringProp propContainer = new WithStringProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
+    }
+
+    @Theory
+    public void serializeNullProperty_object_fail(@FromDataPoints("strictProperties") Gson gson) {
+        assertThrows(NullPropertyException.class, () -> {
+            WithObjectProp propContainer = new WithObjectProp();
+            propContainer.prop = null;
+            gson.toJson(propContainer);
+        });
+    }
+
     @Theory
     public void testBooleanProperty(@FromDataPoints("all") Gson gson) {
         testProperty(WithBooleanProp.class, true, "{\"prop\":true}", o -> o.prop, gson);
         testProperty(WithBooleanProp.class, false, "{\"prop\":false}", o -> o.prop, gson);
-    }
-
-    @Theory
-    public void testNullPrimitivesFail_boolean(@FromDataPoints("strictPrimitives") Gson gson) {
-        assertThrows(NullPrimitiveException.class, () -> {
-            testDeserialize(WithBooleanProp.class, "{\"prop\":null}", null, o -> o.prop.get(), gson);
-        });
-    }
-
-    @Theory
-    public void testNullPrimitivesFail_int(@FromDataPoints("strictPrimitives") Gson gson) {
-        assertThrows(NullPrimitiveException.class, () -> {
-            testDeserialize(WithIntegerProp.class, "{\"prop\":null}", null, o -> o.prop.get(), gson);
-        });
-    }
-
-    @Theory
-    public void testNullPrimitivesFail_long(@FromDataPoints("strictPrimitives") Gson gson) {
-        assertThrows(NullPrimitiveException.class, () -> {
-            testDeserialize(WithLongProp.class, "{\"prop\":null}", null, o -> o.prop.get(), gson);
-        });
-    }
-
-    @Theory
-    public void testNullPrimitivesFail_float(@FromDataPoints("strictPrimitives") Gson gson) {
-        assertThrows(NullPrimitiveException.class, () -> {
-            testDeserialize(WithFloatProp.class, "{\"prop\":null}", null, o -> o.prop.get(), gson);
-        });
-    }
-
-    @Theory
-    public void testNullPrimitivesFail_double(@FromDataPoints("strictPrimitives") Gson gson) {
-        assertThrows(NullPrimitiveException.class, () -> {
-            testDeserialize(WithDoubleProp.class, "{\"prop\":null}", null, o -> o.prop.get(), gson);
-        });
-    }
-
-    @Theory
-    public void testNullPrimitivesDefault(@FromDataPoints("safePrimitives") Gson gson) {
-        testDeserialize(WithBooleanProp.class, "{\"prop\":null}", false, o -> o.prop.get(), gson);
-        testDeserialize(WithIntegerProp.class, "{\"prop\":null}", 0, o -> o.prop.get(), gson);
-        testDeserialize(WithLongProp.class, "{\"prop\":null}", 0L, o -> o.prop.get(), gson);
-        testDeserialize(WithFloatProp.class, "{\"prop\":null}", 0f, o -> o.prop.get(), gson);
-        testDeserialize(WithDoubleProp.class, "{\"prop\":null}", 0d, o -> o.prop.get(), gson);
-    }
-
-    @Theory
-    public void testNullPropertiesFail_boolean(@FromDataPoints("strictProperties") Gson gson) {
-        assertThrows(NullPropertyException.class, () -> {
-            testSerialize(WithBooleanProp.class, "{\"prop\":null}", (BooleanProperty) null, (o, v) -> o.prop = v, gson);
-        });
-    }
-
-    @Theory
-    public void testNullPropertiesFail_int(@FromDataPoints("strictProperties") Gson gson) {
-        assertThrows(NullPropertyException.class, () -> {
-            testSerialize(WithIntegerProp.class, "{\"prop\":null}", (IntegerProperty) null, (o, v) -> o.prop = v, gson);
-        });
-    }
-
-    @Theory
-    public void testNullPropertiesFail_long(@FromDataPoints("strictProperties") Gson gson) {
-        assertThrows(NullPropertyException.class, () -> {
-            testSerialize(WithLongProp.class, "{\"prop\":null}", (LongProperty) null, (o, v) -> o.prop = v, gson);
-        });
-    }
-
-    @Theory
-    public void testNullPropertiesFail_float(@FromDataPoints("strictProperties") Gson gson) {
-        assertThrows(NullPropertyException.class, () -> {
-            testSerialize(WithFloatProp.class, "{\"prop\":null}", (FloatProperty) null, (o, v) -> o.prop = v, gson);
-        });
-    }
-
-    @Theory
-    public void testNullPropertiesFail_double(@FromDataPoints("strictProperties") Gson gson) {
-        assertThrows(NullPropertyException.class, () -> {
-            testSerialize(WithDoubleProp.class, "{\"prop\":null}", (DoubleProperty) null, (o, v) -> o.prop = v, gson);
-        });
-    }
-
-    @Theory
-    public void testNullPropertiesAccepted(@FromDataPoints("safeProperties") Gson gson) {
-        testSerialize(WithBooleanProp.class, "{\"prop\":null}", (BooleanProperty) null, (o, v) -> o.prop = v, gson);
-        testSerialize(WithIntegerProp.class, "{\"prop\":null}", (IntegerProperty) null, (o, v) -> o.prop = v, gson);
-        testSerialize(WithLongProp.class, "{\"prop\":null}", (LongProperty) null, (o, v) -> o.prop = v, gson);
-        testSerialize(WithFloatProp.class, "{\"prop\":null}", (FloatProperty) null, (o, v) -> o.prop = v, gson);
-        testSerialize(WithDoubleProp.class, "{\"prop\":null}", (DoubleProperty) null, (o, v) -> o.prop = v, gson);
     }
 
     @Theory
