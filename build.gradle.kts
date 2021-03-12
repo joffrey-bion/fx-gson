@@ -1,20 +1,16 @@
-import com.jfrog.bintray.gradle.BintrayExtension.*
-
 plugins {
-    id("com.jfrog.bintray") version "1.8.4"
-    id("org.hildan.github.changelog") version "0.8.0"
     id("org.openjfx.javafxplugin") version "0.0.9"
     `java-library`
-    `maven-publish`
     jacoco
     checkstyle
+    `maven-publish`
+    signing
+    id("io.github.gradle-nexus.publish-plugin") version "1.0.0"
+    id("org.hildan.github.changelog") version "1.3.0"
 }
 
 group = "org.hildan.fxgson"
 description = "A set of type adapters for Google Gson to make JavaFX properties serialization more natural."
-
-val Project.labels get() = arrayOf("json", "gson", "javafx", "property")
-val Project.licenses get() = arrayOf("MIT")
 
 java {
     withJavadocJar()
@@ -61,20 +57,24 @@ tasks.check {
 changelog {
     futureVersionTag = project.version.toString()
     sinceTag = "v1.2"
-    releaseUrlTemplate = "https://bintray.com/joffrey-bion/maven/fx-gson/%s"
-    releaseUrlTagTransform = { it.removePrefix("v") }
     customTagByIssueNumber = mapOf(12 to "v3.1.0")
 }
 
-val githubUser = getPropOrEnv("githubUser", "GITHUB_USER")
-val githubRepoName = rootProject.name
-val githubSlug = "$githubUser/${rootProject.name}"
-val githubRepoUrl = "https://github.com/$githubSlug"
+nexusPublishing {
+    packageGroup.set("org.hildan")
+    repositories {
+        sonatype()
+    }
+}
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
+
+            val githubUser = findProperty("githubUser") as String? ?: System.getenv("GITHUB_USER")
+            val githubSlug = "$githubUser/${rootProject.name}"
+            val githubRepoUrl = "https://github.com/$githubSlug"
 
             pom {
                 name.set(project.name)
@@ -103,41 +103,9 @@ publishing {
     }
 }
 
-bintray {
-    user = getPropOrEnv("bintrayUser", "BINTRAY_USER")
-    key = getPropOrEnv("bintrayApiKey", "BINTRAY_KEY")
-    setPublications("maven")
-    publish = true
-
-    pkg(closureOf<PackageConfig> {
-        repo = getPropOrEnv("bintrayRepo", "BINTRAY_REPO")
-        name = project.name
-        desc = project.description
-        setLabels(*project.labels)
-        setLicenses(*project.licenses)
-
-        websiteUrl = githubRepoUrl
-        issueTrackerUrl = "$githubRepoUrl/issues"
-        vcsUrl = "$githubRepoUrl.git"
-        githubRepo = githubSlug
-
-        version(closureOf<VersionConfig> {
-            desc = project.description
-            vcsTag = project.version.toString()
-            gpg(closureOf<GpgConfig> {
-                sign = true
-            })
-            mavenCentralSync(closureOf<MavenCentralSyncConfig> {
-                sync = true
-                user = getPropOrEnv("ossrhUserToken", "OSSRH_USER_TOKEN")
-                password = getPropOrEnv("ossrhKey", "OSSRH_KEY")
-            })
-        })
-    })
+signing {
+    val signingKey: String? by project
+    val signingPassword: String? by project
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign(publishing.publications["maven"])
 }
-tasks.bintrayUpload {
-    dependsOn(tasks.build)
-}
-
-fun Project.getPropOrEnv(propName: String, envVar: String? = null): String? =
-    findProperty(propName) as String? ?: System.getenv(envVar)

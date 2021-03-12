@@ -30,11 +30,18 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
 
-      - name: Build and publish to Bintray and Maven Central
+      # The publishToSonatype task and the repository release need to be in the same Gradle call
+      # so that the closeAndRelease task knows which staging repository was created by publishToSonatype
+      - name: Build and publish to Maven Central
         env:
-          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
-          OSSRH_USER_TOKEN: ${{ secrets.OSSRH_USER_TOKEN }}
-          OSSRH_KEY: ${{ secrets.OSSRH_KEY }}
+          # GPG keys for signing plugin (sign maven artifacts)
+          # see https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_SECRET_ASCII_ARMORED }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSWORD }}
+          # Credentials implicitly read by the gradle-nexus-publish-plugin
+          # https://github.com/gradle-nexus/publish-plugin#publishing-to-maven-central-via-sonatype-ossrh
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.OSSRH_USER_TOKEN }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.OSSRH_KEY }}
         run: |
           tag=$(echo ${{ github.event.release.tag_name }} | sed s/v//)
-          ./gradlew -Pversion=$tag bintrayUpload
+          ./gradlew -Pversion=$tag publishToSonatype closeAndReleaseSonatypeStagingRepository
