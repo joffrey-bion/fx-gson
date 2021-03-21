@@ -42,6 +42,4 @@ jobs:
           # https://github.com/gradle-nexus/publish-plugin#publishing-to-maven-central-via-sonatype-ossrh
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.OSSRH_USER_TOKEN }}
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.OSSRH_KEY }}
-        run: |
-          tag=$(echo ${{ github.event.release.tag_name }} | sed s/v//)
-          ./gradlew -Pversion=$tag publishToSonatype closeAndReleaseSonatypeStagingRepository
+        run: ./gradlew -Pversion=${{ github.event.release.tag_name }} publishToSonatype closeAndReleaseSonatypeStagingRepository

@@ -56,8 +56,8 @@ tasks.check {
 
 changelog {
     futureVersionTag = project.version.toString()
-    sinceTag = "v1.2"
-    customTagByIssueNumber = mapOf(12 to "v3.1.0")
+    sinceTag = "1.2.0"
+    customTagByIssueNumber = mapOf(12 to "3.1.0")
 }
 
 nexusPublishing {
