@@ -118,8 +118,8 @@ Starting from FX Gson 4.0.0, the library is published as a Java Jigsaw module (J
 
 ### Manual download
  
-You may directly download the JAR from 
-[FX Gson's Bintray Repository](https://bintray.com/joffrey-bion/maven/fx-gson/_latestVersion), although I recommend
+You may manually download the JAR from 
+[Maven Central](https://repo1.maven.org/maven2/org/hildan/fxgson/fx-gson/), although I recommend
 using a build tool such as [Gradle](https://gradle.org/).
  
 ### Gradle
