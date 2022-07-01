@@ -48,7 +48,7 @@ class TestClassesWithProp {
         }
         T v1 = p1.getValue();
         U v2 = p2.getValue();
-        return equals.apply(v1, v2);
+        return p1.getName().equals(p2.getName()) && equals.apply(v1, v2);
     }
 
     static class WithBooleanProp {
@@ -59,6 +59,10 @@ class TestClassesWithProp {
 
         WithBooleanProp(boolean value) {
             this.prop = new SimpleBooleanProperty(value);
+        }
+
+        WithBooleanProp(String name, boolean value) {
+            this.prop = new SimpleBooleanProperty(this, name, value);
         }
 
         @Override
@@ -89,6 +93,10 @@ class TestClassesWithProp {
             this.prop = new SimpleIntegerProperty(value);
         }
 
+        WithIntegerProp(String name, int value) {
+            this.prop = new SimpleIntegerProperty(this, name, value);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -115,6 +123,10 @@ class TestClassesWithProp {
 
         WithLongProp(long value) {
             this.prop = new SimpleLongProperty(value);
+        }
+
+        WithLongProp(String name, long value) {
+            this.prop = new SimpleLongProperty(this, name, value);
         }
 
         @Override
@@ -145,6 +157,10 @@ class TestClassesWithProp {
             this.prop = new SimpleFloatProperty(value);
         }
 
+        WithFloatProp(String name, float value) {
+            this.prop = new SimpleFloatProperty(this, name, value);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -171,6 +187,10 @@ class TestClassesWithProp {
 
         WithDoubleProp(double value) {
             this.prop = new SimpleDoubleProperty(value);
+        }
+
+        WithDoubleProp(String name, double value) {
+            this.prop = new SimpleDoubleProperty(this, name, value);
         }
 
         @Override
@@ -201,6 +221,10 @@ class TestClassesWithProp {
             this.prop = new SimpleStringProperty(value);
         }
 
+        WithStringProp(String name, String value) {
+            this.prop = new SimpleStringProperty(this, name, value);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -227,6 +251,10 @@ class TestClassesWithProp {
 
         WithObjectProp(CustomObject value) {
             this.prop = new SimpleObjectProperty<>(value);
+        }
+
+        WithObjectProp(String name, CustomObject value) {
+            this.prop = new SimpleObjectProperty<>(this, name, value);
         }
 
         @Override
