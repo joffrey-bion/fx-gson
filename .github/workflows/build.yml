@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        jdk-version: [11, 13, 15]
+        jdk-version: [11, 17]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
