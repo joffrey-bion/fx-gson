@@ -31,7 +31,7 @@ val checkstyleConfig by configurations.creating {}
 dependencies {
     api("com.google.code.gson:gson:2.10")
     compileOnlyApi("org.jetbrains:annotations:23.0.0")
-    testImplementation("junit:junit:4.+")
+    testImplementation("junit:junit:4.13.2")
     checkstyleConfig("org.hildan.checkstyle:checkstyle-config:2.5.0")
 }
 
