@@ -1,3 +1,6 @@
+/**
+ * FXGson module, to serialize JavaFX properties as their plain values using Gson.
+ */
 module org.hildan.fxgson {
     requires transitive com.google.gson;
     requires transitive javafx.base; // for Property classes
