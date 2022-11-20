@@ -1,5 +1,21 @@
 # Change Log
 
+## [4.1.0](https://github.com/joffrey-bion/fx-gson/tree/4.1.0) (2022-11-20)
+[View commits](https://github.com/joffrey-bion/fx-gson/compare/4.0.1...4.1.0)
+
+**Closed issues:**
+
+- FX Gson's Bintray Repository redirects to JFrog [\#23](https://github.com/joffrey-bion/fx-gson/issues/23)
+
+**Merged pull requests:**
+
+- Exclude jetbrains annotations from runtime dependents [\#24](https://github.com/joffrey-bion/fx-gson/pull/24) ([@Glavo](https://github.com/Glavo))
+
+**Upgraded dependencies:**
+
+- Upgrade JetBrains annotations to version 23.0.0 [\#26](https://github.com/joffrey-bion/fx-gson/issues/26)
+- Upgrade Gson to 2.10 [\#25](https://github.com/joffrey-bion/fx-gson/issues/25)
+
 ## [4.0.1](https://github.com/joffrey-bion/fx-gson/tree/4.0.1) (2021-01-20)
 [View commits](https://github.com/joffrey-bion/fx-gson/compare/4.0.0...4.0.1)
 
