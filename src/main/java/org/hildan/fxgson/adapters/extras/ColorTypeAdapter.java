@@ -43,6 +43,9 @@ public class ColorTypeAdapter extends TypeAdapter<Color> {
         }
     }
 
+    /**
+     * Exception thrown when a string cannot be deserialized as a [Color] because of its invalid format.
+     */
     public static class InvalidColorException extends RuntimeException {
 
         private static final String MSG_TEMPLATE =

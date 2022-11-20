@@ -91,6 +91,9 @@ public class FontTypeAdapter extends TypeAdapter<Font> {
         }
     }
 
+    /**
+     * Exception thrown when a string cannot be deserialized as a [Font] because of its invalid format.
+     */
     public static class InvalidFontException extends RuntimeException {
 
         InvalidFontException(String message) {
