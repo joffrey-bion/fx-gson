@@ -8,10 +8,9 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest]
         jdk-version: [11, 13, 15]
     steps:
       - name: Checkout repository
@@ -22,18 +21,7 @@ jobs:
         with:
           java-version: ${{ matrix.jdk-version }}
 
-      - name: Gradle build cache
-        uses: actions/cache@v2.1.1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-build-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: ${{ runner.os }}-gradle-build-
-
-      - name: Gradle wrapper cache
-        uses: actions/cache@v2.1.1
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
-
       - name: Build with Gradle
-        run: ./gradlew build --stacktrace
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build

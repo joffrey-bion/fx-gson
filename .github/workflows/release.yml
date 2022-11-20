@@ -19,24 +19,17 @@ jobs:
         with:
           java-version: 11
 
-      - name: Gradle build cache
-        uses: actions/cache@v2.1.1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-build-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: ${{ runner.os }}-gradle-build-
-
-      - name: Gradle wrapper cache
-        uses: actions/cache@v2.1.1
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
-
       - name: Test build before release
-        run: ./gradlew build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
 
       - name: Generate Change Log
-        run: ./gradlew -Pversion=${{ github.event.inputs.version }} generateChangelog
+        uses: gradle/gradle-build-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          arguments: generateChangelog -Pversion=${{ inputs.version }}
 
       - name: Commit and Push Change Log
         id: changelog-commit
