@@ -3,8 +3,8 @@
  */
 module org.hildan.fxgson {
     requires transitive com.google.gson;
-    requires transitive javafx.base; // for Property classes
-    requires transitive javafx.graphics; // for Color and Font classes
+    requires javafx.base; // for Property classes
+    requires static javafx.graphics; // for Color and Font classes
     requires static org.jetbrains.annotations;
 
     exports org.hildan.fxgson;
