@@ -1,4 +1,5 @@
 plugins {
+    id("org.javamodularity.moduleplugin") version "1.8.12"
     id("org.openjfx.javafxplugin") version "0.0.13"
     `java-library`
     jacoco
@@ -22,6 +23,7 @@ modularity {
 }
 
 tasks.getByName<Jar>("sourcesJar") {
+    // When the mixedJavaRelease is set, the module-info.class will be packaged into the sourcesJar
     exclude("module-info.class")
 }
 
