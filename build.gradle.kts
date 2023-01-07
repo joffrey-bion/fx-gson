@@ -1,3 +1,5 @@
+import org.javamodularity.moduleplugin.extensions.CompileTestModuleOptions
+
 plugins {
     id("org.openjfx.javafxplugin") version "0.0.13"
     `java-library`
@@ -17,16 +19,42 @@ java {
     withSourcesJar()
 }
 
+modularity {
+    // Compiles the library to bytecode level 8, so it is usable with JRE 8,
+    // but also compiles module-info.java separately for Java 9+.
+    // This doesn't build a multi-release jar, because it places module-info.class at the root of the jar.
+    // See https://github.com/java9-modularity/gradle-modules-plugin#compilation-to-a-specific-java-release
+    mixedJavaRelease(8)
+}
+
+// When mixedJavaRelease is set, the module-info.class is packaged into the sources and javadoc jars (by mistake?)
+// se we have to exclude the file explicitly.
+// See https://github.com/java9-modularity/gradle-modules-plugin/issues/220
+tasks.getByName<Jar>("sourcesJar") {
+    exclude("module-info.class")
+}
+tasks.getByName<Jar>("javadocJar") {
+    exclude("module-info.class")
+}
+
 javafx {
     version = "11"
     modules = listOf("javafx.base", "javafx.graphics")
+    // This removes any JavaFX dependency from the generated pom.xml, because consumers should define their own
+    // dependencies on JavaFX to match the correct target platform.
+    configuration = "compileOnly"
 }
 
 repositories {
     mavenCentral()
 }
 
-val checkstyleConfig by configurations.creating {}
+val checkstyleConfig: Configuration by configurations.creating {}
+
+configurations {
+    // provides JavaFX dependencies to tests (because they are added as compileOnly via the javafx plugin)
+    testImplementation.get().extendsFrom(compileOnly.get())
+}
 
 dependencies {
     api("com.google.code.gson:gson:2.10")
@@ -41,11 +69,21 @@ checkstyle {
     config = resources.text.fromArchiveEntry(checkstyleConfig, "checkstyle.xml")
 }
 
-tasks.jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                minimum = 1.0.toBigDecimal()
+tasks {
+    compileTestJava {
+        extensions.configure<CompileTestModuleOptions> {
+            // Fallback to classpath mode because with mixedJavaRelease using the module path seems to be broken.
+            // Despite using classpath, the tests still seem to pick up missing declarations in module-info.java,
+            // which may be good enough for now.
+            isCompileOnClasspath = true
+        }
+    }
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                limit {
+                    minimum = 1.0.toBigDecimal()
+                }
             }
         }
     }
