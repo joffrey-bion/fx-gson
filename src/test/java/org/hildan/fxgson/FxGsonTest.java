@@ -28,6 +28,8 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -224,7 +226,9 @@ public class FxGsonTest {
     private static <B, V> void testValue(Class<B> baseClass, V valueToTest, String expectedJson, Function<B, V> getter,
             BiConsumer<B, V> setter, Gson gson) {
         try {
-            B baseObj = baseClass.newInstance();
+            @SuppressWarnings("unchecked")
+            Constructor<B>[] constructors = (Constructor<B>[]) baseClass.getConstructors();
+            B baseObj = constructors[0].newInstance();
             setter.accept(baseObj, valueToTest);
 
             if (expectedJson != null) {
@@ -237,6 +241,9 @@ public class FxGsonTest {
             assertEquals("Incorrect deserialized value", valueToTest, getter.apply(deserialized));
         } catch (InstantiationException | IllegalAccessException e) {
             throw new IllegalArgumentException("Cannot run the test on class '" + baseClass.getSimpleName() + "'", e);
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            throw new IllegalStateException("Cannot run the test on class '" + baseClass.getSimpleName() + "'", cause);
         }
     }
 
