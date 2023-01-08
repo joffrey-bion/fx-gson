@@ -123,7 +123,7 @@ There are different JRE requirements depending on the version of FX Gson:
 Starting from FX Gson 4.0.0, the library has a `module-info.java` for compatibility with Jigsaw (Java 9+).
 
 Starting from FX Gson 5.0.0, the library still has `module-info.java` compiled with Java 9, but all other class files
-have bytecode level 8, so it can still be used in Java 8. Thanks to @Glavo for the contribution!
+have bytecode level 8, so it can still be used in Java 8. Thanks to [@Glavo](https://github.com/Glavo) for the contribution!
 
 ## Setup - adding the dependency
 
