@@ -1,11 +1,23 @@
 # Change Log
 
-## [4.1.0](https://github.com/joffrey-bion/fx-gson/tree/4.1.0) (2022-11-20)
-[View commits](https://github.com/joffrey-bion/fx-gson/compare/4.0.1...4.1.0)
+## [5.0.0](https://github.com/joffrey-bion/fx-gson/tree/5.0.0) (2023-01-08)
+[View commits](https://github.com/joffrey-bion/fx-gson/compare/4.1.0...5.0.0)
 
 **Closed issues:**
 
-- FX Gson's Bintray Repository redirects to JFrog [\#23](https://github.com/joffrey-bion/fx-gson/issues/23)
+- When I try to use the libary, I get: Kotlin: Module org.hildan.fxgson cannot be found in the module graph [\#21](https://github.com/joffrey-bion/fx-gson/issues/21)
+
+**Implemented enhancements:**
+
+- Add back support for Java 8 [\#31](https://github.com/joffrey-bion/fx-gson/issues/31)
+
+**Merged pull requests:**
+
+- Optional depends on javafx.graphics [\#29](https://github.com/joffrey-bion/fx-gson/pull/29) ([@Glavo](https://github.com/Glavo))
+- Add Java 8 support [\#28](https://github.com/joffrey-bion/fx-gson/pull/28) ([@Glavo](https://github.com/Glavo))
+
+## [4.1.0](https://github.com/joffrey-bion/fx-gson/tree/4.1.0) (2022-11-20)
+[View commits](https://github.com/joffrey-bion/fx-gson/compare/4.0.1...4.1.0)
 
 **Merged pull requests:**
 
