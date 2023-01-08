@@ -124,12 +124,6 @@ using a build tool such as [Gradle](https://gradle.org/).
  
 ### Gradle
 
-```groovy
-compile 'org.hildan.fxgson:fx-gson:$VERSION'
-```
-
-or with the Kotlin DSL:
-
 ```kotlin
 compile("org.hildan.fxgson:fx-gson:$VERSION")
 ```
