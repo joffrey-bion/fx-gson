@@ -20,6 +20,7 @@ java {
 javafx {
     version = "11"
     modules = listOf("javafx.base", "javafx.graphics")
+    configuration = "compileOnly"
 }
 
 repositories {
@@ -33,6 +34,10 @@ dependencies {
     compileOnlyApi("org.jetbrains:annotations:23.0.0")
     testImplementation("junit:junit:4.13.2")
     checkstyleConfig("org.hildan.checkstyle:checkstyle-config:2.5.0")
+}
+
+configurations {
+    testImplementation.get().extendsFrom(compileOnly.get())
 }
 
 checkstyle {
