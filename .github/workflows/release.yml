@@ -43,7 +43,7 @@ jobs:
           echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Create Release and Tag
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GH_PAT }} # using personal token to trigger publish workflow
           tag_name: ${{ inputs.version }}
